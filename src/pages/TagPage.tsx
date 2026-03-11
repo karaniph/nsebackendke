@@ -13,10 +13,23 @@ const TagPage = () => {
   const allPosts = tag ? getPostsByTagFrom(data || [], tag) : [];
   const page = parseInt(searchParams.get("page") ?? "1", 10);
   const { posts, totalPages, currentPage, totalPosts } = paginatePosts(allPosts, page);
+  const encodedTag = encodeURIComponent(tag || "");
+  const canonicalPath = page > 1 ? `/tags/${encodedTag}?page=${page}` : `/tags/${encodedTag}`;
 
   return (
     <BlogLayout>
-      <SEOHead title={`#${tag}`} description={`Posts tagged "${tag}" on NSEinsider.`} path={`/tags/${tag}`} />
+      <SEOHead
+        title={`#${tag}`}
+        description={`Posts tagged "${tag}" on NSEinsider.`}
+        path={canonicalPath}
+        schemaType="collection"
+        keywords={[`tag ${tag}`, "NSEinsider", "NSE"]}
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "Tags", path: "/tags" },
+          { name: String(tag || ""), path: `/tags/${encodedTag}` }
+        ]}
+      />
       <div className="container py-12 md:py-16 max-w-3xl animate-in-up">
         <div className="mb-10">
           <span className="tag-chip text-sm px-3 py-1.5 mb-3 inline-block">{tag}</span>

@@ -3,13 +3,50 @@
   <channel>
     <title>NSEinsider</title>
     <link>https://nseinsider.co.ke</link>
-    <description>Kenya's market intelligence platform. Weekly analysis, company deep dives, and investor education for the Nairobi Securities Exchange.</description>
+    <description>Kenya market briefs, deep dives, and investor education from NSEinsider.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 11 Mar 2026 11:09:27 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 11 Mar 2026 11:34:04 GMT</lastBuildDate>
     <atom:link href="https://nseinsider.co.ke/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title><![CDATA[Kenyan Market Report: Strong Gainers Lead Active Session]]></title>
+      <link>https://nseinsider.co.ke/blog/2026-03-11-kenyan-market-report-strong-gainers-lead-active-session</link>
+      <guid>https://nseinsider.co.ke/blog/2026-03-11-kenyan-market-report-strong-gainers-lead-active-session</guid>
+      <description><![CDATA[The NSE closed with notable gains in select stocks, while liquidity remained robust and sector performance varied.]]></description>
+      <pubDate>Wed, 11 Mar 2026 00:00:00 GMT</pubDate>
+      <author>NSEinsider Desk</author>
+      <category>market-briefs</category>
+      <category>nse</category>
+      <category>kenya</category>
+      <category>market-briefs</category>
+    </item>
+    <item>
+      <title><![CDATA[NSE Wrap: Market Cap Rises 3.19% Amid Foreign Outflows]]></title>
+      <link>https://nseinsider.co.ke/blog/2026-03-10-nse-wrap-market-cap-rises-319-amid-foreign-outflows</link>
+      <guid>https://nseinsider.co.ke/blog/2026-03-10-nse-wrap-market-cap-rises-319-amid-foreign-outflows</guid>
+      <description><![CDATA[The NSE saw a 3.19% rise in market capitalization to KES 3.37 trillion, but foreign outflows and mixed equity performance hint at underlying volatility.]]></description>
+      <pubDate>Tue, 10 Mar 2026 00:00:00 GMT</pubDate>
+      <author>NSEinsider Desk</author>
+      <category>market-briefs</category>
+      <category>nse</category>
+      <category>kenya</category>
+      <category>market-briefs</category>
+    </item>
+    <item>
+      <title><![CDATA[NSE Wrap: A Quiet Session with Limited Catalysts]]></title>
+      <link>https://nseinsider.co.ke/blog/2026-03-09-nse-wrap-a-quiet-session-with-limited-catalysts</link>
+      <guid>https://nseinsider.co.ke/blog/2026-03-09-nse-wrap-a-quiet-session-with-limited-catalysts</guid>
+      <description><![CDATA[The Nairobi Securities Exchange saw subdued activity on March 9, 2026, with no major announcements driving significant price movements.]]></description>
+      <pubDate>Mon, 09 Mar 2026 00:00:00 GMT</pubDate>
+      <author>NSEinsider Desk</author>
+      <category>market-briefs</category>
+      <category>nse</category>
+      <category>kenya</category>
+      <category>market-briefs</category>
+    </item>
     <item>
       <title><![CDATA[NSE Weekly Wrap: NASI Gains 1.8% as Banking Stocks Rally]]></title>
       <link>https://nseinsider.co.ke/blog/nse-weekly-wrap-march-2026</link>
+      <guid>https://nseinsider.co.ke/blog/nse-weekly-wrap-march-2026</guid>
       <description><![CDATA[The Nairobi All-Share Index closed the week higher, driven by renewed investor interest in KCB, Equity, and Co-operative Bank. Here's what moved the market.]]></description>
       <pubDate>Sat, 07 Mar 2026 00:00:00 GMT</pubDate>
       <author>Brian Mwenda</author>
@@ -20,8 +57,45 @@
       <category>nasi</category>
     </item>
     <item>
+      <title><![CDATA[NSE Market Brief - 2026-03-06]]></title>
+      <link>https://nseinsider.co.ke/blog/2026-03-06-nse-market-brief-2026-03-06</link>
+      <guid>https://nseinsider.co.ke/blog/2026-03-06-nse-market-brief-2026-03-06</guid>
+      <description><![CDATA[A practical daily market brief built from NSEinsider's monitored sources.]]></description>
+      <pubDate>Fri, 06 Mar 2026 00:00:00 GMT</pubDate>
+      <author>NSEinsider Desk</author>
+      <category>market-briefs</category>
+      <category>nse</category>
+      <category>kenya</category>
+      <category>market-briefs</category>
+    </item>
+    <item>
+      <title><![CDATA[NSE Market Brief - 2026-03-03]]></title>
+      <link>https://nseinsider.co.ke/blog/2026-03-03-nse-market-brief-2026-03-03</link>
+      <guid>https://nseinsider.co.ke/blog/2026-03-03-nse-market-brief-2026-03-03</guid>
+      <description><![CDATA[A practical daily market brief built from NSEinsider's monitored sources.]]></description>
+      <pubDate>Tue, 03 Mar 2026 00:00:00 GMT</pubDate>
+      <author>NSEinsider Desk</author>
+      <category>market-briefs</category>
+      <category>nse</category>
+      <category>kenya</category>
+      <category>market-briefs</category>
+    </item>
+    <item>
+      <title><![CDATA[NSE Market Brief - 2026-03-02]]></title>
+      <link>https://nseinsider.co.ke/blog/2026-03-02-nse-market-brief-2026-03-02</link>
+      <guid>https://nseinsider.co.ke/blog/2026-03-02-nse-market-brief-2026-03-02</guid>
+      <description><![CDATA[A practical daily market brief built from NSEinsider's monitored sources.]]></description>
+      <pubDate>Mon, 02 Mar 2026 00:00:00 GMT</pubDate>
+      <author>NSEinsider Desk</author>
+      <category>market-briefs</category>
+      <category>nse</category>
+      <category>kenya</category>
+      <category>market-briefs</category>
+    </item>
+    <item>
       <title><![CDATA[NSEinsider Bot v2: Real-Time Alerts, Watchlists, and More]]></title>
       <link>https://nseinsider.co.ke/blog/nseinsider-bot-v2-launch</link>
+      <guid>https://nseinsider.co.ke/blog/nseinsider-bot-v2-launch</guid>
       <description><![CDATA[Our Telegram bot just got a major upgrade. Here's everything new in v2 — including real-time price alerts, custom watchlists, and daily market summaries.]]></description>
       <pubDate>Sun, 01 Mar 2026 00:00:00 GMT</pubDate>
       <author>Kevin Njoroge</author>
@@ -34,6 +108,7 @@
     <item>
       <title><![CDATA[Safaricom: Is the M-Pesa Growth Story Fully Priced In?]]></title>
       <link>https://nseinsider.co.ke/blog/safaricom-deep-dive-2026</link>
+      <guid>https://nseinsider.co.ke/blog/safaricom-deep-dive-2026</guid>
       <description><![CDATA[A comprehensive look at Safaricom's valuation, M-Pesa's expansion into Ethiopia, and whether the stock still offers upside at current levels.]]></description>
       <pubDate>Sat, 28 Feb 2026 00:00:00 GMT</pubDate>
       <author>Brian Mwenda</author>
@@ -46,6 +121,7 @@
     <item>
       <title><![CDATA[How to Read NSE Financial Statements Like a Pro]]></title>
       <link>https://nseinsider.co.ke/blog/how-to-read-nse-financial-statements</link>
+      <guid>https://nseinsider.co.ke/blog/how-to-read-nse-financial-statements</guid>
       <description><![CDATA[A practical guide to understanding balance sheets, income statements, and cash flow reports from NSE-listed companies — no finance degree required.]]></description>
       <pubDate>Sun, 15 Feb 2026 00:00:00 GMT</pubDate>
       <author>Amara Osei</author>

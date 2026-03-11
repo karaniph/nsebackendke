@@ -75,7 +75,7 @@ export async function fetchLivePosts(): Promise<BlogPost[]> {
     || "https://nse-bot-backend.karanidevops.workers.dev/public/blog/posts";
 
   try {
-    const response = await fetch(`${apiBase}?limit=120`, {
+    const response = await fetch(`${apiBase}?limit=120&include_failed=1`, {
       headers: { Accept: "application/json" }
     });
     if (!response.ok) {

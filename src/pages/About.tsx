@@ -6,7 +6,17 @@ import SEOHead from "@/components/SEOHead";
 const About = () => {
   return (
     <BlogLayout>
-      <SEOHead title="About" description="About NSEinsider — independent market intelligence for Kenya's investors." path="/about" />
+      <SEOHead
+        title="About"
+        description="About NSEinsider — independent market intelligence for Kenya's investors."
+        path="/about"
+        schemaType="page"
+        keywords={["about NSEinsider", "NSE market intelligence", "Kenya investing"]}
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "About", path: "/about" }
+        ]}
+      />
       <div className="container py-12 md:py-16 max-w-3xl animate-in-up">
         <h1 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">
           Independent market intelligence for Kenya

@@ -12,7 +12,17 @@ const Contact = () => {
 
   return (
     <BlogLayout>
-      <SEOHead title="Contact" description="Get in touch with NSEinsider." path="/contact" />
+      <SEOHead
+        title="Contact"
+        description="Get in touch with NSEinsider."
+        path="/contact"
+        schemaType="page"
+        keywords={["contact NSEinsider", "NSE support", "Kenya market analysis"]}
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "Contact", path: "/contact" }
+        ]}
+      />
       <div className="container py-12 md:py-16 max-w-2xl animate-in-up">
         <h1 className="text-3xl font-heading font-bold text-foreground mb-2">Get in Touch</h1>
         <p className="text-muted-foreground mb-10">

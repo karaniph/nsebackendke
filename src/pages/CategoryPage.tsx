@@ -23,6 +23,7 @@ const CategoryPage = () => {
   const desc = cat ? CATEGORY_DESCRIPTIONS[cat] : "";
   const page = parseInt(searchParams.get("page") ?? "1", 10);
   const { posts, totalPages, currentPage, totalPosts } = paginatePosts(allPosts, page);
+  const canonicalPath = page > 1 ? `/category/${cat}?page=${page}` : `/category/${cat}`;
 
   if (!label) {
     return (
@@ -40,7 +41,17 @@ const CategoryPage = () => {
 
   return (
     <BlogLayout>
-      <SEOHead title={label} description={desc} path={`/category/${cat}`} />
+      <SEOHead
+        title={label}
+        description={desc}
+        path={canonicalPath}
+        schemaType="collection"
+        keywords={[label, "NSEinsider", "NSE", "Kenya stocks"]}
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: label, path: `/category/${cat}` }
+        ]}
+      />
       <div className="container py-12 md:py-16 animate-in-up">
         <div className="mb-10">
           <span className="category-badge mb-3" data-category={cat}>{label}</span>

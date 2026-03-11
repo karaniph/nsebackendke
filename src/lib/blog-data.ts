@@ -274,7 +274,7 @@ You can customise the summary to include only your watchlist stocks.
 - SMS alerts for users without reliable data
 - API access for developers
 
-> The bot is free to use for basic features. Pro access (KES 500/month) unlocks unlimited alerts, priority delivery, and advanced charts. Start by messaging @NSEinsiderBot on Telegram.
+> The bot is free to use for basic features. Pro access (KES 500/month) unlocks unlimited alerts, priority delivery, and advanced charts. Start by messaging @NSEInsider_bot on Telegram.
 
 ## Feedback
 

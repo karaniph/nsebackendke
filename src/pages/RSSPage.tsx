@@ -11,7 +11,17 @@ const RSSPage = () => {
 
   return (
     <BlogLayout>
-      <SEOHead title="RSS Feed" description="Subscribe to NSEinsider via RSS." path="/rss" />
+      <SEOHead
+        title="RSS Feed"
+        description="Subscribe to NSEinsider via RSS."
+        path="/rss"
+        noindex
+        schemaType="page"
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "RSS", path: "/rss" }
+        ]}
+      />
       <div className="container py-12 md:py-16 max-w-3xl animate-in-up">
         <h1 className="text-3xl font-heading font-bold text-foreground mb-2">RSS Feed</h1>
         <p className="text-muted-foreground mb-6">

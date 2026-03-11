@@ -11,7 +11,17 @@ const TagsIndex = () => {
 
   return (
     <BlogLayout>
-      <SEOHead title="Tags" description="Browse NSEinsider posts by topic." path="/tags" />
+      <SEOHead
+        title="Tags"
+        description="Browse NSEinsider posts by topic."
+        path="/tags"
+        schemaType="collection"
+        keywords={["NSEinsider tags", "NSE topics", "Kenya investing"]}
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "Tags", path: "/tags" }
+        ]}
+      />
       <div className="container py-12 md:py-16 max-w-3xl animate-in-up">
         <h1 className="text-3xl font-heading font-bold text-foreground mb-2">Tags</h1>
         <p className="text-muted-foreground mb-10">Browse all topics across our analysis and education content.</p>

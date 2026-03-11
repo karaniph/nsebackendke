@@ -98,7 +98,16 @@ const BlogPost = () => {
         path={`/blog/${post.slug}`}
         type="article"
         publishedDate={post.date}
+        modifiedDate={post.date}
         author={post.author}
+        section={CATEGORY_LABELS[post.category]}
+        keywords={post.tags}
+        schemaType="article"
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: CATEGORY_LABELS[post.category], path: `/category/${post.category}` },
+          { name: post.title, path: `/blog/${post.slug}` }
+        ]}
       />
       <article className="container max-w-3xl py-12 md:py-16 animate-in-up">
         <header className="mb-10">

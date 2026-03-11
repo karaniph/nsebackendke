@@ -28,6 +28,13 @@ const ArchivePage = () => {
         title={`Archive: ${pageTitle} — NSEinsider`}
         description={`Browse all NSEinsider posts published in ${pageTitle}.`}
         path={`/archive/${year}/${month}`}
+        schemaType="collection"
+        keywords={["NSEinsider archive", "NSE market reports", pageTitle]}
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "Archive", path: "/archive" },
+          { name: pageTitle, path: `/archive/${year}/${month}` }
+        ]}
       />
 
       <div className="container py-12 md:py-16 animate-in-up">
