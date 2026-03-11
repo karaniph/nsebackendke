@@ -1,0 +1,60 @@
+import { Link } from "react-router-dom";
+import { formatDate, CATEGORY_LABELS, type BlogPost } from "@/lib/blog-data";
+
+const PostCard = ({ post, index = 0, variant = "default" }: { post: BlogPost; index?: number; variant?: "default" | "compact" }) => {
+  if (variant === "compact") {
+    return (
+      <Link
+        to={`/blog/${post.slug}`}
+        className={`block group animate-in-up stagger-${Math.min(index + 1, 5)}`}
+      >
+        <article className="flex items-start gap-4 py-4 border-b border-border/60 last:border-b-0 group-hover:bg-secondary/30 -mx-3 px-3 rounded-lg transition-colors">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1.5">
+              <span className="category-badge" data-category={post.category}>
+                {CATEGORY_LABELS[post.category]}
+              </span>
+              <time className="text-xs text-muted-foreground">{formatDate(post.date)}</time>
+            </div>
+            <h3 className="text-sm font-semibold text-foreground group-hover:text-accent transition-colors leading-snug line-clamp-2">
+              {post.title}
+            </h3>
+          </div>
+        </article>
+      </Link>
+    );
+  }
+
+  return (
+    <article className={`content-card overflow-hidden animate-in-up stagger-${Math.min(index + 1, 5)}`}>
+      <Link to={`/blog/${post.slug}`} className="block group">
+        <div className="p-5 md:p-6">
+          <div className="flex items-center gap-2.5 mb-3">
+            <span className="category-badge" data-category={post.category}>
+              {CATEGORY_LABELS[post.category]}
+            </span>
+            <time className="text-xs text-muted-foreground">{formatDate(post.date)}</time>
+          </div>
+          <h2 className="font-heading font-bold text-lg text-foreground group-hover:text-accent transition-colors duration-150 leading-snug mb-2">
+            {post.title}
+          </h2>
+          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-4">
+            {post.description}
+          </p>
+          <div className="flex items-center justify-between">
+            <div className="flex flex-wrap gap-1.5">
+              {post.tags.slice(0, 3).map((tag) => (
+                <span key={tag} className="text-xs text-muted-foreground bg-secondary px-2 py-0.5 rounded-full">
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <span className="text-xs text-muted-foreground">{post.author}</span>
+          </div>
+        </div>
+      </Link>
+    </article>
+  );
+};
+
+export default PostCard;

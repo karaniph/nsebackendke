@@ -12,39 +12,43 @@ const Contact = () => {
 
   return (
     <BlogLayout>
-      <SEOHead title="Contact" description="Get in touch." path="/contact" />
-      <div className="pt-12 animate-in-up">
-        <div className="accent-line mb-8" />
-        <h1 className="text-3xl font-heading font-bold mb-4 text-foreground">Contact</h1>
-        <p className="text-muted-foreground text-sm mb-12 max-w-md">
-          Questions, feedback, or collaboration inquiries. I'll get back to you.
+      <SEOHead title="Contact" description="Get in touch with NSEinsider." path="/contact" />
+      <div className="container py-12 md:py-16 max-w-2xl animate-in-up">
+        <h1 className="text-3xl font-heading font-bold text-foreground mb-2">Get in Touch</h1>
+        <p className="text-muted-foreground mb-10">
+          Have feedback, a partnership enquiry, or a stock you'd like us to cover? We'd love to hear from you.
         </p>
         {submitted ? (
-          <div className="newsletter-section">
-            <div className="flex items-center gap-3">
-              <svg width="20" height="20" viewBox="0 0 16 16" fill="none" className="text-accent">
-                <path d="M13.5 4.5L6.5 11.5L2.5 7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <div className="content-card p-8 text-center">
+            <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center mx-auto mb-4">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-accent">
+                <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              <p className="text-sm text-foreground">Message received. Thank you.</p>
             </div>
+            <h2 className="text-lg font-heading font-semibold text-foreground">Message sent</h2>
+            <p className="text-sm text-muted-foreground mt-1">We'll get back to you within 48 hours.</p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-10" data-netlify="true" name="contact">
-            <div>
-              <label htmlFor="name" className="block text-xs font-mono uppercase tracking-widest text-muted-foreground mb-3">Name</label>
-              <input id="name" name="name" type="text" required maxLength={100} className="input-glow w-full" />
+          <form onSubmit={handleSubmit} className="space-y-6" data-netlify="true" name="contact">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">Name</label>
+                <input id="name" name="name" type="text" required maxLength={100} className="input-brand" placeholder="Your name" />
+              </div>
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">Email</label>
+                <input id="email" name="email" type="email" required maxLength={255} className="input-brand" placeholder="you@example.com" />
+              </div>
             </div>
             <div>
-              <label htmlFor="email" className="block text-xs font-mono uppercase tracking-widest text-muted-foreground mb-3">Email</label>
-              <input id="email" name="email" type="email" required maxLength={255} className="input-glow w-full" />
+              <label htmlFor="subject" className="block text-sm font-medium text-foreground mb-2">Subject</label>
+              <input id="subject" name="subject" type="text" maxLength={200} className="input-brand" placeholder="What's this about?" />
             </div>
             <div>
-              <label htmlFor="message" className="block text-xs font-mono uppercase tracking-widest text-muted-foreground mb-3">Message</label>
-              <textarea id="message" name="message" required maxLength={1000} rows={5} className="input-glow w-full resize-none" />
+              <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">Message</label>
+              <textarea id="message" name="message" required maxLength={2000} rows={5} className="input-brand resize-none" placeholder="Your message..." />
             </div>
-            <button type="submit" className="text-sm font-mono text-foreground hover:text-accent transition-all duration-200">
-              Send message →
-            </button>
+            <button type="submit" className="btn-brand">Send Message →</button>
           </form>
         )}
       </div>
