@@ -10,8 +10,8 @@ interface SEOHeadProps {
   author?: string;
 }
 
-const SITE_NAME = "Form & Void";
-const SITE_URL = "https://formandvoid.dev";
+const SITE_NAME = "NSEinsider";
+const SITE_URL = "https://nseinsider.co.ke";
 
 const SEOHead = ({
   title,
