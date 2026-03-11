@@ -13,17 +13,30 @@ const Index = () => {
         title="Form & Void"
         description="Essays on systems design, engineering culture, and the craft of building software."
       />
-      <section className="mb-20">
-        <h1 className="text-3xl font-heading font-bold mb-4">Latest</h1>
-        <p className="text-muted-foreground text-sm mb-16">
-          Essays on systems, craft, and engineering culture.
+      <section className="pt-16 pb-8 animate-in-up">
+        <div className="accent-line mb-8" />
+        <h1 className="text-4xl md:text-5xl font-heading font-bold leading-tight text-foreground">
+          Building software<br />
+          <span className="text-muted-foreground font-light">with intention.</span>
+        </h1>
+        <p className="text-muted-foreground text-sm mt-6 max-w-md leading-relaxed">
+          Essays on systems design, engineering culture, and the craft of writing code that endures.
         </p>
-        <div className="space-y-12">
-          {posts.map((post) => (
-            <PostListItem key={post.slug} post={post} />
+      </section>
+
+      <div className="divider-fade my-10" />
+
+      <section>
+        <h2 className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-8">
+          Latest Posts
+        </h2>
+        <div className="space-y-2">
+          {posts.map((post, i) => (
+            <PostListItem key={post.slug} post={post} index={i} />
           ))}
         </div>
       </section>
+
       <NewsletterSignup />
     </BlogLayout>
   );

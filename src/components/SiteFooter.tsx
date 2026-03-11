@@ -2,12 +2,13 @@ import { Link } from "react-router-dom";
 
 const SiteFooter = () => {
   return (
-    <footer className="w-full max-w-prose mx-auto px-6 pt-16 pb-12">
-      <div className="border-t border-border pt-8 flex items-baseline justify-between text-sm text-muted-foreground">
+    <footer className="site-footer w-full max-w-prose mx-auto px-6 pb-12 pt-20">
+      <div className="divider-fade mb-8" />
+      <div className="flex items-center justify-between text-xs text-muted-foreground">
         <span>© {new Date().getFullYear()} Form & Void</span>
-        <div className="flex items-baseline gap-6">
-          <Link to="/tags" className="hover:text-accent transition-colors">Tags</Link>
-          <a href="/rss.xml" className="hover:text-accent transition-colors">RSS</a>
+        <div className="flex items-center gap-5">
+          <Link to="/tags" className="btn-subtle">Tags</Link>
+          <a href="/rss.xml" className="btn-subtle">RSS</a>
         </div>
       </div>
     </footer>

@@ -11,16 +11,20 @@ const TagPage = () => {
   return (
     <BlogLayout>
       <SEOHead title={`#${tag}`} description={`Posts tagged "${tag}".`} path={`/tags/${tag}`} />
-      <h1 className="text-3xl font-heading font-bold mb-12">{tag}</h1>
-      {posts.length === 0 ? (
-        <p className="text-muted-foreground text-sm">No posts with this tag.</p>
-      ) : (
-        <div className="space-y-12">
-          {posts.map((post) => (
-            <PostListItem key={post.slug} post={post} />
-          ))}
-        </div>
-      )}
+      <div className="pt-12 animate-in-up">
+        <div className="accent-line mb-8" />
+        <h1 className="text-3xl font-heading font-bold mb-2 text-foreground">{tag}</h1>
+        <p className="text-sm text-muted-foreground mb-12">{posts.length} post{posts.length !== 1 ? "s" : ""}</p>
+        {posts.length === 0 ? (
+          <p className="text-muted-foreground text-sm">No posts with this tag.</p>
+        ) : (
+          <div className="space-y-2">
+            {posts.map((post, i) => (
+              <PostListItem key={post.slug} post={post} index={i} />
+            ))}
+          </div>
+        )}
+      </div>
     </BlogLayout>
   );
 };
