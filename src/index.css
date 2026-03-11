@@ -348,6 +348,35 @@
   .author-card {
     @apply flex items-start gap-4 p-6 rounded-xl bg-card border border-border;
   }
+
+  /* ─── Pagination ─── */
+  .pagination-btn {
+    @apply inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium
+           border border-border bg-card text-foreground
+           transition-all duration-200 select-none;
+  }
+  .pagination-btn:hover {
+    @apply bg-secondary border-border/80;
+  }
+  .pagination-btn--disabled {
+    @apply opacity-40 cursor-not-allowed pointer-events-none;
+  }
+  .pagination-num {
+    @apply inline-flex items-center justify-center w-9 h-9 rounded-lg text-sm font-medium
+           text-muted-foreground transition-all duration-200 select-none;
+  }
+  .pagination-num:hover {
+    @apply bg-secondary text-foreground;
+  }
+  .pagination-num--active {
+    font-weight: 600;
+    background: hsl(var(--brand-gold));
+    color: hsl(220 60% 8%);
+  }
+  .pagination-num--active:hover {
+    background: hsl(38 92% 45%);
+    color: hsl(220 60% 8%);
+  }
 }
 
 @layer utilities {

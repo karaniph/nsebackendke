@@ -3,7 +3,7 @@ import BlogLayout from "@/components/BlogLayout";
 import PostCard from "@/components/PostCard";
 import TelegramCTA from "@/components/TelegramCTA";
 import SEOHead from "@/components/SEOHead";
-import { getPostBySlug, getRelatedPosts, formatDate, CATEGORY_LABELS } from "@/lib/blog-data";
+import { getPostBySlug, getRelatedPosts, getAdjacentPosts, formatDate, CATEGORY_LABELS } from "@/lib/blog-data";
 
 function renderContent(content: string) {
   const lines = content.split("\n");
@@ -76,6 +76,7 @@ const BlogPost = () => {
   if (!post) return <Navigate to="/404" replace />;
 
   const related = getRelatedPosts(post);
+  const { prev, next } = getAdjacentPosts(post.slug);
 
   return (
     <BlogLayout>
@@ -126,6 +127,46 @@ const BlogPost = () => {
         <div className="mt-14">
           <TelegramCTA variant="inline" />
         </div>
+
+        {/* ─── Prev / Next navigation ─── */}
+        {(prev || next) && (
+          <nav className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {prev ? (
+              <Link
+                to={`/blog/${prev.slug}`}
+                className="content-card p-5 group flex flex-col gap-2 hover:shadow-md transition-shadow"
+              >
+                <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m15 18-6-6 6-6"/></svg>
+                  Previous post
+                </span>
+                <span className="text-sm font-semibold text-foreground group-hover:text-accent transition-colors leading-snug line-clamp-2">
+                  {prev.title}
+                </span>
+                <time className="text-xs text-muted-foreground">{formatDate(prev.date)}</time>
+              </Link>
+            ) : (
+              <div />
+            )}
+            {next ? (
+              <Link
+                to={`/blog/${next.slug}`}
+                className="content-card p-5 group flex flex-col gap-2 items-end text-right hover:shadow-md transition-shadow"
+              >
+                <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  Next post
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m9 18 6-6-6-6"/></svg>
+                </span>
+                <span className="text-sm font-semibold text-foreground group-hover:text-accent transition-colors leading-snug line-clamp-2">
+                  {next.title}
+                </span>
+                <time className="text-xs text-muted-foreground">{formatDate(next.date)}</time>
+              </Link>
+            ) : (
+              <div />
+            )}
+          </nav>
+        )}
 
         {/* Related posts */}
         {related.length > 0 && (

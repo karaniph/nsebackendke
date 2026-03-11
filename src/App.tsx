@@ -11,6 +11,7 @@ import TagPage from "./pages/TagPage";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import RSSPage from "./pages/RSSPage";
+import ArchivePage from "./pages/ArchivePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => {
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
             <Route path="/rss" element={<RSSPage />} />
+            <Route path="/archive/:year/:month" element={<ArchivePage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

@@ -318,6 +318,88 @@ export function getRelatedPosts(post: BlogPost, limit = 3): BlogPost[] {
     .map((x) => x.post);
 }
 
+// ─── Adjacent Posts (Prev / Next) ───────────────────────────────────────────
+export function getAdjacentPosts(slug: string): {
+  prev: BlogPost | null;
+  next: BlogPost | null;
+} {
+  const posts = getPublishedPosts(); // sorted newest → oldest
+  const idx = posts.findIndex((p) => p.slug === slug);
+  if (idx === -1) return { prev: null, next: null };
+  return {
+    next: idx > 0 ? posts[idx - 1] : null,          // newer post
+    prev: idx < posts.length - 1 ? posts[idx + 1] : null, // older post
+  };
+}
+
+// ─── Archive Helpers ─────────────────────────────────────────────────────────
+export interface ArchiveMonth {
+  year: number;
+  month: number;
+  label: string;
+  count: number;
+  href: string;
+}
+
+export function getArchiveMonths(): ArchiveMonth[] {
+  const posts = getPublishedPosts();
+  const map = new Map<string, { year: number; month: number; count: number }>();
+  posts.forEach((p) => {
+    const d = new Date(p.date);
+    const year = d.getFullYear();
+    const month = d.getMonth() + 1;
+    const key = `${year}-${month}`;
+    const existing = map.get(key);
+    if (existing) existing.count++;
+    else map.set(key, { year, month, count: 1 });
+  });
+  return Array.from(map.values())
+    .sort((a, b) => b.year - a.year || b.month - a.month)
+    .map(({ year, month, count }) => ({
+      year,
+      month,
+      count,
+      label: new Date(year, month - 1).toLocaleDateString("en-GB", {
+        month: "long",
+        year: "numeric",
+      }),
+      href: `/archive/${year}/${String(month).padStart(2, "0")}`,
+    }));
+}
+
+export function getPostsByYearMonth(year: number, month: number): BlogPost[] {
+  return getPublishedPosts().filter((p) => {
+    const d = new Date(p.date);
+    return d.getFullYear() === year && d.getMonth() + 1 === month;
+  });
+}
+
+// ─── Pagination ──────────────────────────────────────────────────────────────
+export const POSTS_PER_PAGE = 12;
+
+export interface PaginatedResult {
+  posts: BlogPost[];
+  totalPages: number;
+  currentPage: number;
+  totalPosts: number;
+}
+
+export function paginatePosts(
+  posts: BlogPost[],
+  page: number,
+  perPage = POSTS_PER_PAGE
+): PaginatedResult {
+  const currentPage = Math.max(1, Math.min(page, Math.ceil(posts.length / perPage) || 1));
+  const totalPages = Math.max(1, Math.ceil(posts.length / perPage));
+  const start = (currentPage - 1) * perPage;
+  return {
+    posts: posts.slice(start, start + perPage),
+    totalPages,
+    currentPage,
+    totalPosts: posts.length,
+  };
+}
+
 export function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString("en-GB", {
     day: "numeric",

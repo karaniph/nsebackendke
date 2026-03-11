@@ -1,8 +1,9 @@
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import BlogLayout from "@/components/BlogLayout";
 import PostCard from "@/components/PostCard";
 import SEOHead from "@/components/SEOHead";
-import { getPostsByCategory, CATEGORY_LABELS, type PostCategory } from "@/lib/blog-data";
+import Pagination from "@/components/Pagination";
+import { getPostsByCategory, CATEGORY_LABELS, paginatePosts, type PostCategory } from "@/lib/blog-data";
 
 const CATEGORY_DESCRIPTIONS: Record<PostCategory, string> = {
   "market-briefs": "Weekly NSE performance summaries, top movers, and what to watch next.",
@@ -13,10 +14,13 @@ const CATEGORY_DESCRIPTIONS: Record<PostCategory, string> = {
 
 const CategoryPage = () => {
   const { category } = useParams<{ category: string }>();
+  const [searchParams] = useSearchParams();
   const cat = category as PostCategory;
-  const posts = cat ? getPostsByCategory(cat) : [];
+  const allPosts = cat ? getPostsByCategory(cat) : [];
   const label = cat ? CATEGORY_LABELS[cat] : "";
   const desc = cat ? CATEGORY_DESCRIPTIONS[cat] : "";
+  const page = parseInt(searchParams.get("page") ?? "1", 10);
+  const { posts, totalPages, currentPage, totalPosts } = paginatePosts(allPosts, page);
 
   if (!label) {
     return (
@@ -40,8 +44,9 @@ const CategoryPage = () => {
           <span className="category-badge mb-3" data-category={cat}>{label}</span>
           <h1 className="text-3xl md:text-4xl font-heading font-bold text-foreground mt-3">{label}</h1>
           <p className="text-muted-foreground mt-2 max-w-lg">{desc}</p>
+          <p className="text-sm text-muted-foreground mt-1">{totalPosts} post{totalPosts !== 1 ? "s" : ""}</p>
         </div>
-        {posts.length === 0 ? (
+        {allPosts.length === 0 ? (
           <div className="empty-state">
             <div className="empty-state-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14,2 14,8 20,8"/></svg>
@@ -50,11 +55,14 @@ const CategoryPage = () => {
             <p className="text-xs text-muted-foreground mt-1">Check back soon — new content is published weekly.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
-            {posts.map((post, i) => (
-              <PostCard key={post.slug} post={post} index={i} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+              {posts.map((post, i) => (
+                <PostCard key={post.slug} post={post} index={i} />
+              ))}
+            </div>
+            <Pagination currentPage={currentPage} totalPages={totalPages} />
+          </>
         )}
       </div>
     </BlogLayout>
