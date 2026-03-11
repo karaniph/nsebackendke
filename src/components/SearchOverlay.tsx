@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { getPublishedPosts, formatDate, CATEGORY_LABELS } from "@/lib/blog-data";
+import { useLivePosts } from "@/hooks/use-live-posts";
+import { formatDate, CATEGORY_LABELS, sortPublishedPosts } from "@/lib/blog-data";
 
 interface SearchOverlayProps {
   isOpen: boolean;
@@ -10,7 +11,8 @@ interface SearchOverlayProps {
 const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-  const posts = getPublishedPosts();
+  const { data } = useLivePosts();
+  const posts = sortPublishedPosts(data || []);
 
   const filtered = query.trim()
     ? posts.filter(

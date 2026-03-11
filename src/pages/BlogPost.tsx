@@ -3,7 +3,8 @@ import BlogLayout from "@/components/BlogLayout";
 import PostCard from "@/components/PostCard";
 import TelegramCTA from "@/components/TelegramCTA";
 import SEOHead from "@/components/SEOHead";
-import { getPostBySlug, getRelatedPosts, getAdjacentPosts, formatDate, CATEGORY_LABELS } from "@/lib/blog-data";
+import { useLivePosts } from "@/hooks/use-live-posts";
+import { getPostBySlugFrom, getRelatedPostsFrom, getAdjacentPostsFrom, formatDate, CATEGORY_LABELS } from "@/lib/blog-data";
 
 function renderContent(content: string) {
   const lines = content.split("\n");
@@ -71,12 +72,23 @@ function renderContent(content: string) {
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
-  const post = slug ? getPostBySlug(slug) : undefined;
+  const { data, isLoading } = useLivePosts();
+  const posts = data || [];
+  const post = slug ? getPostBySlugFrom(posts, slug) : undefined;
 
+  if (isLoading) {
+    return (
+      <BlogLayout>
+        <article className="container max-w-3xl py-16">
+          <p className="text-sm text-muted-foreground">Loading post...</p>
+        </article>
+      </BlogLayout>
+    );
+  }
   if (!post) return <Navigate to="/404" replace />;
 
-  const related = getRelatedPosts(post);
-  const { prev, next } = getAdjacentPosts(post.slug);
+  const related = getRelatedPostsFrom(posts, post);
+  const { prev, next } = getAdjacentPostsFrom(posts, post.slug);
 
   return (
     <BlogLayout>

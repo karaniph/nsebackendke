@@ -3,12 +3,14 @@ import BlogLayout from "@/components/BlogLayout";
 import PostCard from "@/components/PostCard";
 import SEOHead from "@/components/SEOHead";
 import Pagination from "@/components/Pagination";
-import { getPostsByTag, paginatePosts } from "@/lib/blog-data";
+import { useLivePosts } from "@/hooks/use-live-posts";
+import { getPostsByTagFrom, paginatePosts } from "@/lib/blog-data";
 
 const TagPage = () => {
   const { tag } = useParams<{ tag: string }>();
+  const { data } = useLivePosts();
   const [searchParams] = useSearchParams();
-  const allPosts = tag ? getPostsByTag(tag) : [];
+  const allPosts = tag ? getPostsByTagFrom(data || [], tag) : [];
   const page = parseInt(searchParams.get("page") ?? "1", 10);
   const { posts, totalPages, currentPage, totalPosts } = paginatePosts(allPosts, page);
 

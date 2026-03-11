@@ -288,12 +288,26 @@ export function getPublishedPosts(): BlogPost[] {
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
+export function sortPublishedPosts(posts: BlogPost[]): BlogPost[] {
+  return posts
+    .filter((p) => !p.draft)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
 export function getPostBySlug(slug: string): BlogPost | undefined {
   return blogPosts.find((p) => p.slug === slug);
 }
 
+export function getPostBySlugFrom(posts: BlogPost[], slug: string): BlogPost | undefined {
+  return posts.find((p) => p.slug === slug);
+}
+
 export function getPostsByCategory(category: PostCategory): BlogPost[] {
   return getPublishedPosts().filter((p) => p.category === category);
+}
+
+export function getPostsByCategoryFrom(posts: BlogPost[], category: PostCategory): BlogPost[] {
+  return sortPublishedPosts(posts).filter((p) => p.category === category);
 }
 
 export function getAllTags(): string[] {
@@ -306,8 +320,30 @@ export function getPostsByTag(tag: string): BlogPost[] {
   return getPublishedPosts().filter((p) => p.tags.includes(tag));
 }
 
+export function getAllTagsFrom(posts: BlogPost[]): string[] {
+  const tags = new Set<string>();
+  sortPublishedPosts(posts).forEach((p) => p.tags.forEach((t) => tags.add(t)));
+  return Array.from(tags).sort();
+}
+
+export function getPostsByTagFrom(posts: BlogPost[], tag: string): BlogPost[] {
+  return sortPublishedPosts(posts).filter((p) => p.tags.includes(tag));
+}
+
 export function getRelatedPosts(post: BlogPost, limit = 3): BlogPost[] {
   return getPublishedPosts()
+    .filter((p) => p.slug !== post.slug)
+    .map((p) => ({
+      post: p,
+      score: p.tags.filter((t) => post.tags.includes(t)).length + (p.category === post.category ? 2 : 0),
+    }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map((x) => x.post);
+}
+
+export function getRelatedPostsFrom(posts: BlogPost[], post: BlogPost, limit = 3): BlogPost[] {
+  return sortPublishedPosts(posts)
     .filter((p) => p.slug !== post.slug)
     .map((p) => ({
       post: p,
@@ -329,6 +365,16 @@ export function getAdjacentPosts(slug: string): {
   return {
     next: idx > 0 ? posts[idx - 1] : null,          // newer post
     prev: idx < posts.length - 1 ? posts[idx + 1] : null, // older post
+  };
+}
+
+export function getAdjacentPostsFrom(posts: BlogPost[], slug: string): { prev: BlogPost | null; next: BlogPost | null } {
+  const sorted = sortPublishedPosts(posts);
+  const idx = sorted.findIndex((p) => p.slug === slug);
+  if (idx === -1) return { prev: null, next: null };
+  return {
+    next: idx > 0 ? sorted[idx - 1] : null,
+    prev: idx < sorted.length - 1 ? sorted[idx + 1] : null,
   };
 }
 
@@ -367,8 +413,41 @@ export function getArchiveMonths(): ArchiveMonth[] {
     }));
 }
 
+export function getArchiveMonthsFrom(posts: BlogPost[]): ArchiveMonth[] {
+  const published = sortPublishedPosts(posts);
+  const map = new Map<string, { year: number; month: number; count: number }>();
+  published.forEach((p) => {
+    const d = new Date(p.date);
+    const year = d.getFullYear();
+    const month = d.getMonth() + 1;
+    const key = `${year}-${month}`;
+    const existing = map.get(key);
+    if (existing) existing.count++;
+    else map.set(key, { year, month, count: 1 });
+  });
+  return Array.from(map.values())
+    .sort((a, b) => b.year - a.year || b.month - a.month)
+    .map(({ year, month, count }) => ({
+      year,
+      month,
+      count,
+      label: new Date(year, month - 1).toLocaleDateString("en-GB", {
+        month: "long",
+        year: "numeric",
+      }),
+      href: `/archive/${year}/${String(month).padStart(2, "0")}`,
+    }));
+}
+
 export function getPostsByYearMonth(year: number, month: number): BlogPost[] {
   return getPublishedPosts().filter((p) => {
+    const d = new Date(p.date);
+    return d.getFullYear() === year && d.getMonth() + 1 === month;
+  });
+}
+
+export function getPostsByYearMonthFrom(posts: BlogPost[], year: number, month: number): BlogPost[] {
+  return sortPublishedPosts(posts).filter((p) => {
     const d = new Date(p.date);
     return d.getFullYear() === year && d.getMonth() + 1 === month;
   });

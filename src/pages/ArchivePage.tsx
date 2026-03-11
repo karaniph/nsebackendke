@@ -2,7 +2,8 @@ import { useParams, Link } from "react-router-dom";
 import BlogLayout from "@/components/BlogLayout";
 import PostCard from "@/components/PostCard";
 import SEOHead from "@/components/SEOHead";
-import { getPostsByYearMonth, getArchiveMonths } from "@/lib/blog-data";
+import { useLivePosts } from "@/hooks/use-live-posts";
+import { getPostsByYearMonthFrom, getArchiveMonthsFrom } from "@/lib/blog-data";
 
 const MONTH_NAMES = [
   "", "January", "February", "March", "April", "May", "June",
@@ -11,11 +12,13 @@ const MONTH_NAMES = [
 
 const ArchivePage = () => {
   const { year, month } = useParams<{ year: string; month: string }>();
+  const { data } = useLivePosts();
+  const postsData = data || [];
   const yearNum = parseInt(year ?? "0", 10);
   const monthNum = parseInt(month ?? "0", 10);
 
-  const posts = yearNum && monthNum ? getPostsByYearMonth(yearNum, monthNum) : [];
-  const archiveMonths = getArchiveMonths();
+  const posts = yearNum && monthNum ? getPostsByYearMonthFrom(postsData, yearNum, monthNum) : [];
+  const archiveMonths = getArchiveMonthsFrom(postsData);
   const monthLabel = MONTH_NAMES[monthNum] ?? "";
   const pageTitle = `${monthLabel} ${yearNum}`;
 

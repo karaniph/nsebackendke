@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
 import BlogLayout from "@/components/BlogLayout";
 import SEOHead from "@/components/SEOHead";
-import { getAllTags, getPostsByTag } from "@/lib/blog-data";
+import { useLivePosts } from "@/hooks/use-live-posts";
+import { getAllTagsFrom, getPostsByTagFrom } from "@/lib/blog-data";
 
 const TagsIndex = () => {
-  const tags = getAllTags();
+  const { data } = useLivePosts();
+  const posts = data || [];
+  const tags = getAllTagsFrom(posts);
 
   return (
     <BlogLayout>
@@ -20,7 +23,7 @@ const TagsIndex = () => {
               className="tag-chip text-sm px-3 py-1.5"
             >
               {tag}
-              <span className="ml-1.5 text-muted-foreground/60">{getPostsByTag(tag).length}</span>
+              <span className="ml-1.5 text-muted-foreground/60">{getPostsByTagFrom(posts, tag).length}</span>
             </Link>
           ))}
         </div>

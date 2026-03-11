@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>NSEinsider</title>
+    <link>https://nseinsider.co.ke</link>
+    <description>Kenya's market intelligence platform. Weekly analysis, company deep dives, and investor education for the Nairobi Securities Exchange.</description>
+    <language>en</language>
+    <lastBuildDate>Wed, 11 Mar 2026 11:09:27 GMT</lastBuildDate>
+    <atom:link href="https://nseinsider.co.ke/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title><![CDATA[NSE Weekly Wrap: NASI Gains 1.8% as Banking Stocks Rally]]></title>
+      <link>https://nseinsider.co.ke/blog/nse-weekly-wrap-march-2026</link>
+      <description><![CDATA[The Nairobi All-Share Index closed the week higher, driven by renewed investor interest in KCB, Equity, and Co-operative Bank. Here's what moved the market.]]></description>
+      <pubDate>Sat, 07 Mar 2026 00:00:00 GMT</pubDate>
+      <author>Brian Mwenda</author>
+      <category>market-briefs</category>
+      <category>nse</category>
+      <category>weekly-wrap</category>
+      <category>banking</category>
+      <category>nasi</category>
+    </item>
+    <item>
+      <title><![CDATA[NSEinsider Bot v2: Real-Time Alerts, Watchlists, and More]]></title>
+      <link>https://nseinsider.co.ke/blog/nseinsider-bot-v2-launch</link>
+      <description><![CDATA[Our Telegram bot just got a major upgrade. Here's everything new in v2 — including real-time price alerts, custom watchlists, and daily market summaries.]]></description>
+      <pubDate>Sun, 01 Mar 2026 00:00:00 GMT</pubDate>
+      <author>Kevin Njoroge</author>
+      <category>bot-updates</category>
+      <category>bot</category>
+      <category>telegram</category>
+      <category>product-update</category>
+      <category>alerts</category>
+    </item>
+    <item>
+      <title><![CDATA[Safaricom: Is the M-Pesa Growth Story Fully Priced In?]]></title>
+      <link>https://nseinsider.co.ke/blog/safaricom-deep-dive-2026</link>
+      <description><![CDATA[A comprehensive look at Safaricom's valuation, M-Pesa's expansion into Ethiopia, and whether the stock still offers upside at current levels.]]></description>
+      <pubDate>Sat, 28 Feb 2026 00:00:00 GMT</pubDate>
+      <author>Brian Mwenda</author>
+      <category>deep-dives</category>
+      <category>safaricom</category>
+      <category>m-pesa</category>
+      <category>valuation</category>
+      <category>ethiopia</category>
+    </item>
+    <item>
+      <title><![CDATA[How to Read NSE Financial Statements Like a Pro]]></title>
+      <link>https://nseinsider.co.ke/blog/how-to-read-nse-financial-statements</link>
+      <description><![CDATA[A practical guide to understanding balance sheets, income statements, and cash flow reports from NSE-listed companies — no finance degree required.]]></description>
+      <pubDate>Sun, 15 Feb 2026 00:00:00 GMT</pubDate>
+      <author>Amara Osei</author>
+      <category>education</category>
+      <category>education</category>
+      <category>fundamentals</category>
+      <category>financial-analysis</category>
+      <category>beginners</category>
+    </item>
+  </channel>
+</rss>

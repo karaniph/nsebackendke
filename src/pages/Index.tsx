@@ -3,17 +3,19 @@ import BlogLayout from "@/components/BlogLayout";
 import PostCard from "@/components/PostCard";
 import TelegramCTA from "@/components/TelegramCTA";
 import SEOHead from "@/components/SEOHead";
+import { useLivePosts } from "@/hooks/use-live-posts";
 import {
-  getPublishedPosts,
-  getPostsByCategory,
+  getPostsByCategoryFrom,
+  sortPublishedPosts,
 } from "@/lib/blog-data";
 
 const Index = () => {
-  const allPosts = getPublishedPosts();
-  const marketBriefs = getPostsByCategory("market-briefs");
-  const deepDives = getPostsByCategory("deep-dives");
-  const education = getPostsByCategory("education");
-  const botUpdates = getPostsByCategory("bot-updates");
+  const { data } = useLivePosts();
+  const allPosts = sortPublishedPosts(data || []);
+  const marketBriefs = getPostsByCategoryFrom(allPosts, "market-briefs");
+  const deepDives = getPostsByCategoryFrom(allPosts, "deep-dives");
+  const education = getPostsByCategoryFrom(allPosts, "education");
+  const botUpdates = getPostsByCategoryFrom(allPosts, "bot-updates");
 
   return (
     <BlogLayout>

@@ -3,7 +3,8 @@ import BlogLayout from "@/components/BlogLayout";
 import PostCard from "@/components/PostCard";
 import SEOHead from "@/components/SEOHead";
 import Pagination from "@/components/Pagination";
-import { getPostsByCategory, CATEGORY_LABELS, paginatePosts, type PostCategory } from "@/lib/blog-data";
+import { useLivePosts } from "@/hooks/use-live-posts";
+import { getPostsByCategoryFrom, CATEGORY_LABELS, paginatePosts, type PostCategory } from "@/lib/blog-data";
 
 const CATEGORY_DESCRIPTIONS: Record<PostCategory, string> = {
   "market-briefs": "Weekly NSE performance summaries, top movers, and what to watch next.",
@@ -14,9 +15,10 @@ const CATEGORY_DESCRIPTIONS: Record<PostCategory, string> = {
 
 const CategoryPage = () => {
   const { category } = useParams<{ category: string }>();
+  const { data } = useLivePosts();
   const [searchParams] = useSearchParams();
   const cat = category as PostCategory;
-  const allPosts = cat ? getPostsByCategory(cat) : [];
+  const allPosts = cat ? getPostsByCategoryFrom(data || [], cat) : [];
   const label = cat ? CATEGORY_LABELS[cat] : "";
   const desc = cat ? CATEGORY_DESCRIPTIONS[cat] : "";
   const page = parseInt(searchParams.get("page") ?? "1", 10);
