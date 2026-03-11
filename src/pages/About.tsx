@@ -27,35 +27,6 @@ const About = () => {
             <li><strong>Investor Education</strong> — Practical guides to reading financial statements, understanding ratios, and building a portfolio</li>
             <li><strong>Bot Updates</strong> — New features and tips for the NSEinsider Telegram Bot</li>
           </ul>
-
-          <h2>The Team</h2>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-8">
-          <div className="author-card">
-            <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center text-sm font-bold text-foreground shrink-0">BM</div>
-            <div>
-              <h3 className="font-heading font-semibold text-foreground">Brian Mwenda</h3>
-              <p className="text-sm text-muted-foreground">Market Analyst</p>
-              <p className="text-xs text-muted-foreground mt-2 leading-relaxed">CFA Level III candidate. Previously at Genghis Capital. Covers banking, telco, and macro.</p>
-            </div>
-          </div>
-          <div className="author-card">
-            <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center text-sm font-bold text-foreground shrink-0">AO</div>
-            <div>
-              <h3 className="font-heading font-semibold text-foreground">Amara Osei</h3>
-              <p className="text-sm text-muted-foreground">Education Lead</p>
-              <p className="text-xs text-muted-foreground mt-2 leading-relaxed">Former investment banking analyst. Passionate about financial literacy across East Africa.</p>
-            </div>
-          </div>
-          <div className="author-card">
-            <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center text-sm font-bold text-foreground shrink-0">KN</div>
-            <div>
-              <h3 className="font-heading font-semibold text-foreground">Kevin Njoroge</h3>
-              <p className="text-sm text-muted-foreground">Product Lead</p>
-              <p className="text-xs text-muted-foreground mt-2 leading-relaxed">Full-stack developer building the NSEinsider Bot. Ex-Safaricom engineering.</p>
-            </div>
-          </div>
         </div>
 
         <div className="prose-blog">
