@@ -8,44 +8,55 @@ interface SiteHeaderProps {
 
 const SiteHeader = ({ onSearchOpen }: SiteHeaderProps) => {
   const [currentTheme, setCurrentTheme] = useState<"light" | "dark">(getInitialTheme);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     setTheme(currentTheme);
   }, [currentTheme]);
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const toggleTheme = () => {
-    const next = currentTheme === "light" ? "dark" : "light";
-    setCurrentTheme(next);
+    setCurrentTheme((t) => (t === "light" ? "dark" : "light"));
   };
 
   return (
-    <header className="w-full max-w-prose mx-auto px-6 pt-16 pb-12">
-      <nav className="flex items-baseline justify-between">
-        <Link to="/" className="font-heading text-xl font-semibold tracking-tight text-foreground hover:text-accent transition-colors">
+    <header
+      className={`sticky top-0 z-40 transition-all duration-300 ${
+        scrolled
+          ? "bg-background/80 backdrop-blur-xl border-b border-border/50 py-4"
+          : "bg-transparent py-6"
+      }`}
+    >
+      <div className="w-full max-w-prose mx-auto px-6 flex items-center justify-between">
+        <Link
+          to="/"
+          className="font-heading text-lg font-semibold tracking-tight text-foreground transition-colors hover:text-accent"
+        >
           Form & Void
         </Link>
-        <div className="flex items-baseline gap-6 text-sm">
-          <button
-            onClick={onSearchOpen}
-            className="text-muted-foreground hover:text-accent transition-colors"
-          >
+        <nav className="flex items-center gap-5 text-sm">
+          <button onClick={onSearchOpen} className="btn-subtle">
             Search
           </button>
-          <Link
-            to="/contact"
-            className="text-muted-foreground hover:text-accent transition-colors"
-          >
+          <Link to="/contact" className="btn-subtle">
             Contact
           </Link>
           <button
             onClick={toggleTheme}
-            className="text-muted-foreground hover:text-accent transition-colors"
+            className="btn-subtle flex items-center gap-1.5"
             aria-label="Toggle theme"
           >
+            <span className="inline-block w-3 h-3 rounded-full border border-current transition-colors" 
+                  style={{ background: currentTheme === "dark" ? "currentColor" : "transparent" }} />
             {currentTheme === "light" ? "Dark" : "Light"}
           </button>
-        </div>
-      </nav>
+        </nav>
+      </div>
     </header>
   );
 };

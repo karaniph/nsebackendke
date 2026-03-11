@@ -3,7 +3,6 @@ import BlogLayout from "@/components/BlogLayout";
 import SEOHead from "@/components/SEOHead";
 import { getPostBySlug, formatDate } from "@/lib/blog-data";
 
-/** Extremely simple markdown-to-HTML for our controlled content */
 function renderContent(content: string) {
   const lines = content.split("\n");
   const elements: React.ReactNode[] = [];
@@ -13,33 +12,28 @@ function renderContent(content: string) {
 
   const processInline = (text: string): React.ReactNode[] => {
     const parts: React.ReactNode[] = [];
-    // Process inline code, bold, italic, links
     const regex = /(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\([^)]+\))/g;
     let lastIndex = 0;
     let match;
 
     while ((match = regex.exec(text)) !== null) {
-      if (match.index > lastIndex) {
-        parts.push(text.slice(lastIndex, match.index));
-      }
+      if (match.index > lastIndex) parts.push(text.slice(lastIndex, match.index));
       const m = match[0];
       if (m.startsWith("`")) {
-        parts.push(<code key={`i${key++}`} className="bg-secondary px-1.5 py-0.5 rounded-sm text-sm">{m.slice(1, -1)}</code>);
+        parts.push(<code key={`i${key++}`}>{m.slice(1, -1)}</code>);
       } else if (m.startsWith("**")) {
-        parts.push(<strong key={`i${key++}`}>{m.slice(2, -2)}</strong>);
+        parts.push(<strong key={`i${key++}`} className="text-foreground font-semibold">{m.slice(2, -2)}</strong>);
       } else if (m.startsWith("*")) {
         parts.push(<em key={`i${key++}`}>{m.slice(1, -1)}</em>);
       } else if (m.startsWith("[")) {
         const linkMatch = m.match(/\[([^\]]+)\]\(([^)]+)\)/);
         if (linkMatch) {
-          parts.push(<a key={`i${key++}`} href={linkMatch[2]} className="underline underline-offset-4 decoration-accent hover:text-accent transition-colors">{linkMatch[1]}</a>);
+          parts.push(<a key={`i${key++}`} href={linkMatch[2]}>{linkMatch[1]}</a>);
         }
       }
       lastIndex = match.index + m.length;
     }
-    if (lastIndex < text.length) {
-      parts.push(text.slice(lastIndex));
-    }
+    if (lastIndex < text.length) parts.push(text.slice(lastIndex));
     return parts.length > 0 ? parts : [text];
   };
 
@@ -49,9 +43,7 @@ function renderContent(content: string) {
     if (line.startsWith("```")) {
       if (inCodeBlock) {
         elements.push(
-          <pre key={key++} className="bg-secondary rounded-sm p-4 overflow-x-auto my-8 text-sm leading-relaxed">
-            <code>{codeLines.join("\n")}</code>
-          </pre>
+          <pre key={key++}><code>{codeLines.join("\n")}</code></pre>
         );
         codeLines = [];
         inCodeBlock = false;
@@ -61,55 +53,31 @@ function renderContent(content: string) {
       continue;
     }
 
-    if (inCodeBlock) {
-      codeLines.push(line);
-      continue;
-    }
-
+    if (inCodeBlock) { codeLines.push(line); continue; }
     if (line.trim() === "") continue;
 
     if (line.startsWith("## ")) {
-      elements.push(<h2 key={key++} className="text-2xl font-heading font-semibold mt-16 mb-6">{line.slice(3)}</h2>);
+      elements.push(<h2 key={key++}>{line.slice(3)}</h2>);
     } else if (line.startsWith("### ")) {
-      elements.push(<h3 key={key++} className="text-xl font-heading font-semibold mt-12 mb-4">{line.slice(4)}</h3>);
+      elements.push(<h3 key={key++}>{line.slice(4)}</h3>);
     } else if (line.startsWith("> ")) {
-      elements.push(
-        <blockquote key={key++} className="border-l-2 border-accent pl-6 my-8 italic text-muted-foreground">
-          {processInline(line.slice(2))}
-        </blockquote>
-      );
+      elements.push(<blockquote key={key++}>{processInline(line.slice(2))}</blockquote>);
     } else if (line.startsWith("- ")) {
-      // Collect list items
       const items: string[] = [line.slice(2)];
-      while (i + 1 < lines.length && lines[i + 1].startsWith("- ")) {
-        i++;
-        items.push(lines[i].slice(2));
-      }
+      while (i + 1 < lines.length && lines[i + 1].startsWith("- ")) { i++; items.push(lines[i].slice(2)); }
       elements.push(
-        <ul key={key++} className="mb-6 pl-6">
-          {items.map((item, j) => (
-            <li key={j} className="list-disc mb-2">{processInline(item)}</li>
-          ))}
-        </ul>
+        <ul key={key++}>{items.map((item, j) => <li key={j}>{processInline(item)}</li>)}</ul>
       );
     } else if (/^\d+\. /.test(line)) {
       const items: string[] = [line.replace(/^\d+\. /, "")];
-      while (i + 1 < lines.length && /^\d+\. /.test(lines[i + 1])) {
-        i++;
-        items.push(lines[i].replace(/^\d+\. /, ""));
-      }
+      while (i + 1 < lines.length && /^\d+\. /.test(lines[i + 1])) { i++; items.push(lines[i].replace(/^\d+\. /, "")); }
       elements.push(
-        <ol key={key++} className="mb-6 pl-6">
-          {items.map((item, j) => (
-            <li key={j} className="list-decimal mb-2">{processInline(item)}</li>
-          ))}
-        </ol>
+        <ol key={key++}>{items.map((item, j) => <li key={j}>{processInline(item)}</li>)}</ol>
       );
     } else {
-      elements.push(<p key={key++} className="mb-6">{processInline(line)}</p>);
+      elements.push(<p key={key++}>{processInline(line)}</p>);
     }
   }
-
   return elements;
 }
 
@@ -129,22 +97,25 @@ const BlogPost = () => {
         publishedDate={post.date}
         author={post.author}
       />
-      <article>
-        <header className="mb-16">
-          <time className="text-sm text-muted-foreground">{formatDate(post.date)}</time>
-          <h1 className="text-3xl font-heading font-bold mt-2 mb-4">{post.title}</h1>
-          <p className="text-muted-foreground text-sm">{post.author}</p>
-          <div className="flex gap-3 mt-4">
+      <article className="animate-in-up">
+        <header className="pt-12 mb-16">
+          <div className="flex items-center gap-3 mb-6">
+            <time className="text-xs text-muted-foreground font-mono">{formatDate(post.date)}</time>
+            <span className="w-1 h-1 rounded-full bg-border" />
+            <span className="text-xs text-muted-foreground">{post.author}</span>
+          </div>
+          <h1 className="text-3xl md:text-4xl font-heading font-bold leading-tight text-foreground mb-6">
+            {post.title}
+          </h1>
+          <p className="text-muted-foreground text-sm leading-relaxed max-w-lg">
+            {post.description}
+          </p>
+          <div className="flex flex-wrap gap-2 mt-6">
             {post.tags.map((tag) => (
-              <Link
-                key={tag}
-                to={`/tags/${tag}`}
-                className="text-xs text-muted-foreground hover:text-accent transition-colors"
-              >
-                {tag}
-              </Link>
+              <Link key={tag} to={`/tags/${tag}`} className="tag-chip">{tag}</Link>
             ))}
           </div>
+          <div className="divider-fade mt-12" />
         </header>
         <div className="prose-blog">
           {renderContent(post.content)}

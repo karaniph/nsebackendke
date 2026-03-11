@@ -14,11 +14,11 @@ export default {
     },
     extend: {
       fontFamily: {
-        mono: ['"IBM Plex Mono"', 'monospace'],
-        heading: ['"Spline Sans"', 'sans-serif'],
+        mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+        heading: ['"Spline Sans"', 'system-ui', 'sans-serif'],
       },
       maxWidth: {
-        prose: '72ch',
+        prose: '68ch',
       },
       colors: {
         border: "hsl(var(--border))",
