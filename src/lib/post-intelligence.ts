@@ -75,18 +75,25 @@ export function inferMarketMood(markdown: string): "Bullish" | "Bearish" | "Mixe
 }
 
 export function extractKeyTakeaways(markdown: string, limit = 3): string[] {
+  const clean = (value: string): string =>
+    value
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+      .replace(/[*_`>#]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
   const bullets = markdown
     .split("\n")
     .map((line) => line.trim())
     .filter((line) => line.startsWith("- "))
-    .map((line) => line.slice(2).trim())
+    .map((line) => clean(line.slice(2).trim()))
     .filter(Boolean);
   if (bullets.length >= limit) return bullets.slice(0, limit);
 
   const sentences = markdown
     .replace(/\n+/g, " ")
     .split(/(?<=[.!?])\s+/)
-    .map((s) => s.trim())
+    .map((s) => clean(s.trim()))
     .filter((s) => s.length > 50 && !s.startsWith("#"));
   return sentences.slice(0, limit);
 }
@@ -114,4 +121,3 @@ export function getCategoryOgImage(category: string): string {
   if (category === "market-briefs") return "/og-market-briefs.svg";
   return "/og-image.jpg";
 }
-

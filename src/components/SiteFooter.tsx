@@ -42,7 +42,7 @@ const SiteFooter = () => {
           <div>
             <h4 className="text-sm font-semibold text-foreground mb-4">Get Alerts</h4>
             <p className="text-sm text-muted-foreground mb-4">
-              Join 5,000+ investors on our Telegram bot for real-time NSE updates.
+              Join our Telegram bot for real-time NSE updates.
             </p>
             <a
               href="https://t.me/NSEInsider_bot"

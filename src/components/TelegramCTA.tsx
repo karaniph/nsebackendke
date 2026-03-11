@@ -26,7 +26,7 @@ const TelegramCTA = ({ variant = "default" }: { variant?: "default" | "inline" }
             Never miss a market move
           </h3>
           <p className="text-sm text-primary-foreground/70 mt-2 max-w-md leading-relaxed">
-            Join 5,000+ Kenyan investors getting real-time price alerts, daily market summaries, and custom watchlists — directly on Telegram.
+            Get real-time price alerts, daily market summaries, and custom watchlists — directly on Telegram.
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3">

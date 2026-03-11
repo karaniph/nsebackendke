@@ -234,7 +234,6 @@ const BlogPost = () => {
             <span className="rounded-full bg-secondary px-2.5 py-1">{readMinutes} min read</span>
             <span className="rounded-full bg-secondary px-2.5 py-1">{Math.max(1, sources.length)} verified source{Math.max(1, sources.length) > 1 ? "s" : ""}</span>
             <span className="rounded-full bg-secondary px-2.5 py-1">Last updated {formatDate(post.updatedAt || post.date)}</span>
-            <span className="rounded-full bg-secondary px-2.5 py-1">Generated from verified reports</span>
           </div>
           <div className="flex flex-wrap gap-2 mt-6">
             {post.tags.map((tag) => (
