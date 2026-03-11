@@ -13,6 +13,12 @@ export interface BlogPost {
   coverImage: string;
   draft: boolean;
   content: string;
+  blocks?: {
+    valuationSnapshot?: Array<{ label: string; value: string; signal?: "positive" | "neutral" | "negative" }>;
+    riskMatrix?: Array<{ risk: string; likelihood: "low" | "medium" | "high"; impact: "low" | "medium" | "high" }>;
+    glossary?: Array<{ term: string; definition: string }>;
+    checklist?: string[];
+  };
 }
 
 export const CATEGORY_LABELS: Record<PostCategory, string> = {

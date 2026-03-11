@@ -3,10 +3,15 @@ import { useParams, Link, Navigate } from "react-router-dom";
 import BlogLayout from "@/components/BlogLayout";
 import PostCard from "@/components/PostCard";
 import SEOHead from "@/components/SEOHead";
+import ValuationSnapshotCard from "@/components/ValuationSnapshotCard";
+import RiskMatrix from "@/components/RiskMatrix";
+import GlossaryChips from "@/components/GlossaryChips";
+import ChecklistCard from "@/components/ChecklistCard";
 import { useLivePosts } from "@/hooks/use-live-posts";
 import { getPostBySlugFrom, getRelatedPostsFrom, getAdjacentPostsFrom, formatDate, CATEGORY_LABELS } from "@/lib/blog-data";
 import { estimateReadingMinutes, extractHeadings, extractKeyTakeaways, extractSourceUrls, getCategoryOgImage, getPostMetaDescription, slugifyHeading } from "@/lib/post-intelligence";
 import { loadFollowedTopics, saveFollowedTopics } from "@/lib/personalization";
+import { buildVisualBlocks } from "@/lib/visual-blocks";
 
 function renderContent(content: string) {
   const lines = content.split("\n");
@@ -111,6 +116,7 @@ const BlogPost = () => {
   const readMinutes = estimateReadingMinutes(post.content);
   const sources = extractSourceUrls(post.content);
   const keyTakeaways = extractKeyTakeaways(post.content, 3);
+  const visualBlocks = buildVisualBlocks(post);
   const recommended = useMemo(
     () =>
       related
@@ -249,6 +255,20 @@ const BlogPost = () => {
                 </li>
               ))}
             </ul>
+          </section>
+        )}
+
+        {post.category === "deep-dives" && (
+          <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+            <ValuationSnapshotCard metrics={visualBlocks.valuationSnapshot} />
+            <RiskMatrix items={visualBlocks.riskMatrix} />
+          </section>
+        )}
+
+        {post.category === "education" && (
+          <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+            <GlossaryChips items={visualBlocks.glossary} />
+            <ChecklistCard items={visualBlocks.checklist} />
           </section>
         )}
 
