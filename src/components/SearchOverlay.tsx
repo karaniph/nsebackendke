@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { getPublishedPosts, formatDate } from "@/lib/blog-data";
+import { getPublishedPosts, formatDate, CATEGORY_LABELS } from "@/lib/blog-data";
 
 interface SearchOverlayProps {
   isOpen: boolean;
@@ -17,7 +17,8 @@ const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
         (p) =>
           p.title.toLowerCase().includes(query.toLowerCase()) ||
           p.description.toLowerCase().includes(query.toLowerCase()) ||
-          p.tags.some((t) => t.toLowerCase().includes(query.toLowerCase()))
+          p.tags.some((t) => t.toLowerCase().includes(query.toLowerCase())) ||
+          p.category.toLowerCase().includes(query.toLowerCase())
       )
     : [];
 
@@ -45,46 +46,61 @@ const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
 
   return (
     <div className="fixed inset-0 z-50 search-overlay animate-fade-in" onClick={onClose}>
-      <div
-        className="w-full max-w-prose mx-auto px-6 pt-[20vh]"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="relative">
-          <input
-            ref={inputRef}
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search posts..."
-            className="w-full bg-transparent border-b-2 border-foreground/20 pb-4 text-3xl font-heading font-light text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-accent transition-all duration-300"
-          />
-          {query && (
-            <span className="absolute right-0 bottom-5 text-xs text-muted-foreground">
-              {filtered.length} result{filtered.length !== 1 ? "s" : ""}
-            </span>
-          )}
+      <div className="container max-w-2xl pt-[15vh]" onClick={(e) => e.stopPropagation()}>
+        <div className="bg-card border border-border rounded-2xl shadow-2xl overflow-hidden">
+          <div className="flex items-center gap-3 px-5 border-b border-border">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground shrink-0">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+            </svg>
+            <input
+              ref={inputRef}
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search posts, tags, topics..."
+              className="flex-1 bg-transparent py-4 text-base text-foreground placeholder:text-muted-foreground focus:outline-none"
+            />
+            <kbd className="hidden sm:inline-block text-xs text-muted-foreground bg-secondary px-2 py-1 rounded">Esc</kbd>
+          </div>
+          <div className="max-h-[50vh] overflow-y-auto">
+            {query.trim() && filtered.length === 0 && (
+              <div className="empty-state py-12">
+                <div className="empty-state-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                  </svg>
+                </div>
+                <p className="text-sm text-muted-foreground">No posts found for "{query}"</p>
+              </div>
+            )}
+            {filtered.map((post) => (
+              <Link
+                key={post.slug}
+                to={`/blog/${post.slug}`}
+                onClick={onClose}
+                className="flex items-start gap-3 px-5 py-3.5 hover:bg-secondary/60 transition-colors border-b border-border/40 last:border-b-0"
+              >
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="category-badge text-[10px]" data-category={post.category}>
+                      {CATEGORY_LABELS[post.category]}
+                    </span>
+                    <time className="text-xs text-muted-foreground">{formatDate(post.date)}</time>
+                  </div>
+                  <h4 className="text-sm font-semibold text-foreground leading-snug">{post.title}</h4>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground mt-1 shrink-0">
+                  <path d="m9 18 6-6-6-6"/>
+                </svg>
+              </Link>
+            ))}
+            {!query.trim() && (
+              <div className="p-5 text-sm text-muted-foreground">
+                Start typing to search across all posts and tags.
+              </div>
+            )}
+          </div>
         </div>
-        <div className="mt-10 space-y-1">
-          {query.trim() && filtered.length === 0 && (
-            <p className="text-muted-foreground text-sm py-4">No posts found.</p>
-          )}
-          {filtered.map((post, i) => (
-            <Link
-              key={post.slug}
-              to={`/blog/${post.slug}`}
-              onClick={onClose}
-              className={`block group post-card animate-in-up stagger-${Math.min(i + 1, 5)}`}
-            >
-              <span className="text-xs text-muted-foreground font-mono">{formatDate(post.date)}</span>
-              <h3 className="font-heading font-semibold text-lg text-foreground group-hover:text-accent transition-colors mt-1">
-                {post.title}
-              </h3>
-            </Link>
-          ))}
-        </div>
-        <p className="mt-16 text-xs text-muted-foreground/60">
-          Press <kbd className="bg-secondary px-2 py-0.5 rounded text-foreground/60 ml-1">Esc</kbd> to close
-        </p>
       </div>
     </div>
   );

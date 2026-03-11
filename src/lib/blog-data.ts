@@ -1,274 +1,284 @@
+export type PostCategory = "market-briefs" | "deep-dives" | "education" | "bot-updates";
+
 export interface BlogPost {
   slug: string;
   title: string;
   description: string;
   date: string;
   author: string;
+  authorRole: string;
   tags: string[];
+  category: PostCategory;
   coverImage: string;
   draft: boolean;
   content: string;
 }
 
+export const CATEGORY_LABELS: Record<PostCategory, string> = {
+  "market-briefs": "Market Brief",
+  "deep-dives": "Deep Dive",
+  "education": "Education",
+  "bot-updates": "Bot Update",
+};
+
 export const blogPosts: BlogPost[] = [
   {
-    slug: "building-resilient-systems-with-circuit-breakers",
-    title: "Building Resilient Systems with Circuit Breakers",
-    description: "How to implement the circuit breaker pattern in distributed systems to prevent cascading failures and improve fault tolerance.",
-    date: "2026-03-08",
-    author: "Ada Kovács",
-    tags: ["systems-design", "reliability", "typescript"],
+    slug: "nse-weekly-wrap-march-2026",
+    title: "NSE Weekly Wrap: NASI Gains 1.8% as Banking Stocks Rally",
+    description: "The Nairobi All-Share Index closed the week higher, driven by renewed investor interest in KCB, Equity, and Co-operative Bank. Here's what moved the market.",
+    date: "2026-03-07",
+    author: "Brian Mwenda",
+    authorRole: "Market Analyst",
+    tags: ["nse", "weekly-wrap", "banking", "nasi"],
+    category: "market-briefs",
     coverImage: "",
     draft: false,
-    content: `## The Problem with Cascading Failures
+    content: `## Market Overview
 
-In distributed systems, a single failing service can bring down your entire architecture. When Service A depends on Service B, and Service B becomes unresponsive, Service A will accumulate blocked threads waiting for responses that never arrive.
+The Nairobi Securities Exchange posted a strong week, with the NASI closing at 112.45 — up 1.8% from last Friday's 110.47. Total market turnover hit KES 3.2 billion, a 22% increase week-on-week, signalling renewed institutional interest.
 
-This is the cascading failure problem. It's not theoretical — it's the most common cause of large-scale outages in production systems.
+Banking stocks led the rally, with the sector index gaining 2.4%. The positive momentum was attributed to strong Q4 2025 earnings previews and expectations of a further CBK rate cut in April.
 
-## What Is a Circuit Breaker?
+## Top Movers
 
-The circuit breaker pattern, popularized by Michael Nygard in *Release It!*, is borrowed directly from electrical engineering. An electrical circuit breaker detects excessive current and breaks the circuit to prevent damage. A software circuit breaker does the same for network calls.
+**Gainers:**
 
-It operates in three states:
+- KCB Group: +4.2% to KES 42.50 — strong Q4 earnings preview
+- Equity Group: +3.1% to KES 51.75 — regional expansion narrative
+- Co-operative Bank: +2.8% to KES 14.90 — dividend expectations
+- Safaricom: +1.5% to KES 28.40 — stable ARPU growth
 
-**Closed** — requests flow normally. The breaker monitors failure rates.
+**Losers:**
 
-**Open** — after a threshold of failures, the breaker "trips." All subsequent requests fail immediately without attempting the network call. This is the key insight: *fail fast* rather than fail slow.
+- BAT Kenya: -2.1% to KES 345.00 — regulatory concerns
+- Bamburi Cement: -1.6% to KES 32.50 — construction slowdown
+- East African Breweries: -0.8% to KES 165.00 — profit-taking
 
-**Half-Open** — after a timeout period, the breaker allows a single test request through. If it succeeds, the breaker closes. If it fails, the breaker opens again.
+## What to Watch Next Week
 
-## Implementation in TypeScript
+1. CBK's Monetary Policy Committee meets Tuesday — consensus expects a 25bps cut to 10.5%
+2. Safaricom half-year results due Wednesday
+3. Treasury bond auction on Thursday with strong demand expected
 
-Here's a minimal circuit breaker implementation:
+> The banking sector is repricing ahead of rate cuts. We expect this trend to continue through Q2, though selectivity will matter — not all banks are positioned equally for a lower-rate environment.
 
-\`\`\`typescript
-type CircuitState = 'CLOSED' | 'OPEN' | 'HALF_OPEN';
+## Foreign Investor Activity
 
-class CircuitBreaker {
-  private state: CircuitState = 'CLOSED';
-  private failureCount = 0;
-  private lastFailureTime: number | null = null;
+Net foreign selling continued but at a reduced pace — KES 180M net outflows vs. KES 420M the prior week. This suggests the sell-off is moderating, which is typically a bullish signal for the medium term.
 
-  constructor(
-    private threshold: number = 5,
-    private timeout: number = 30000
-  ) {}
-
-  async execute<T>(fn: () => Promise<T>): Promise<T> {
-    if (this.state === 'OPEN') {
-      if (Date.now() - this.lastFailureTime! > this.timeout) {
-        this.state = 'HALF_OPEN';
-      } else {
-        throw new Error('Circuit is OPEN');
-      }
-    }
-
-    try {
-      const result = await fn();
-      this.onSuccess();
-      return result;
-    } catch (error) {
-      this.onFailure();
-      throw error;
-    }
-  }
-
-  private onSuccess(): void {
-    this.failureCount = 0;
-    this.state = 'CLOSED';
-  }
-
-  private onFailure(): void {
-    this.failureCount++;
-    this.lastFailureTime = Date.now();
-    if (this.failureCount >= this.threshold) {
-      this.state = 'OPEN';
-    }
-  }
-}
-\`\`\`
-
-The critical detail is in the \`execute\` method. When the circuit is open, we don't even attempt the call. We fail immediately. This protects both the caller and the downstream service.
-
-## When to Use Circuit Breakers
-
-Circuit breakers are not universally applicable. Use them for:
-
-- Remote service calls (HTTP, gRPC)
-- Database connections under high load
-- Any I/O operation with unpredictable latency
-
-Do *not* use them for:
-
-- Local function calls
-- Operations where failure is expected and handled
-- Idempotent retry scenarios (use retry with backoff instead)
-
-## Monitoring Is Non-Negotiable
-
-A circuit breaker without monitoring is worse than no circuit breaker at all. You need to track:
-
-- State transitions (CLOSED → OPEN is an incident)
-- Failure rates per downstream service
-- Time spent in OPEN state
-
-> The circuit breaker doesn't fix the underlying problem. It buys you time to fix it without losing your entire system.
-
-This pattern is foundational. If you're building anything that makes network calls in production, you need circuit breakers.`,
+The shilling held steady at 128.50 against the dollar, providing a stable backdrop for equities.`,
   },
   {
-    slug: "the-case-for-boring-technology",
-    title: "The Case for Boring Technology",
-    description: "Why choosing well-understood, battle-tested technology is almost always the right decision for production systems.",
-    date: "2026-02-22",
-    author: "Ada Kovács",
-    tags: ["engineering-culture", "architecture"],
+    slug: "safaricom-deep-dive-2026",
+    title: "Safaricom: Is the M-Pesa Growth Story Fully Priced In?",
+    description: "A comprehensive look at Safaricom's valuation, M-Pesa's expansion into Ethiopia, and whether the stock still offers upside at current levels.",
+    date: "2026-02-28",
+    author: "Brian Mwenda",
+    authorRole: "Market Analyst",
+    tags: ["safaricom", "m-pesa", "valuation", "ethiopia"],
+    category: "deep-dives",
     coverImage: "",
     draft: false,
-    content: `## Innovation Tokens
+    content: `## The Investment Thesis
 
-Dan McKinley introduced the concept of "innovation tokens" in his influential essay. The idea is simple: every organization has a limited capacity for novelty. Each new, unproven technology you adopt spends one of these tokens.
+Safaricom remains the most actively traded counter on the NSE, accounting for roughly 40% of daily turnover. At KES 28.40, it trades at 14.2x forward earnings — a premium to the broader market but a discount to its five-year average of 17x.
 
-Most companies have approximately three innovation tokens to spend. If you spend them all on your database, your message queue, and your deployment pipeline, you have none left for the actual product you're building.
+The bull case rests on three pillars: continued M-Pesa dominance in Kenya, the Ethiopia opportunity, and the 5G rollout. The bear case centres on regulatory risk, the capital-intensive Ethiopia expansion, and slowing domestic subscriber growth.
 
-## What "Boring" Actually Means
+## M-Pesa: Still the Engine
 
-Boring technology is not bad technology. It is technology whose failure modes are well-understood. When PostgreSQL has a problem at 3 AM, you can find the answer on Stack Overflow. When your cutting-edge distributed database has a problem at 3 AM, you're reading source code on GitHub and hoping the maintainer is awake.
+M-Pesa revenue grew 18% year-on-year to KES 120 billion in FY2025, driven by:
 
-Boring means:
+- **Transaction volume growth** — 17.2 billion transactions, up from 15.1 billion
+- **Super app expansion** — merchant payments, credit, and savings products
+- **Cross-border remittances** — growing at 35% annually
 
-- **Extensive documentation.** Not just API docs, but war stories, migration guides, and performance tuning articles written by people who have run it in production for years.
-- **Predictable failure modes.** You know how it breaks. You've seen the errors before. You have runbooks.
-- **A large hiring pool.** You can find engineers who already know the technology, reducing onboarding time and operational risk.
+The key metric to watch is revenue per transaction, which has been declining as micro-transactions grow. This is actually healthy — it means the platform is deepening financial inclusion — but it does moderate revenue growth expectations.
 
-## The Real Cost of New Technology
+## Ethiopia: The Optionality Play
 
-Every technology choice has two cost curves:
+Safaricom Ethiopia has 8.2 million subscribers after 30 months of operations. The company invested KES 85 billion in the network and has targeted breakeven by FY2028.
 
-1. **The visible cost** — learning curve, integration time, initial setup.
-2. **The invisible cost** — operational surprises, missing tooling, ecosystem gaps, and the knowledge debt you accumulate when only two people on your team understand how it works.
+**Risks:**
 
-The invisible cost is always larger than the visible cost. Always.
+- Mobile money license delays (still pending government approval)
+- Forex repatriation challenges
+- Intense competition from Ethio Telecom's established base of 72 million subscribers
+
+**Upside:**
+
+- If M-Pesa launches in Ethiopia by H2 2026, it would be a significant catalyst
+- Ethiopia's 120 million population represents a massive addressable market
+- Current Safaricom valuation arguably assigns zero value to Ethiopia operations
+
+## Valuation Framework
 
 \`\`\`
-Cost
- │
- │    ╱ Invisible (operational)
- │   ╱
- │  ╱
- │ ╱  ╱ Visible (setup)
- │╱  ╱
- │  ╱
- │ ╱
- └──────────── Time
+Metric          Current   5Y Avg   Peer Avg
+──────────────────────────────────────────────
+P/E (Forward)   14.2x     17.0x    12.5x
+EV/EBITDA       8.1x      9.5x     7.2x
+Div Yield       5.8%      4.5%     3.2%
+ROE             28.4%     32.1%    18.5%
 \`\`\`
 
-## A Decision Framework
+At current levels, the stock is pricing in moderate growth but not the Ethiopia optionality. Our fair value estimate is KES 34.00, implying 20% upside.
 
-Before adopting a new technology, answer these questions:
+> We rate Safaricom a **Buy** with a 12-month target of KES 34.00. The risk-reward is compelling given the Ethiopia optionality and the 5.8% dividend yield providing downside protection.
 
-1. **What specific problem does this solve that existing tools cannot?** If the answer is "it's faster" or "it's more modern," that's not sufficient.
+## Key Risks
 
-2. **What happens when it breaks at 3 AM?** Can your on-call engineer fix it, or do they need to escalate to the one person who understands it?
-
-3. **What is the migration path if it doesn't work out?** Every technology adoption should have a reversal plan.
-
-4. **Is the team willing to own this for five years?** Technology choices outlast the engineers who make them. Choose accordingly.
-
-## The Exception
-
-There is one valid reason to adopt non-boring technology: when the boring option genuinely cannot solve the problem. If you're processing ten million events per second, PostgreSQL might not be the answer. But make sure you've actually hit that limit before reaching for something exotic.
-
-> The goal is not to use the newest technology. The goal is to solve problems for users. Technology is the means, never the end.
-
-Build on foundations you trust. Save your innovation tokens for the problems that actually require innovation.`,
+1. Regulatory changes to M-Pesa pricing could compress margins
+2. Ethiopia mobile money license further delayed
+3. 5G capex exceeds projections
+4. Shilling depreciation impacts Ethiopia investment returns`,
   },
   {
-    slug: "effective-code-review-practices",
-    title: "Effective Code Review Practices",
-    description: "A framework for code reviews that improve code quality without slowing down your team or creating adversarial dynamics.",
-    date: "2026-02-10",
-    author: "Ada Kovács",
-    tags: ["engineering-culture", "practices", "typescript"],
+    slug: "how-to-read-nse-financial-statements",
+    title: "How to Read NSE Financial Statements Like a Pro",
+    description: "A practical guide to understanding balance sheets, income statements, and cash flow reports from NSE-listed companies — no finance degree required.",
+    date: "2026-02-15",
+    author: "Amara Osei",
+    authorRole: "Education Lead",
+    tags: ["education", "fundamentals", "financial-analysis", "beginners"],
+    category: "education",
     coverImage: "",
     draft: false,
-    content: `## Code Review Is Communication
+    content: `## Why This Matters
 
-The primary purpose of code review is not to find bugs. Static analysis tools and tests are better at that. The primary purpose is *knowledge transfer* and *shared ownership*.
+Every NSE-listed company publishes financial statements quarterly and annually. These documents tell you more about a company's health than any analyst's opinion or WhatsApp tip. Learning to read them gives you an information edge that 90% of retail investors at the NSE don't have.
 
-A good code review leaves both the author and the reviewer with a better understanding of the system. A bad code review leaves the author demoralized and the reviewer frustrated.
+We'll break down the three core statements using real examples from NSE-listed companies.
 
-## The Framework
+## The Income Statement
 
-### 1. Start with Why
+The income statement answers one question: **Did the company make money over this period?**
 
-Before reading any code, read the pull request description. Understand the problem being solved. If the description is insufficient, your first comment should be: "Can you add more context about what problem this solves?"
+Key lines to focus on:
 
-Never review code without understanding its intent.
+- **Revenue (Turnover):** Total sales. Is it growing year-on-year?
+- **Operating Profit (EBIT):** Revenue minus operating costs. This tells you about the core business performance.
+- **Net Profit:** The bottom line after tax and interest. This is what's available to shareholders.
 
-### 2. Distinguish Between Three Levels
+**What to watch for:**
 
-Not all feedback is equal. Explicitly categorize your comments:
+- Revenue growing but profits shrinking = margins under pressure
+- One-time gains inflating profits = not sustainable
+- Interest costs eating into operating profit = too much debt
 
-**Must fix** — correctness issues, security vulnerabilities, data loss risks. These block the PR.
+## The Balance Sheet
 
-\`\`\`typescript
-// MUST FIX: This query is vulnerable to SQL injection.
-// Use parameterized queries instead of string interpolation.
-const query = \`SELECT * FROM users WHERE id = \${userId}\`;
-// Should be:
-const query = 'SELECT * FROM users WHERE id = $1';
+The balance sheet is a snapshot of what the company owns (assets) and owes (liabilities) at a specific point in time.
+
+**Key ratios to calculate:**
+
+1. **Current Ratio** = Current Assets ÷ Current Liabilities. Above 1.5 is comfortable.
+2. **Debt-to-Equity** = Total Debt ÷ Shareholders' Equity. Below 1.0 is conservative.
+3. **Book Value per Share** = Shareholders' Equity ÷ Shares Outstanding.
+
+> A company trading below book value isn't automatically cheap — it might be cheap for a reason. Always ask *why* the market is pricing it there.
+
+## The Cash Flow Statement
+
+This is arguably the most important statement and the most overlooked. Profits can be manipulated. Cash flow cannot.
+
+Three sections:
+
+- **Operating Cash Flow:** Cash generated from the core business. This should be positive and growing.
+- **Investing Cash Flow:** Cash spent on capital expenditures, acquisitions. Usually negative — that's fine.
+- **Financing Cash Flow:** Cash from raising debt, issuing shares, or paying dividends.
+
+**The golden rule:** Operating cash flow should exceed net profit over time. If a company reports KES 5 billion in profit but only KES 2 billion in operating cash flow, something is wrong.
+
+## Practical Exercise
+
+Let's apply this framework. Pull up Equity Group's latest annual report from the NSE website:
+
+1. Find the revenue trend over the last 3 years — is it growing?
+2. Calculate the current ratio and debt-to-equity
+3. Compare operating cash flow to net profit
+4. Check the dividend payout ratio — is it sustainable?
+
+If you can answer these four questions for any NSE company, you're already ahead of most investors in the market.
+
+## Common Red Flags
+
+- Consistent negative operating cash flow despite reported profits
+- Receivables growing much faster than revenue (customers not paying)
+- Frequent related-party transactions without clear business justification
+- Auditor qualifications or changes in auditing firms
+- Directors selling large stakes without explanation`,
+  },
+  {
+    slug: "nseinsider-bot-v2-launch",
+    title: "NSEinsider Bot v2: Real-Time Alerts, Watchlists, and More",
+    description: "Our Telegram bot just got a major upgrade. Here's everything new in v2 — including real-time price alerts, custom watchlists, and daily market summaries.",
+    date: "2026-03-01",
+    author: "Kevin Njoroge",
+    authorRole: "Product Lead",
+    tags: ["bot", "telegram", "product-update", "alerts"],
+    category: "bot-updates",
+    coverImage: "",
+    draft: false,
+    content: `## What's New in v2
+
+We've been listening to your feedback. The NSEinsider Telegram Bot v2 is our biggest update yet, designed to make following the NSE effortless. Here's what's new.
+
+## Real-Time Price Alerts
+
+Set custom price alerts for any NSE counter. Get notified the moment your target is hit.
+
+**How to use:**
+
+\`\`\`
+/alert SCOM above 30.00
+/alert KCB below 38.00
+/alert EQTY range 48.00-55.00
 \`\`\`
 
-**Should fix** — performance issues, maintainability concerns, missing error handling. These should be addressed but can be negotiated.
+You can set up to 20 active alerts on the free tier and unlimited alerts on Pro.
 
-**Nit** — style preferences, naming suggestions, minor readability improvements. These are explicitly optional.
+## Custom Watchlists
 
-If you don't categorize your comments, the author cannot prioritize their response. Everything feels equally urgent, which means nothing is.
+Create and manage watchlists to track the counters you care about. Get a daily summary of your watchlist performance.
 
-### 3. Ask Questions Instead of Making Demands
+\`\`\`
+/watchlist create "Banking Picks"
+/watchlist add "Banking Picks" KCB EQTY COOP
+/watchlist summary
+\`\`\`
 
-Compare these two comments:
+## Daily Market Summary
 
-*Bad:* "This function is too long. Break it up."
+Every trading day at 4:30 PM EAT, the bot sends you a concise summary:
 
-*Good:* "I'm having trouble following the logic here. Would it be clearer if the validation step were extracted into its own function?"
+- NASI, NSE-20, and NSE-25 index performance
+- Top 5 gainers and losers
+- Total market turnover
+- Notable corporate actions
 
-The first is a command. The second is a collaboration. The first creates defensiveness. The second creates dialogue.
+You can customise the summary to include only your watchlist stocks.
 
-### 4. Review in Context
+## Improved Command Reference
 
-A function that looks messy in isolation might be perfectly appropriate given the constraints of the surrounding code. Before suggesting a refactor, understand:
+- \`/price SCOM\` — Current price and daily change
+- \`/chart KCB 30d\` — 30-day price chart
+- \`/fundamentals EQTY\` — Key ratios (P/E, P/B, dividend yield)
+- \`/news SCOM\` — Latest news mentions
+- \`/compare KCB EQTY\` — Side-by-side comparison
 
-- What are the performance requirements?
-- Is this a hot path or a rarely-executed branch?
-- Is this a temporary workaround with a tracked issue, or a permanent solution?
+## What's Coming in v2.1
 
-### 5. Time-Box Your Reviews
+- Portfolio tracking with profit/loss calculations
+- Earnings calendar integration
+- SMS alerts for users without reliable data
+- API access for developers
 
-A code review should take no more than 60 minutes. After that, your attention degrades and you start either rubber-stamping or nitpicking.
+> The bot is free to use for basic features. Pro access (KES 500/month) unlocks unlimited alerts, priority delivery, and advanced charts. Start by messaging @NSEinsiderBot on Telegram.
 
-If a PR requires more than 60 minutes to review, it's too large. This is feedback for the author about PR sizing, not something to power through.
+## Feedback
 
-## What Not to Review
-
-- **Formatting.** Use automated formatters. Humans should never argue about semicolons.
-- **Things covered by linters.** If ESLint can catch it, you don't need to.
-- **Personal style preferences** that have no impact on correctness or maintainability.
-
-## Measuring Success
-
-A healthy code review culture has these properties:
-
-- PRs are reviewed within 4 hours during working hours
-- Review comments are discussions, not mandates
-- Authors feel comfortable pushing back on feedback
-- Knowledge is distributed — no single person is a bottleneck reviewer
-
-> The best code review is one where both people learn something. The worst is one where someone feels diminished.
-
-Invest in your review culture. It compounds.`,
+We ship based on what you tell us. Drop your feature requests and bug reports in our Telegram community or email us at hello@nseinsider.co.ke.`,
   },
 ];
 
@@ -282,6 +292,10 @@ export function getPostBySlug(slug: string): BlogPost | undefined {
   return blogPosts.find((p) => p.slug === slug);
 }
 
+export function getPostsByCategory(category: PostCategory): BlogPost[] {
+  return getPublishedPosts().filter((p) => p.category === category);
+}
+
 export function getAllTags(): string[] {
   const tags = new Set<string>();
   getPublishedPosts().forEach((p) => p.tags.forEach((t) => tags.add(t)));
@@ -292,11 +306,49 @@ export function getPostsByTag(tag: string): BlogPost[] {
   return getPublishedPosts().filter((p) => p.tags.includes(tag));
 }
 
+export function getRelatedPosts(post: BlogPost, limit = 3): BlogPost[] {
+  return getPublishedPosts()
+    .filter((p) => p.slug !== post.slug)
+    .map((p) => ({
+      post: p,
+      score: p.tags.filter((t) => post.tags.includes(t)).length + (p.category === post.category ? 2 : 0),
+    }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map((x) => x.post);
+}
+
 export function formatDate(dateStr: string): string {
-  const d = new Date(dateStr);
-  return d.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
+  return new Date(dateStr).toLocaleDateString("en-GB", {
     day: "numeric",
+    month: "short",
+    year: "numeric",
   });
+}
+
+export function generateRSSFeed(): string {
+  const posts = getPublishedPosts();
+  const items = posts.map(
+    (p) => `    <item>
+      <title><![CDATA[${p.title}]]></title>
+      <link>https://nseinsider.co.ke/blog/${p.slug}</link>
+      <description><![CDATA[${p.description}]]></description>
+      <pubDate>${new Date(p.date).toUTCString()}</pubDate>
+      <author>${p.author}</author>
+      <category>${p.category}</category>
+      ${p.tags.map((t) => `<category>${t}</category>`).join("\n      ")}
+    </item>`
+  );
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>NSEinsider</title>
+    <link>https://nseinsider.co.ke</link>
+    <description>Kenya's market intelligence platform. Weekly analysis, company deep dives, and investor education for the Nairobi Securities Exchange.</description>
+    <language>en</language>
+    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <atom:link href="https://nseinsider.co.ke/rss.xml" rel="self" type="application/rss+xml"/>
+${items.join("\n")}
+  </channel>
+</rss>`;
 }

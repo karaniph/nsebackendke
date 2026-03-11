@@ -7,9 +7,9 @@ const BlogLayout = ({ children }: { children: React.ReactNode }) => {
   const [searchOpen, setSearchOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col noise-bg">
+    <div className="min-h-screen flex flex-col">
       <SiteHeader onSearchOpen={() => setSearchOpen(true)} />
-      <main className="flex-1 w-full max-w-prose mx-auto px-6 pb-8">
+      <main className="flex-1">
         {children}
       </main>
       <SiteFooter />

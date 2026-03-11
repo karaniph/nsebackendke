@@ -8,21 +8,19 @@ const TagsIndex = () => {
 
   return (
     <BlogLayout>
-      <SEOHead title="Tags" description="Browse posts by topic." path="/tags" />
-      <div className="pt-12 animate-in-up">
-        <div className="accent-line mb-8" />
-        <h1 className="text-3xl font-heading font-bold mb-12 text-foreground">Tags</h1>
-        <div className="space-y-1">
-          {tags.map((tag, i) => (
+      <SEOHead title="Tags" description="Browse NSEinsider posts by topic." path="/tags" />
+      <div className="container py-12 md:py-16 max-w-3xl animate-in-up">
+        <h1 className="text-3xl font-heading font-bold text-foreground mb-2">Tags</h1>
+        <p className="text-muted-foreground mb-10">Browse all topics across our analysis and education content.</p>
+        <div className="flex flex-wrap gap-2">
+          {tags.map((tag) => (
             <Link
               key={tag}
               to={`/tags/${tag}`}
-              className={`post-card flex items-baseline justify-between group animate-in-up stagger-${Math.min(i + 1, 5)}`}
+              className="tag-chip text-sm px-3 py-1.5"
             >
-              <span className="text-foreground group-hover:text-accent transition-colors font-mono text-sm">{tag}</span>
-              <span className="text-xs text-muted-foreground font-mono">
-                {getPostsByTag(tag).length} post{getPostsByTag(tag).length !== 1 ? "s" : ""}
-              </span>
+              {tag}
+              <span className="ml-1.5 text-muted-foreground/60">{getPostsByTag(tag).length}</span>
             </Link>
           ))}
         </div>
