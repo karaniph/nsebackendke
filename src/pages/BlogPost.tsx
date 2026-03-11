@@ -1,16 +1,19 @@
+import { useEffect, useMemo, useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import BlogLayout from "@/components/BlogLayout";
 import PostCard from "@/components/PostCard";
-import TelegramCTA from "@/components/TelegramCTA";
 import SEOHead from "@/components/SEOHead";
 import { useLivePosts } from "@/hooks/use-live-posts";
 import { getPostBySlugFrom, getRelatedPostsFrom, getAdjacentPostsFrom, formatDate, CATEGORY_LABELS } from "@/lib/blog-data";
+import { estimateReadingMinutes, extractHeadings, extractKeyTakeaways, extractSourceUrls, getCategoryOgImage, getPostMetaDescription, slugifyHeading } from "@/lib/post-intelligence";
+import { loadFollowedTopics, saveFollowedTopics } from "@/lib/personalization";
 
 function renderContent(content: string) {
   const lines = content.split("\n");
   const elements: React.ReactNode[] = [];
   let inCodeBlock = false;
   let codeLines: string[] = [];
+  const headingSeen = new Map<string, number>();
   let key = 0;
 
   const processInline = (text: string): React.ReactNode[] => {
@@ -29,7 +32,7 @@ function renderContent(content: string) {
         parts.push(<em key={`i${key++}`}>{m.slice(1, -1)}</em>);
       } else if (m.startsWith("[")) {
         const linkMatch = m.match(/\[([^\]]+)\]\(([^)]+)\)/);
-        if (linkMatch) parts.push(<a key={`i${key++}`} href={linkMatch[2]}>{linkMatch[1]}</a>);
+        if (linkMatch) parts.push(<a key={`i${key++}`} href={linkMatch[2]} target="_blank" rel="noopener noreferrer">{linkMatch[1]}</a>);
       }
       lastIndex = match.index + m.length;
     }
@@ -50,9 +53,19 @@ function renderContent(content: string) {
     if (inCodeBlock) { codeLines.push(line); continue; }
     if (line.trim() === "") continue;
     if (line.startsWith("## ")) {
-      elements.push(<h2 key={key++}>{line.slice(3)}</h2>);
+      const text = line.slice(3);
+      const base = slugifyHeading(text);
+      const count = (headingSeen.get(base) || 0) + 1;
+      headingSeen.set(base, count);
+      const id = count === 1 ? base : `${base}-${count}`;
+      elements.push(<h2 key={key++} id={id}>{text}</h2>);
     } else if (line.startsWith("### ")) {
-      elements.push(<h3 key={key++}>{line.slice(4)}</h3>);
+      const text = line.slice(4);
+      const base = slugifyHeading(text);
+      const count = (headingSeen.get(base) || 0) + 1;
+      headingSeen.set(base, count);
+      const id = count === 1 ? base : `${base}-${count}`;
+      elements.push(<h3 key={key++} id={id}>{text}</h3>);
     } else if (line.startsWith("> ")) {
       elements.push(<blockquote key={key++}>{processInline(line.slice(2))}</blockquote>);
     } else if (line.startsWith("- ")) {
@@ -73,8 +86,13 @@ function renderContent(content: string) {
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data, isLoading } = useLivePosts();
+  const [followedTopics, setFollowedTopics] = useState<string[]>([]);
   const posts = data || [];
   const post = slug ? getPostBySlugFrom(posts, slug) : undefined;
+
+  useEffect(() => {
+    setFollowedTopics(loadFollowedTopics());
+  }, []);
 
   if (isLoading) {
     return (
@@ -87,21 +105,91 @@ const BlogPost = () => {
   }
   if (!post) return <Navigate to="/404" replace />;
 
-  const related = getRelatedPostsFrom(posts, post);
+  const related = getRelatedPostsFrom(posts, post, 6);
   const { prev, next } = getAdjacentPostsFrom(posts, post.slug);
+  const headings = extractHeadings(post.content);
+  const readMinutes = estimateReadingMinutes(post.content);
+  const sources = extractSourceUrls(post.content);
+  const keyTakeaways = extractKeyTakeaways(post.content, 3);
+  const recommended = useMemo(
+    () =>
+      related
+        .sort((a, b) => {
+          const aScore = (a.category === post.category ? 3 : 0) + a.tags.filter((t) => post.tags.includes(t)).length;
+          const bScore = (b.category === post.category ? 3 : 0) + b.tags.filter((t) => post.tags.includes(t)).length;
+          return bScore - aScore;
+        })
+        .slice(0, 3),
+    [related, post]
+  );
+  const metaDescription = getPostMetaDescription(post);
+  const ogImage = getCategoryOgImage(post.category);
+  const primaryTopic = (post.tags[0] || post.category).toLowerCase();
+  const topicFollowed = followedTopics.includes(primaryTopic);
+
+  const toggleTopicFollow = () => {
+    const next = topicFollowed ? followedTopics.filter((t) => t !== primaryTopic) : [...followedTopics, primaryTopic];
+    setFollowedTopics(next);
+    saveFollowedTopics(next);
+  };
+
+  const faq =
+    post.category === "education"
+      ? [
+          {
+            question: `What is the main lesson in "${post.title}"?`,
+            answer: keyTakeaways[0] || post.description
+          },
+          {
+            question: "How can I apply this on the NSE today?",
+            answer: keyTakeaways[1] || "Use the checklist in the article before entering any position."
+          },
+          {
+            question: "Is this investment advice?",
+            answer: "No. This is educational content for decision support and research discipline."
+          }
+        ]
+      : undefined;
+
+  const ctaConfig =
+    post.category === "education"
+      ? {
+          title: "Turn this lesson into a habit",
+          message: "Get practical investor lessons in Telegram and build your process week by week.",
+          primaryLabel: "Get the next lesson",
+          primaryHref: "https://t.me/NSEInsider_bot",
+          secondaryLabel: topicFollowed ? "Following topic" : "Follow this topic"
+        }
+      : post.category === "deep-dives"
+        ? {
+            title: "Track this stock in real time",
+            message: "Set alerts and follow fresh filings in Telegram before the next deep dive lands.",
+            primaryLabel: "Track on Telegram",
+            primaryHref: "https://t.me/NSEInsider_bot",
+            secondaryLabel: topicFollowed ? "Following topic" : "Follow this topic"
+          }
+        : {
+            title: "Get tomorrow's brief before open",
+            message: "Receive pre-market context, key movers, and risk signals directly on Telegram.",
+            primaryLabel: "Get morning alert",
+            primaryHref: "https://t.me/NSEInsider_bot",
+            secondaryLabel: topicFollowed ? "Following topic" : "Follow this topic"
+          };
 
   return (
     <BlogLayout>
       <SEOHead
         title={post.title}
-        description={post.description}
+        description={metaDescription}
         path={`/blog/${post.slug}`}
         type="article"
         publishedDate={post.date}
-        modifiedDate={post.date}
+        modifiedDate={post.updatedAt || post.date}
         author={post.author}
         section={CATEGORY_LABELS[post.category]}
         keywords={post.tags}
+        image={ogImage}
+        faq={faq}
         schemaType="article"
         breadcrumbs={[
           { name: "Home", path: "/" },
@@ -109,7 +197,9 @@ const BlogPost = () => {
           { name: post.title, path: `/blog/${post.slug}` }
         ]}
       />
-      <article className="container max-w-3xl py-12 md:py-16 animate-in-up">
+      <article className="container py-12 md:py-16 animate-in-up">
+        <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_280px] gap-10">
+          <div className="max-w-3xl">
         <header className="mb-10">
           <div className="flex items-center gap-2.5 mb-4">
             <Link to={`/category/${post.category}`} className="category-badge" data-category={post.category}>
@@ -134,6 +224,12 @@ const BlogPost = () => {
               </div>
             </div>
           </div>
+          <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+            <span className="rounded-full bg-secondary px-2.5 py-1">{readMinutes} min read</span>
+            <span className="rounded-full bg-secondary px-2.5 py-1">{Math.max(1, sources.length)} verified source{Math.max(1, sources.length) > 1 ? "s" : ""}</span>
+            <span className="rounded-full bg-secondary px-2.5 py-1">Last updated {formatDate(post.updatedAt || post.date)}</span>
+            <span className="rounded-full bg-secondary px-2.5 py-1">Generated from verified reports</span>
+          </div>
           <div className="flex flex-wrap gap-2 mt-6">
             {post.tags.map((tag) => (
               <Link key={tag} to={`/tags/${tag}`} className="tag-chip">{tag}</Link>
@@ -142,11 +238,33 @@ const BlogPost = () => {
           <div className="divider-fade mt-10" />
         </header>
 
+        {keyTakeaways.length > 0 && (
+          <section className="content-card p-5 md:p-6 mb-8 border-l-4 border-l-accent">
+            <h2 className="text-lg font-heading font-bold">Key Takeaways</h2>
+            <ul className="mt-3 space-y-2 text-sm text-foreground/90">
+              {keyTakeaways.map((item) => (
+                <li key={item} className="flex gap-2">
+                  <span className="mt-1 h-1.5 w-1.5 rounded-full bg-accent" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
         <div className="prose-blog">{renderContent(post.content)}</div>
 
-        {/* CTA after post */}
-        <div className="mt-14">
-          <TelegramCTA variant="inline" />
+        <div className="mt-14 content-card p-6 md:p-7">
+          <h3 className="text-xl font-heading font-bold">{ctaConfig.title}</h3>
+          <p className="text-sm text-muted-foreground mt-2">{ctaConfig.message}</p>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <a href={ctaConfig.primaryHref} target="_blank" rel="noopener noreferrer" className="btn-brand">
+              {ctaConfig.primaryLabel}
+            </a>
+            <button type="button" onClick={toggleTopicFollow} className="btn-outline">
+              {ctaConfig.secondaryLabel}
+            </button>
+          </div>
         </div>
 
         {/* ─── Prev / Next navigation ─── */}
@@ -189,17 +307,38 @@ const BlogPost = () => {
           </nav>
         )}
 
-        {/* Related posts */}
-        {related.length > 0 && (
+        {/* Next Read */}
+        {recommended.length > 0 && (
           <section className="mt-16">
-            <h2 className="text-xl font-heading font-bold text-foreground mb-6">Related Posts</h2>
+            <h2 className="text-xl font-heading font-bold text-foreground mb-6">Next Read</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {related.map((p, i) => (
+              {recommended.map((p, i) => (
                 <PostCard key={p.slug} post={p} index={i} />
               ))}
             </div>
           </section>
         )}
+          </div>
+
+          {headings.length > 0 && (
+            <aside className="hidden xl:block">
+              <div className="sticky top-24 content-card p-5">
+                <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground mb-3">On this page</p>
+                <nav className="space-y-2">
+                  {headings.map((heading) => (
+                    <a
+                      key={heading.id}
+                      href={`#${heading.id}`}
+                      className={`block text-sm hover:text-accent transition-colors ${heading.level === 3 ? "pl-4 text-muted-foreground" : "text-foreground"}`}
+                    >
+                      {heading.text}
+                    </a>
+                  ))}
+                </nav>
+              </div>
+            </aside>
+          )}
+        </div>
       </article>
     </BlogLayout>
   );

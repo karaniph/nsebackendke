@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
 import BlogLayout from "@/components/BlogLayout";
 import PostCard from "@/components/PostCard";
 import TelegramCTA from "@/components/TelegramCTA";
@@ -8,6 +9,8 @@ import {
   getPostsByCategoryFrom,
   sortPublishedPosts,
 } from "@/lib/blog-data";
+import { extractKeyTakeaways, inferMarketMood } from "@/lib/post-intelligence";
+import { DEFAULT_TOPICS, getPersonalizedPosts, loadFollowedTopics, saveFollowedTopics } from "@/lib/personalization";
 
 const Index = () => {
   const { data } = useLivePosts();
@@ -16,13 +19,36 @@ const Index = () => {
   const deepDives = getPostsByCategoryFrom(allPosts, "deep-dives");
   const education = getPostsByCategoryFrom(allPosts, "education");
   const botUpdates = getPostsByCategoryFrom(allPosts, "bot-updates");
+  const [followedTopics, setFollowedTopics] = useState<string[]>([]);
+
+  useEffect(() => {
+    setFollowedTopics(loadFollowedTopics());
+  }, []);
+
+  const toggleTopic = (topic: string) => {
+    const normalized = topic.toLowerCase();
+    const next = followedTopics.includes(normalized)
+      ? followedTopics.filter((t) => t !== normalized)
+      : [...followedTopics, normalized];
+    setFollowedTopics(next);
+    saveFollowedTopics(next);
+  };
+
+  const personalizedPosts = useMemo(
+    () => getPersonalizedPosts(allPosts, followedTopics, 4),
+    [allPosts, followedTopics]
+  );
+  const todayBrief = marketBriefs[0];
+  const todayTakeaways = todayBrief ? extractKeyTakeaways(todayBrief.content, 3) : [];
+  const marketMood = todayBrief ? inferMarketMood(todayBrief.content) : "Mixed";
 
   return (
     <BlogLayout>
       <SEOHead
         title="NSEinsider — Kenya's Market Intelligence Platform"
-        description="Independent analysis, company deep dives, and investor education for the Nairobi Securities Exchange. Join 5,000+ investors."
-        keywords={["NSE", "Nairobi Securities Exchange", "Kenya stocks", "market briefs", "investment education"]}
+        description="Daily NSE market briefs, deep dives, and practical investor education for Kenya. Get verified analysis and Telegram alerts from NSEinsider."
+        image="/og-market-briefs.svg"
+        keywords={["NSE", "Nairobi Securities Exchange", "Kenya stocks", "market briefs", "investment education", "Kenya investing", "stock analysis"]}
         schemaType="website"
         breadcrumbs={[{ name: "Home", path: "/" }]}
       />
@@ -80,6 +106,80 @@ const Index = () => {
 
       <div className="container"><div className="divider-fade" /></div>
 
+      {/* ─── Today in 30 Seconds ─── */}
+      {todayBrief && (
+        <section className="container py-8 md:py-10">
+          <div className="content-card p-6 md:p-7 border-l-4 border-l-accent">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+              <div>
+                <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Today in 30 Seconds</p>
+                <h2 className="text-xl font-heading font-bold mt-1">Quick NSE Snapshot</h2>
+              </div>
+              <div className="inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-1 text-xs text-muted-foreground">
+                <span>Market mood:</span>
+                <span className={`stat-pill ${marketMood === "Bullish" ? "up" : marketMood === "Bearish" ? "down" : ""}`}>{marketMood}</span>
+              </div>
+            </div>
+            <ul className="mt-4 space-y-2 text-sm text-foreground/90">
+              {todayTakeaways.map((item) => (
+                <li key={item} className="flex gap-2">
+                  <span className="mt-1 h-1.5 w-1.5 rounded-full bg-accent" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Link to={`/blog/${todayBrief.slug}`} className="btn-outline">Read full brief</Link>
+              <a href="https://t.me/NSEInsider_bot" target="_blank" rel="noopener noreferrer" className="btn-brand">Get tomorrow's alert</a>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ─── Personalization ─── */}
+      <section className="container py-8 md:py-10">
+        <div className="content-card p-6 md:p-7">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div>
+              <h2 className="text-xl font-heading font-bold">Follow topics</h2>
+              <p className="text-sm text-muted-foreground mt-1">Pick topics once. We'll prioritize relevant stories next visit.</p>
+            </div>
+            <span className="text-xs text-muted-foreground">{followedTopics.length} selected</span>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {DEFAULT_TOPICS.map((topic) => {
+              const active = followedTopics.includes(topic);
+              return (
+                <button
+                  key={topic}
+                  type="button"
+                  onClick={() => toggleTopic(topic)}
+                  className={`tag-chip ${active ? "border-border text-foreground bg-secondary" : ""}`}
+                >
+                  {active ? "✓ " : ""}{topic.replace(/-/g, " ")}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {personalizedPosts.length > 0 && (
+        <section className="container py-8 md:py-10">
+          <div className="section-header">
+            <div>
+              <h2>Personalized For You</h2>
+              <p className="text-sm text-muted-foreground mt-1">Based on your followed topics</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+            {personalizedPosts.map((post, i) => (
+              <PostCard key={post.slug} post={post} index={i} />
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* ─── Latest Posts ─── */}
       <section className="container py-12 md:py-16">
         <div className="section-header">
@@ -107,6 +207,10 @@ const Index = () => {
             {marketBriefs.slice(0, 2).map((post, i) => (
               <PostCard key={post.slug} post={post} index={i} />
             ))}
+          </div>
+          <div className="content-card mt-5 p-4 md:p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <p className="text-sm text-muted-foreground">Need tomorrow's opening setup early? Get the brief directly in Telegram before market chatter takes over.</p>
+            <a href="https://t.me/NSEInsider_bot" target="_blank" rel="noopener noreferrer" className="btn-brand text-sm">Get tomorrow's brief</a>
           </div>
         </section>
       )}
@@ -139,6 +243,10 @@ const Index = () => {
                 </div>
               )}
             </div>
+            <div className="content-card mt-5 p-4 md:p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <p className="text-sm text-muted-foreground">Track specific stocks with live prompts and get notified when a new deep dive drops.</p>
+              <a href="https://t.me/NSEInsider_bot" target="_blank" rel="noopener noreferrer" className="btn-outline text-sm">Track stocks on Telegram</a>
+            </div>
           </div>
 
           {/* Education */}
@@ -160,6 +268,10 @@ const Index = () => {
                   <p className="text-sm text-muted-foreground">Education content coming soon.</p>
                 </div>
               )}
+            </div>
+            <div className="content-card mt-5 p-4 md:p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <p className="text-sm text-muted-foreground">Build investor skills weekly with short lessons you can save and revisit.</p>
+              <Link to="/category/education" className="btn-outline text-sm">Start learning path</Link>
             </div>
           </div>
         </div>

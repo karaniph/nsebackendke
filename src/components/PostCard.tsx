@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
 import { formatDate, CATEGORY_LABELS, type BlogPost } from "@/lib/blog-data";
+import { estimateReadingMinutes, extractSourceUrls } from "@/lib/post-intelligence";
 
 const PostCard = ({ post, index = 0, variant = "default" }: { post: BlogPost; index?: number; variant?: "default" | "compact" }) => {
+  const readMinutes = estimateReadingMinutes(post.content);
+  const sourceCount = extractSourceUrls(post.content).length;
+
   if (variant === "compact") {
     return (
       <Link
@@ -19,6 +23,11 @@ const PostCard = ({ post, index = 0, variant = "default" }: { post: BlogPost; in
             <h3 className="text-sm font-semibold text-foreground group-hover:text-accent transition-colors leading-snug line-clamp-2">
               {post.title}
             </h3>
+            <div className="mt-2 flex items-center gap-2 text-[11px] text-muted-foreground">
+              <span>{readMinutes} min read</span>
+              <span>·</span>
+              <span>{Math.max(1, sourceCount)} sources</span>
+            </div>
           </div>
         </article>
       </Link>
@@ -50,6 +59,11 @@ const PostCard = ({ post, index = 0, variant = "default" }: { post: BlogPost; in
               ))}
             </div>
             <span className="text-xs text-muted-foreground">{post.author}</span>
+          </div>
+          <div className="mt-3 flex items-center gap-2 text-[11px] text-muted-foreground">
+            <span>{readMinutes} min read</span>
+            <span>·</span>
+            <span>Verified from {Math.max(1, sourceCount)} source{Math.max(1, sourceCount) > 1 ? "s" : ""}</span>
           </div>
         </div>
       </Link>

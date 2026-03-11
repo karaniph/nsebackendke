@@ -8,6 +8,7 @@ interface PublicFeedItem {
   slug: string;
   excerpt: string | null;
   content_markdown: string;
+  updated_at?: string | null;
 }
 
 interface PublicFeedResponse {
@@ -49,6 +50,7 @@ function toBlogPost(item: PublicFeedItem): BlogPost {
     title: item.title,
     description: item.excerpt || "NSEinsider market update.",
     date: item.report_date,
+    updatedAt: item.updated_at || item.report_date,
     author: "NSEinsider Desk",
     authorRole: category === "education" ? "Education Desk" : "Market Intelligence Desk",
     tags: guessTags(item),

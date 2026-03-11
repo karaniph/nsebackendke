@@ -19,6 +19,7 @@ interface SEOHeadProps {
   noindex?: boolean;
   breadcrumbs?: BreadcrumbItem[];
   schemaType?: "website" | "article" | "collection" | "page";
+  faq?: Array<{ question: string; answer: string }>;
 }
 
 const SITE_NAME = "NSEinsider";
@@ -40,6 +41,7 @@ const SEOHead = ({
   noindex = false,
   breadcrumbs = [],
   schemaType,
+  faq,
 }: SEOHeadProps) => {
   const normalizedPath = path === "/" ? "/" : `/${path.replace(/^\/+/, "").replace(/\/+$/, "")}`;
   const fullTitle = normalizedPath === "/" ? title : `${title} — ${SITE_NAME}`;
@@ -74,7 +76,7 @@ const SEOHead = ({
       document.querySelector(selector)?.remove();
     };
 
-    const ogImage = image || DEFAULT_OG_IMAGE;
+    const ogImage = image ? (image.startsWith("http") ? image : `${SITE_URL}${image.startsWith("/") ? image : `/${image}`}`) : DEFAULT_OG_IMAGE;
     const metaRobots = noindex ? "noindex, nofollow, noarchive" : "index, follow, max-image-preview:large, max-snippet:-1";
 
     upsertMeta("description", description);
@@ -93,6 +95,7 @@ const SEOHead = ({
     upsertMeta("og:site_name", SITE_NAME, "property");
     upsertMeta("og:locale", "en_KE", "property");
     upsertMeta("og:image", ogImage, "property");
+    upsertMeta("og:image:alt", `${SITE_NAME} - ${fullTitle}`, "property");
 
     upsertMeta("twitter:card", "summary_large_image");
     upsertMeta("twitter:site", TWITTER_HANDLE);
@@ -100,6 +103,7 @@ const SEOHead = ({
     upsertMeta("twitter:title", fullTitle);
     upsertMeta("twitter:description", description);
     upsertMeta("twitter:image", ogImage);
+    upsertMeta("twitter:image:alt", `${SITE_NAME} - ${fullTitle}`);
 
     if (publishedDate) {
       upsertMeta("article:published_time", publishedDate, "property");
@@ -187,7 +191,23 @@ const SEOHead = ({
           }
         : null;
 
-    const graph = [organizationSchema, baseSchema, breadcrumbSchema].filter(Boolean);
+    const faqSchema =
+      faq && faq.length > 0
+        ? {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faq.map((item) => ({
+              "@type": "Question",
+              name: item.question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: item.answer
+              }
+            }))
+          }
+        : null;
+
+    const graph = [organizationSchema, baseSchema, breadcrumbSchema, faqSchema].filter(Boolean);
     let schemaScript = document.querySelector('script[data-seo-schema="true"]');
     if (!schemaScript) {
       schemaScript = document.createElement("script");
@@ -209,7 +229,8 @@ const SEOHead = ({
     section,
     noindex,
     schemaType,
-    breadcrumbs
+    breadcrumbs,
+    faq
   ]);
 
   return null;

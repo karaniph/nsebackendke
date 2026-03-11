@@ -2,51 +2,63 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://nseinsider.co.ke/</loc>
-    <lastmod>2026-03-11T11:34:23.270Z</lastmod>
+    <lastmod>2026-03-11T12:01:53.109Z</lastmod>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/about</loc>
-    <lastmod>2026-03-11T11:34:23.275Z</lastmod>
+    <lastmod>2026-03-11T12:01:53.112Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/contact</loc>
-    <lastmod>2026-03-11T11:34:23.275Z</lastmod>
+    <lastmod>2026-03-11T12:01:53.112Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/tags</loc>
-    <lastmod>2026-03-11T11:34:23.275Z</lastmod>
+    <lastmod>2026-03-11T12:01:53.112Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/category/market-briefs</loc>
-    <lastmod>2026-03-11T11:34:23.275Z</lastmod>
+    <lastmod>2026-03-11T12:01:53.112Z</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/category/deep-dives</loc>
-    <lastmod>2026-03-11T11:34:23.275Z</lastmod>
+    <lastmod>2026-03-11T12:01:53.112Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/category/education</loc>
-    <lastmod>2026-03-11T11:34:23.275Z</lastmod>
+    <lastmod>2026-03-11T12:01:53.112Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/rss</loc>
-    <lastmod>2026-03-11T11:34:23.275Z</lastmod>
+    <lastmod>2026-03-11T12:01:53.112Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://nseinsider.co.ke/blog/2026-03-11-kcb-group-kcb-2026-03-11</loc>
+    <lastmod>2026-03-11T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://nseinsider.co.ke/blog/2026-03-11-dividend-yield-without-traps-2026-03-11</loc>
+    <lastmod>2026-03-11T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/blog/2026-03-11-kenyan-market-report-strong-gainers-lead-active-session</loc>
@@ -55,8 +67,32 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://nseinsider.co.ke/blog/2026-03-10-equity-group-holdings-eqty-2026-03-10</loc>
+    <lastmod>2026-03-10T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://nseinsider.co.ke/blog/2026-03-10-how-to-read-pe-on-the-nse-2026-03-10</loc>
+    <lastmod>2026-03-10T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://nseinsider.co.ke/blog/2026-03-10-nse-wrap-market-cap-rises-319-amid-foreign-outflows</loc>
     <lastmod>2026-03-10T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://nseinsider.co.ke/blog/2026-03-09-co-operative-bank-coop-2026-03-09</loc>
+    <lastmod>2026-03-09T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://nseinsider.co.ke/blog/2026-03-09-basic-valuation-framework-for-kenyan-stocks</loc>
+    <lastmod>2026-03-09T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
@@ -69,6 +105,18 @@
   <url>
     <loc>https://nseinsider.co.ke/blog/nse-weekly-wrap-march-2026</loc>
     <lastmod>2026-03-07T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://nseinsider.co.ke/blog/2026-03-06-east-african-breweries-eabl-2026-03-06</loc>
+    <lastmod>2026-03-06T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://nseinsider.co.ke/blog/2026-03-06-rights-issues-and-dilution-2026-03-06</loc>
+    <lastmod>2026-03-06T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>

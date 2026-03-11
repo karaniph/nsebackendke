@@ -5,12 +5,13 @@ import SEOHead from "@/components/SEOHead";
 import Pagination from "@/components/Pagination";
 import { useLivePosts } from "@/hooks/use-live-posts";
 import { getPostsByCategoryFrom, CATEGORY_LABELS, paginatePosts, type PostCategory } from "@/lib/blog-data";
+import { getCategoryOgImage } from "@/lib/post-intelligence";
 
 const CATEGORY_DESCRIPTIONS: Record<PostCategory, string> = {
-  "market-briefs": "Weekly NSE performance summaries, top movers, and what to watch next.",
-  "deep-dives": "Comprehensive analysis of NSE-listed companies — valuation, strategy, and risks.",
-  "education": "Practical guides to investing on the Nairobi Securities Exchange.",
-  "bot-updates": "Product updates, new features, and tips for the NSEinsider Telegram Bot.",
+  "market-briefs": "Daily NSE market briefs with top movers, foreign flow, risk signals, and what to watch next.",
+  "deep-dives": "Deep analysis of NSE-listed companies covering valuation, strategy, financial trend, and key risks.",
+  "education": "Practical investing lessons for Kenyan retail investors: valuation, risk, portfolio sizing, and discipline.",
+  "bot-updates": "NSEinsider Telegram bot updates, new alert features, and workflow tips for investors.",
 };
 
 const CategoryPage = () => {
@@ -21,6 +22,7 @@ const CategoryPage = () => {
   const allPosts = cat ? getPostsByCategoryFrom(data || [], cat) : [];
   const label = cat ? CATEGORY_LABELS[cat] : "";
   const desc = cat ? CATEGORY_DESCRIPTIONS[cat] : "";
+  const seoDescription = desc ? `${desc} Read the latest ${label.toLowerCase()} on NSEinsider.` : "";
   const page = parseInt(searchParams.get("page") ?? "1", 10);
   const { posts, totalPages, currentPage, totalPosts } = paginatePosts(allPosts, page);
   const canonicalPath = page > 1 ? `/category/${cat}?page=${page}` : `/category/${cat}`;
@@ -43,10 +45,11 @@ const CategoryPage = () => {
     <BlogLayout>
       <SEOHead
         title={label}
-        description={desc}
+        description={seoDescription}
         path={canonicalPath}
+        image={cat ? getCategoryOgImage(cat) : undefined}
         schemaType="collection"
-        keywords={[label, "NSEinsider", "NSE", "Kenya stocks"]}
+        keywords={[label, "NSEinsider", "NSE", "Kenya stocks", "Nairobi Securities Exchange", cat]}
         breadcrumbs={[
           { name: "Home", path: "/" },
           { name: label, path: `/category/${cat}` }
