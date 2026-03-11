@@ -13,6 +13,8 @@ import About from "./pages/About";
 import RSSPage from "./pages/RSSPage";
 import ArchivePage from "./pages/ArchivePage";
 import NotFound from "./pages/NotFound";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsAndConditions from "./pages/TermsAndConditions";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +36,8 @@ const App = () => {
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
             <Route path="/rss" element={<RSSPage />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
             <Route path="/archive/:year/:month" element={<ArchivePage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

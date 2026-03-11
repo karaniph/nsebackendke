@@ -79,6 +79,8 @@ function buildSitemap(posts: BlogPost[]): string {
     { path: "/", priority: "1.0", changefreq: "hourly" },
     { path: "/about", priority: "0.6", changefreq: "monthly" },
     { path: "/contact", priority: "0.5", changefreq: "monthly" },
+    { path: "/privacy-policy", priority: "0.5", changefreq: "yearly" },
+    { path: "/terms-and-conditions", priority: "0.5", changefreq: "yearly" },
     { path: "/tags", priority: "0.7", changefreq: "daily" },
     { path: "/category/market-briefs", priority: "0.9", changefreq: "hourly" },
     { path: "/category/deep-dives", priority: "0.8", changefreq: "daily" },

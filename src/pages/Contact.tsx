@@ -28,6 +28,13 @@ const Contact = () => {
         <p className="text-muted-foreground mb-10">
           Have feedback, a partnership enquiry, or a stock you'd like us to cover? We'd love to hear from you.
         </p>
+        <p className="text-sm text-muted-foreground mb-8">
+          Email us directly at{" "}
+          <a className="text-accent hover:underline" href="mailto:nseinsider@protonmail.com">
+            nseinsider@protonmail.com
+          </a>
+          .
+        </p>
         {submitted ? (
           <div className="content-card p-8 text-center">
             <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center mx-auto mb-4">
@@ -36,7 +43,7 @@ const Contact = () => {
               </svg>
             </div>
             <h2 className="text-lg font-heading font-semibold text-foreground">Message sent</h2>
-            <p className="text-sm text-muted-foreground mt-1">We'll get back to you within 48 hours.</p>
+            <p className="text-sm text-muted-foreground mt-1">We'll get back to you at nseinsider@protonmail.com.</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6" data-netlify="true" name="contact">
