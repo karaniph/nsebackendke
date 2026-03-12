@@ -72,7 +72,26 @@ function mergePosts(remote: BlogPost[], local: BlogPost[]): BlogPost[] {
   return Array.from(map.values()).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
+async function fetchGeneratedPosts(): Promise<BlogPost[] | null> {
+  try {
+    const response = await fetch("/live-posts.json", {
+      headers: { Accept: "application/json" },
+      cache: "no-store"
+    });
+    if (!response.ok) return null;
+    const payload = (await response.json()) as BlogPost[];
+    return Array.isArray(payload) ? payload : null;
+  } catch (_error) {
+    return null;
+  }
+}
+
 export async function fetchLivePosts(): Promise<BlogPost[]> {
+  const generated = await fetchGeneratedPosts();
+  if (generated && generated.length > 0) {
+    return mergePosts(generated, blogPosts);
+  }
+
   const apiBase = (import.meta.env.VITE_BLOG_FEED_API as string | undefined)?.trim()
     || "https://nse-bot-backend.karanidevops.workers.dev/public/blog/posts";
 

@@ -59,6 +59,17 @@ function mergePosts(remote: BlogPost[], local: BlogPost[]): BlogPost[] {
   return Array.from(map.values()).sort((a, b) => +new Date(b.date) - +new Date(a.date));
 }
 
+function loadGeneratedPosts(): BlogPost[] {
+  const source = path.resolve(process.cwd(), "public", "live-posts.json");
+  try {
+    const raw = fs.readFileSync(source, "utf8");
+    const parsed = JSON.parse(raw) as BlogPost[];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (_error) {
+    return [];
+  }
+}
+
 function xmlEscape(value: string): string {
   return value
     .replace(/&/g, "&amp;")
@@ -100,7 +111,8 @@ ${items}
 
 async function main() {
   const local = getPublishedPosts();
-  const remote = await fetchRemotePosts();
+  const generated = loadGeneratedPosts();
+  const remote = generated.length > 0 ? generated : await fetchRemotePosts();
   const merged = mergePosts(remote, local).slice(0, 200);
   const xml = generateRss(merged);
   const dest = path.resolve(process.cwd(), "public", "rss.xml");
