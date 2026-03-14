@@ -1,0 +1,40 @@
+---
+// src/pages/tags/[tag].astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TagContent from '../../components/TagContent';
+
+import { fetchLivePosts } from '../../lib/live-blog';
+import { getAllTagsFrom, sortPublishedPosts, getPostsByTagFrom } from '../../lib/blog-data';
+
+export async function getStaticPaths() {
+  const rawPosts = await fetchLivePosts();
+  const allPostsRaw = sortPublishedPosts(rawPosts || []);
+  const allTags = getAllTagsFrom(allPostsRaw);
+  
+  return allTags.map((tag) => ({
+    params: { tag },
+    props: { allPostsRaw },
+  }));
+}
+
+const { tag } = Astro.params;
+// Optional fallback if needed
+const actualTag = tag || "";
+const encodedTag = encodeURIComponent(actualTag);
+
+const { allPostsRaw } = Astro.props as { allPostsRaw: any };
+const tagPosts = getPostsByTagFrom(allPostsRaw || [], actualTag);
+---
+
+<BaseLayout 
+  title={`#${actualTag}`}
+  description={`Posts tagged "${actualTag}" on NSEinsider.`}
+  type="website"
+  keywords={[`tag ${actualTag}`, "NSEinsider", "NSE"]}
+>
+  <TagContent 
+    client:load 
+    tag={actualTag} 
+    allPosts={tagPosts} 
+  />
+</BaseLayout>

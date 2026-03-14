@@ -1,9 +1,9 @@
-import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getInitialTheme, setTheme } from "@/lib/theme";
 
 interface SiteHeaderProps {
   onSearchOpen: () => void;
+  currentPath?: string;
 }
 
 const navLinks = [
@@ -13,11 +13,10 @@ const navLinks = [
   { label: "About", path: "/about" },
 ];
 
-const SiteHeader = ({ onSearchOpen }: SiteHeaderProps) => {
+const SiteHeader = ({ onSearchOpen, currentPath = "/" }: SiteHeaderProps) => {
   const [currentTheme, setCurrentTheme] = useState<"light" | "dark">(getInitialTheme);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
     setTheme(currentTheme);
@@ -26,12 +25,15 @@ const SiteHeader = ({ onSearchOpen }: SiteHeaderProps) => {
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll, { passive: true });
+    // Try to get path from window if not provided
+    if (typeof window !== 'undefined' && currentPath === "/") {
+       // Optional client side path sync
+    }
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [currentPath]);
 
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [location.pathname]);
+  // Use the prop instead or window if available
+  const activePath = typeof window !== 'undefined' ? window.location.pathname : currentPath;
 
   const toggleTheme = () => setCurrentTheme((t) => (t === "light" ? "dark" : "light"));
 
@@ -43,24 +45,24 @@ const SiteHeader = ({ onSearchOpen }: SiteHeaderProps) => {
     >
       <div className="container flex items-center justify-between h-16">
         {/* Wordmark */}
-        <Link to="/" className="brand-wordmark text-xl" aria-label="NSEinsider home">
+        <a href="/" className="brand-wordmark text-xl" aria-label="NSEinsider home">
           NSE<span className="brand-accent">insider</span>
-        </Link>
+        </a>
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => (
-            <Link
+            <a
               key={link.path}
-              to={link.path}
+              href={link.path}
               className={`px-3 py-2 text-sm rounded-lg transition-colors duration-150 ${
-                location.pathname.startsWith(link.path)
+                activePath.startsWith(link.path)
                   ? "text-foreground bg-secondary font-medium"
                   : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
               }`}
             >
               {link.label}
-            </Link>
+            </a>
           ))}
           <button
             onClick={onSearchOpen}
@@ -117,17 +119,17 @@ const SiteHeader = ({ onSearchOpen }: SiteHeaderProps) => {
       {mobileOpen && (
         <nav className="md:hidden border-t border-border bg-background animate-fade-in pb-4 px-4">
           {navLinks.map((link) => (
-            <Link
+            <a
               key={link.path}
-              to={link.path}
+              href={link.path}
               className={`block px-3 py-3 text-sm rounded-lg ${
-                location.pathname.startsWith(link.path)
+                activePath.startsWith(link.path)
                   ? "text-foreground bg-secondary font-medium"
                   : "text-muted-foreground"
               }`}
             >
               {link.label}
-            </Link>
+            </a>
           ))}
           <button onClick={toggleTheme} className="w-full text-left px-3 py-3 text-sm text-muted-foreground">
             {currentTheme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}

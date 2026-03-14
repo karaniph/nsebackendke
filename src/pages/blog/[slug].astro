@@ -1,0 +1,81 @@
+---
+// src/pages/blog/[slug].astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogPostContent from '../../components/BlogPostContent';
+
+import { fetchLivePosts } from '../../lib/live-blog';
+import { getPublishedPosts, getPostBySlugFrom, sortPublishedPosts } from '../../lib/blog-data';
+import { getPostMetaDescription, getCategoryOgImage } from '../../lib/post-intelligence';
+import { CATEGORY_LABELS, type BlogPost } from '../../lib/blog-data';
+
+export async function getStaticPaths() {
+  // To allow SSG, we need to know all the slugs at build time.
+  // We fetch all posts and map them.
+  const allPosts = await fetchLivePosts();
+  const published = sortPublishedPosts(allPosts || []);
+  
+  return published.map((post) => ({
+    params: { slug: post.slug },
+    props: { post, allPosts: published },
+  }));
+}
+
+const { slug } = Astro.params;
+const { post, allPosts } = Astro.props as { post: BlogPost; allPosts: BlogPost[] };
+
+if (!post) {
+  // Fallback (though getStaticPaths should catch this)
+  return Astro.redirect('/404');
+}
+
+const metaDescription = getPostMetaDescription(post);
+const ogImage = getCategoryOgImage(post.category);
+
+const faq = post.category === "education"
+  ? [
+      {
+        question: `What is the main lesson in "${post.title}"?`,
+        answer: post.description
+      },
+      {
+        question: "How can I apply this on the NSE today?",
+        answer: "Use the checklist in the article before entering any position."
+      },
+      {
+        question: "Is this investment advice?",
+        answer: "No. This is educational content for decision support and research discipline."
+      }
+    ]
+  : undefined;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": post.title,
+  "description": metaDescription,
+  "image": ogImage,
+  "datePublished": post.date,
+  "dateModified": post.updatedAt || post.date,
+  "author": {
+    "@type": "Person",
+    "name": post.author
+  }
+};
+---
+
+<BaseLayout 
+  title={post.title}
+  description={metaDescription}
+  image={ogImage}
+  type="article"
+  publishedDate={post.date}
+  author={post.author}
+  keywords={post.tags}
+  schema={schema}
+>
+  <BlogPostContent 
+    client:load 
+    post={post}
+    allPosts={allPosts}
+  />
+</BaseLayout>

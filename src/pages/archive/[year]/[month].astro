@@ -1,0 +1,51 @@
+---
+// src/pages/archive/[year]/[month].astro
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ArchiveContent from '../../../components/ArchiveContent';
+
+import { fetchLivePosts } from '../../../lib/live-blog';
+import { getPostsByYearMonthFrom, getArchiveMonthsFrom, sortPublishedPosts } from '../../../lib/blog-data';
+
+export async function getStaticPaths() {
+  const rawPosts = await fetchLivePosts();
+  const allPostsRaw = sortPublishedPosts(rawPosts || []);
+  const archiveMonths = getArchiveMonthsFrom(allPostsRaw);
+  
+  return archiveMonths.map((m) => ({
+    params: { year: m.year.toString(), month: m.month.toString().padStart(2, "0") },
+    props: { allPostsRaw, archiveMonths },
+  }));
+}
+
+const { year, month } = Astro.params;
+const { allPostsRaw, archiveMonths } = Astro.props as { allPostsRaw: any; archiveMonths: any };
+
+const yearNum = parseInt(year || "0", 10);
+const monthNum = parseInt(month || "0", 10);
+
+const posts = yearNum && monthNum ? getPostsByYearMonthFrom(allPostsRaw, yearNum, monthNum) : [];
+
+const MONTH_NAMES = [
+  "", "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
+const monthLabel = MONTH_NAMES[monthNum] || "";
+const pageTitle = `${monthLabel} ${yearNum}`;
+---
+
+<BaseLayout 
+  title={`Archive: ${pageTitle} — NSEinsider`}
+  description={`Browse all NSEinsider posts published in ${pageTitle}.`}
+  type="website"
+  keywords={["NSEinsider archive", "NSE market reports", pageTitle]}
+>
+  <ArchiveContent
+    client:load
+    posts={posts}
+    archiveMonths={archiveMonths}
+    yearNum={yearNum}
+    monthNum={monthNum}
+    pageTitle={pageTitle}
+  />
+</BaseLayout>

@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Link } from "react-router-dom";
 import { useLivePosts } from "@/hooks/use-live-posts";
 import { formatDate, CATEGORY_LABELS, sortPublishedPosts } from "@/lib/blog-data";
 
@@ -76,9 +75,9 @@ const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
               </div>
             )}
             {filtered.map((post) => (
-              <Link
+              <a
                 key={post.slug}
-                to={`/blog/${post.slug}`}
+                href={`/blog/${post.slug}`}
                 onClick={onClose}
                 className="flex items-start gap-3 px-5 py-3.5 hover:bg-secondary/60 transition-colors border-b border-border/40 last:border-b-0"
               >
@@ -94,7 +93,7 @@ const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground mt-1 shrink-0">
                   <path d="m9 18 6-6-6-6"/>
                 </svg>
-              </Link>
+              </a>
             ))}
             {!query.trim() && (
               <div className="p-5 text-sm text-muted-foreground">

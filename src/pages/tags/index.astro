@@ -1,0 +1,33 @@
+---
+// src/pages/tags/index.astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { fetchLivePosts } from '../../lib/live-blog';
+import { getAllTagsFrom, sortPublishedPosts, getPostsByTagFrom } from '../../lib/blog-data';
+
+const rawPosts = await fetchLivePosts();
+const allPosts = sortPublishedPosts(rawPosts || []);
+const tags = getAllTagsFrom(allPosts);
+---
+
+<BaseLayout 
+  title="Tags"
+  description="Browse NSEinsider posts by topic."
+  type="website"
+  keywords={["NSEinsider tags", "NSE topics", "Kenya investing"]}
+>
+  <div class="container py-12 md:py-16 max-w-3xl animate-in-up flex-1">
+    <h1 class="text-3xl font-heading font-bold text-foreground mb-2">Tags</h1>
+    <p class="text-muted-foreground mb-10">Browse all topics across our analysis and education content.</p>
+    <div class="flex flex-wrap gap-2">
+      {tags.map((tag) => (
+        <a
+          href={`/tags/${tag}`}
+          class="tag-chip text-sm px-3 py-1.5 hover:bg-secondary/80 transition-colors"
+        >
+          {tag}
+          <span class="ml-1.5 text-muted-foreground/60">{getPostsByTagFrom(allPosts, tag).length}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

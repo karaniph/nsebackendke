@@ -1,0 +1,54 @@
+---
+// src/pages/category/[category].astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CategoryContent from '../../components/CategoryContent';
+
+import { fetchLivePosts } from '../../lib/live-blog';
+import { getPostsByCategoryFrom, CATEGORY_LABELS, type PostCategory, sortPublishedPosts } from '../../lib/blog-data';
+import { getCategoryOgImage } from '../../lib/post-intelligence';
+
+export async function getStaticPaths() {
+  const categories: PostCategory[] = ["market-briefs", "deep-dives", "education", "bot-updates"];
+  
+  // Since we fetch at build time, we pass the category as a static param
+  return categories.map((cat) => ({
+    params: { category: cat },
+  }));
+}
+
+const { category } = Astro.params;
+const cat = category as PostCategory;
+
+// Fetch posts server-side
+const rawPosts = await fetchLivePosts();
+const allPostsRaw = sortPublishedPosts(rawPosts || []);
+const categoryPosts = getPostsByCategoryFrom(allPostsRaw, cat);
+
+const CATEGORY_DESCRIPTIONS: Record<PostCategory, string> = {
+  "market-briefs": "Daily NSE market briefs with top movers, foreign flow, risk signals, and what to watch next.",
+  "deep-dives": "Deep analysis of NSE-listed companies covering valuation, strategy, financial trend, and key risks.",
+  "education": "Practical investing lessons for Kenyan retail investors: valuation, risk, portfolio sizing, and discipline.",
+  "bot-updates": "NSEinsider Telegram bot updates, new alert features, and workflow tips for investors.",
+};
+
+const label = CATEGORY_LABELS[cat] || "Category";
+const desc = CATEGORY_DESCRIPTIONS[cat] || "";
+const seoDescription = desc ? `${desc} Read the latest ${label.toLowerCase()} on NSEinsider.` : "";
+const ogImage = getCategoryOgImage(cat);
+---
+
+<BaseLayout 
+  title={label}
+  description={seoDescription}
+  image={ogImage}
+  type="website"
+  keywords={[label, "NSEinsider", "NSE", "Kenya stocks", "Nairobi Securities Exchange", cat]}
+>
+  <CategoryContent
+    client:load
+    cat={cat}
+    label={label}
+    desc={desc}
+    allPosts={categoryPosts}
+  />
+</BaseLayout>

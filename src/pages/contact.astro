@@ -1,0 +1,14 @@
+---
+// src/pages/contact.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactForm from '../components/ContactForm';
+---
+
+<BaseLayout 
+  title="Contact"
+  description="Get in touch with NSEinsider."
+>
+  <div class="container py-12 md:py-16 max-w-2xl">
+    <ContactForm client:load />
+  </div>
+</BaseLayout>

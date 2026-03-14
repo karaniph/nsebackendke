@@ -1,0 +1,22 @@
+---
+// src/pages/404.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="Page Not Found" 
+  description="The page you requested could not be found."
+  noindex={true}
+>
+  <div class="flex min-h-[70vh] items-center justify-center">
+    <div class="text-center px-4">
+      <h1 class="mb-4 text-6xl font-heading font-extrabold text-foreground">404</h1>
+      <p class="mb-8 text-xl text-muted-foreground">Oops! Page not found</p>
+      <div class="flex justify-center gap-4">
+        <a href="/" class="btn-brand">
+          Return Home
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

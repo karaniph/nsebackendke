@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-
 const SiteFooter = () => {
   return (
     <footer className="mt-auto border-t border-border bg-card">
@@ -7,9 +5,9 @@ const SiteFooter = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-8">
           {/* Brand */}
           <div className="md:col-span-1">
-            <Link to="/" className="brand-wordmark text-xl">
+            <a href="/" className="brand-wordmark text-xl">
               NSE<span className="brand-accent">insider</span>
-            </Link>
+            </a>
             <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
               Independent market intelligence for the Nairobi Securities Exchange. Analysis you can act on.
             </p>
@@ -19,10 +17,10 @@ const SiteFooter = () => {
           <div>
             <h4 className="text-sm font-semibold text-foreground mb-4">Content</h4>
             <ul className="space-y-2.5 text-sm text-muted-foreground">
-              <li><Link to="/category/market-briefs" className="hover:text-foreground transition-colors">Market Briefs</Link></li>
-              <li><Link to="/category/deep-dives" className="hover:text-foreground transition-colors">Deep Dives</Link></li>
-              <li><Link to="/category/education" className="hover:text-foreground transition-colors">Education</Link></li>
-              <li><Link to="/category/bot-updates" className="hover:text-foreground transition-colors">Bot Updates</Link></li>
+              <li><a href="/category/market-briefs" className="hover:text-foreground transition-colors">Market Briefs</a></li>
+              <li><a href="/category/deep-dives" className="hover:text-foreground transition-colors">Deep Dives</a></li>
+              <li><a href="/category/education" className="hover:text-foreground transition-colors">Education</a></li>
+              <li><a href="/category/bot-updates" className="hover:text-foreground transition-colors">Bot Updates</a></li>
             </ul>
           </div>
 
@@ -30,13 +28,13 @@ const SiteFooter = () => {
           <div>
             <h4 className="text-sm font-semibold text-foreground mb-4">Company</h4>
             <ul className="space-y-2.5 text-sm text-muted-foreground">
-              <li><Link to="/about" className="hover:text-foreground transition-colors">About</Link></li>
-              <li><Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link></li>
-              <li><Link to="/privacy-policy" className="hover:text-foreground transition-colors">Privacy Policy</Link></li>
-              <li><Link to="/terms-and-conditions" className="hover:text-foreground transition-colors">Terms & Conditions</Link></li>
-              <li><Link to="/tags" className="hover:text-foreground transition-colors">Tags</Link></li>
-              <li><Link to="/archive" className="hover:text-foreground transition-colors">Archive</Link></li>
-              <li><Link to="/rss" className="hover:text-foreground transition-colors">RSS Feed</Link></li>
+              <li><a href="/about" className="hover:text-foreground transition-colors">About</a></li>
+              <li><a href="/contact" className="hover:text-foreground transition-colors">Contact</a></li>
+              <li><a href="/privacy-policy" className="hover:text-foreground transition-colors">Privacy Policy</a></li>
+              <li><a href="/terms-and-conditions" className="hover:text-foreground transition-colors">Terms & Conditions</a></li>
+              <li><a href="/tags" className="hover:text-foreground transition-colors">Tags</a></li>
+              <li><a href="/archive" className="hover:text-foreground transition-colors">Archive</a></li>
+              <li><a href="/rss" className="hover:text-foreground transition-colors">RSS Feed</a></li>
             </ul>
           </div>
 

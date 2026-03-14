@@ -1,0 +1,48 @@
+---
+// src/pages/about.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TelegramCTA from '../components/TelegramCTA';
+
+const seoDescription = "About NSEinsider — independent market intelligence for Kenya's investors.";
+const seoKeywords = ["about NSEinsider", "NSE market intelligence", "Kenya investing"];
+---
+
+<BaseLayout 
+  title="About"
+  description={seoDescription}
+  keywords={seoKeywords}
+>
+  <div class="container py-12 md:py-16 max-w-3xl animate-in-up flex-1">
+    <h1 class="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6 leading-tight">
+      Independent market intelligence for Kenya
+    </h1>
+
+    <div class="prose-blog">
+      <p>
+        NSEinsider was built to solve a simple problem: retail investors at the Nairobi Securities Exchange deserve the same quality of analysis that institutional investors get.
+      </p>
+      <p>
+        We publish weekly market briefs, company deep dives, and practical education content — all designed to help you make informed investment decisions on the NSE. No hype, no tips, no pump-and-dump. Just rigorous, independent analysis.
+      </p>
+
+      <h2>What We Cover</h2>
+      <ul>
+        <li><strong>Market Briefs</strong> — Weekly roundups of NSE performance, top movers, and macroeconomic context</li>
+        <li><strong>Company Deep Dives</strong> — Detailed analysis of individual NSE counters including valuation, strategy, and risk assessment</li>
+        <li><strong>Investor Education</strong> — Practical guides to reading financial statements, understanding ratios, and building a portfolio</li>
+        <li><strong>Bot Updates</strong> — New features and tips for the NSEinsider Telegram Bot</li>
+      </ul>
+    </div>
+
+    <div class="prose-blog">
+      <h2>Disclaimer</h2>
+      <p>
+        NSEinsider provides market analysis and education for informational purposes only. Nothing published here constitutes investment advice, a solicitation to buy or sell securities, or a recommendation of any kind. Always do your own research and consult a licensed financial advisor before making investment decisions.
+      </p>
+    </div>
+
+    <div class="mt-12">
+      <TelegramCTA client:load />
+    </div>
+  </div>
+</BaseLayout>

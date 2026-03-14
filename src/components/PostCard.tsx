@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { formatDate, CATEGORY_LABELS, type BlogPost } from "@/lib/blog-data";
 import { estimateReadingMinutes, extractSourceUrls } from "@/lib/post-intelligence";
 
@@ -8,8 +7,8 @@ const PostCard = ({ post, index = 0, variant = "default" }: { post: BlogPost; in
 
   if (variant === "compact") {
     return (
-      <Link
-        to={`/blog/${post.slug}`}
+      <a
+        href={`/blog/${post.slug}`}
         className={`block group animate-in-up stagger-${Math.min(index + 1, 5)}`}
       >
         <article className="flex items-start gap-4 py-4 border-b border-border/60 last:border-b-0 group-hover:bg-secondary/30 -mx-3 px-3 rounded-lg transition-colors">
@@ -30,13 +29,13 @@ const PostCard = ({ post, index = 0, variant = "default" }: { post: BlogPost; in
             </div>
           </div>
         </article>
-      </Link>
+      </a>
     );
   }
 
   return (
     <article className={`content-card overflow-hidden animate-in-up stagger-${Math.min(index + 1, 5)}`}>
-      <Link to={`/blog/${post.slug}`} className="block group">
+      <a href={`/blog/${post.slug}`} className="block group">
         <div className="p-5 md:p-6">
           <div className="flex items-center gap-2.5 mb-3">
             <span className="category-badge" data-category={post.category}>
@@ -66,7 +65,7 @@ const PostCard = ({ post, index = 0, variant = "default" }: { post: BlogPost; in
             <span>Verified from {Math.max(1, sourceCount)} source{Math.max(1, sourceCount) > 1 ? "s" : ""}</span>
           </div>
         </div>
-      </Link>
+      </a>
     </article>
   );
 };
