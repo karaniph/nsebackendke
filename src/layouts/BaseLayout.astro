@@ -30,6 +30,8 @@ const {
   schema
 } = Astro.props;
 
+import TickerBar from '../components/TickerBar';
+
 const fullTitle = title.includes(SITE_NAME) ? title : `${title} — ${SITE_NAME}`;
 const resolvedImage = image.startsWith('http') ? image : `${SITE_URL}${image.startsWith('/') ? image : `/${image}`}`;
 ---
@@ -88,6 +90,7 @@ const resolvedImage = image.startsWith('http') ? image : `${SITE_URL}${image.sta
     </script>
     
     <div class="relative flex min-h-screen flex-col">
+      <TickerBar client:load />
       <slot />
     </div>
   </body>

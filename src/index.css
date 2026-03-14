@@ -395,6 +395,7 @@
 
   .ticker-scroll {
     animation: ticker 30s linear infinite;
+    will-change: transform;
   }
   @keyframes ticker {
     from { transform: translateX(0); }

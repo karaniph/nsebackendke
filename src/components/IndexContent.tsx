@@ -45,29 +45,6 @@ const IndexContent = ({ allPosts, marketBriefs, deepDives, education, botUpdates
 
   return (
     <>
-      {/* ─── Ticker Bar ─── */}
-      <div className="ticker-bar overflow-hidden py-2 text-xs font-mono">
-        <div className="ticker-scroll flex items-center gap-8 whitespace-nowrap">
-          <span>NASI <span className="stat-pill up">▲ 1.8%</span></span>
-          <span>SCOM <span className="stat-pill up">▲ 1.5%</span> 28.40</span>
-          <span>KCB <span className="stat-pill up">▲ 4.2%</span> 42.50</span>
-          <span>EQTY <span className="stat-pill up">▲ 3.1%</span> 51.75</span>
-          <span>BAT <span className="stat-pill down">▼ 2.1%</span> 345.00</span>
-          <span>BAMB <span className="stat-pill down">▼ 1.6%</span> 32.50</span>
-          <span>EABL <span className="stat-pill down">▼ 0.8%</span> 165.00</span>
-          <span>COOP <span className="stat-pill up">▲ 2.8%</span> 14.90</span>
-          {/* Duplicate for seamless scroll */}
-          <span>NASI <span className="stat-pill up">▲ 1.8%</span></span>
-          <span>SCOM <span className="stat-pill up">▲ 1.5%</span> 28.40</span>
-          <span>KCB <span className="stat-pill up">▲ 4.2%</span> 42.50</span>
-          <span>EQTY <span className="stat-pill up">▲ 3.1%</span> 51.75</span>
-          <span>BAT <span className="stat-pill down">▼ 2.1%</span> 345.00</span>
-          <span>BAMB <span className="stat-pill down">▼ 1.6%</span> 32.50</span>
-          <span>EABL <span className="stat-pill down">▼ 0.8%</span> 165.00</span>
-          <span>COOP <span className="stat-pill up">▲ 2.8%</span> 14.90</span>
-        </div>
-      </div>
-
       <div className="flex-1 flex flex-col">
         {/* ─── Hero ─── */}
         <section className="container py-16 md:py-24 animate-in-up">

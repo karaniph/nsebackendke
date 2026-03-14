@@ -117,7 +117,7 @@ const SiteHeader = ({ onSearchOpen, currentPath = "/" }: SiteHeaderProps) => {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <nav className="md:hidden border-t border-border bg-background animate-fade-in pb-4 px-4">
+        <nav className="md:hidden border-t border-border bg-background animate-fade-in pb-8 px-4 max-h-[calc(100vh-80px)] overflow-y-auto">
           {navLinks.map((link) => (
             <a
               key={link.path}
