@@ -5,17 +5,18 @@ import IndexContent from '../components/IndexContent';
 import SEOHead from '../components/SEOHead'; // Optional: if you still want some dynamically injected things, but BaseLayout covers it.
 
 import { fetchLivePosts } from '../lib/live-blog';
-import { sortPublishedPosts, getPostsByCategoryFrom } from '../lib/blog-data';
+import { getPublishedPostSummaries, getPostSummariesByCategoryFrom, sortPublishedPosts } from '../lib/blog-data';
 
 // Fetch the data on the server during build (or SSR request)
 const rawPosts = await fetchLivePosts();
-const allPosts = sortPublishedPosts(rawPosts || []);
-const marketBriefs = getPostsByCategoryFrom(allPosts, "market-briefs");
-const deepDives = getPostsByCategoryFrom(allPosts, "deep-dives");
-const education = getPostsByCategoryFrom(allPosts, "education");
-const botUpdates = getPostsByCategoryFrom(allPosts, "bot-updates");
+const allPostsFull = sortPublishedPosts(rawPosts || []);
+const allPosts = allPostsFull.map(({ content, blocks, ...rest }) => rest);
+const marketBriefs = getPostSummariesByCategoryFrom(allPosts, "market-briefs");
+const deepDives = getPostSummariesByCategoryFrom(allPosts, "deep-dives");
+const education = getPostSummariesByCategoryFrom(allPosts, "education");
+const botUpdates = getPostSummariesByCategoryFrom(allPosts, "bot-updates");
 
-const todayBrief = marketBriefs[0];
+const todayBrief = allPostsFull.find(p => p.category === "market-briefs");
 
 const seoDescription = "Daily NSE market briefs, deep dives, and practical investor education for Kenya. Get verified analysis and Telegram alerts from NSEinsider.";
 const seoKeywords = ["NSE", "Nairobi Securities Exchange", "Kenya stocks", "market briefs", "investment education", "Kenya investing", "stock analysis"];

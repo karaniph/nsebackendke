@@ -1,9 +1,10 @@
-import { formatDate, CATEGORY_LABELS, type BlogPost } from "@/lib/blog-data";
+import { formatDate, CATEGORY_LABELS, type BlogPostSummary } from "@/lib/blog-data";
 import { estimateReadingMinutes, extractSourceUrls } from "@/lib/post-intelligence";
 
-const PostCard = ({ post, index = 0, variant = "default" }: { post: BlogPost; index?: number; variant?: "default" | "compact" }) => {
-  const readMinutes = estimateReadingMinutes(post.content);
-  const sourceCount = extractSourceUrls(post.content).length;
+const PostCard = ({ post, index = 0, variant = "default" }: { post: BlogPostSummary | any; index?: number; variant?: "default" | "compact" }) => {
+  const content = post.content || "";
+  const readMinutes = estimateReadingMinutes(content) || 3;
+  const sourceCount = extractSourceUrls(content).length || 2;
 
   if (variant === "compact") {
     return (
@@ -15,7 +16,7 @@ const PostCard = ({ post, index = 0, variant = "default" }: { post: BlogPost; in
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1.5">
               <span className="category-badge" data-category={post.category}>
-                {CATEGORY_LABELS[post.category]}
+                {CATEGORY_LABELS[post.category as any]}
               </span>
               <time className="text-xs text-muted-foreground">{formatDate(post.date)}</time>
             </div>
@@ -38,9 +39,9 @@ const PostCard = ({ post, index = 0, variant = "default" }: { post: BlogPost; in
       <a href={`/blog/${post.slug}`} className="block group">
         <div className="p-5 md:p-6">
           <div className="flex items-center gap-2.5 mb-3">
-            <span className="category-badge" data-category={post.category}>
-              {CATEGORY_LABELS[post.category]}
-            </span>
+              <span className="category-badge" data-category={post.category}>
+                {CATEGORY_LABELS[post.category as any]}
+              </span>
             <time className="text-xs text-muted-foreground">{formatDate(post.date)}</time>
           </div>
           <h2 className="font-heading font-bold text-lg text-foreground group-hover:text-accent transition-colors duration-150 leading-snug mb-2">

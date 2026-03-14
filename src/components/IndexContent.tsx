@@ -5,15 +5,15 @@ import PostCard from "@/components/PostCard";
 import TelegramCTA from "@/components/TelegramCTA";
 import { extractKeyTakeaways, inferMarketMood } from "@/lib/post-intelligence";
 import { DEFAULT_TOPICS, getPersonalizedPosts, loadFollowedTopics, saveFollowedTopics } from "@/lib/personalization";
-import type { BlogPost } from "@/lib/blog-data";
+import type { BlogPost, BlogPostSummary } from "@/lib/blog-data";
 
 interface IndexContentProps {
-  allPosts: BlogPost[];
-  marketBriefs: BlogPost[];
-  deepDives: BlogPost[];
-  education: BlogPost[];
-  botUpdates: BlogPost[];
-  todayBrief?: BlogPost;
+  allPosts: BlogPostSummary[];
+  marketBriefs: BlogPostSummary[];
+  deepDives: BlogPostSummary[];
+  education: BlogPostSummary[];
+  botUpdates: BlogPostSummary[];
+  todayBrief?: BlogPost; // Keep todayBrief as full object for takeaways
 }
 
 const IndexContent = ({ allPosts, marketBriefs, deepDives, education, botUpdates, todayBrief }: IndexContentProps) => {
@@ -146,7 +146,7 @@ const IndexContent = ({ allPosts, marketBriefs, deepDives, education, botUpdates
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
               {personalizedPosts.map((post, i) => (
-                <PostCard key={post.slug} post={post} index={i} asAstroLink />
+                <PostCard key={post.slug} post={post as any} index={i} />
               ))}
             </div>
           </section>

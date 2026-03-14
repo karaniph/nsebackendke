@@ -22,7 +22,8 @@ const cat = category as PostCategory;
 // Fetch posts server-side
 const rawPosts = await fetchLivePosts();
 const allPostsRaw = sortPublishedPosts(rawPosts || []);
-const categoryPosts = getPostsByCategoryFrom(allPostsRaw, cat);
+const categoryPostsFull = getPostsByCategoryFrom(allPostsRaw, cat);
+const categoryPosts = categoryPostsFull.map(({ content, blocks, ...rest }) => rest);
 
 const CATEGORY_DESCRIPTIONS: Record<PostCategory, string> = {
   "market-briefs": "Daily NSE market briefs with top movers, foreign flow, risk signals, and what to watch next.",

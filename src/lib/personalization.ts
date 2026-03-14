@@ -1,4 +1,4 @@
-import type { BlogPost } from "@/lib/blog-data";
+import type { BlogPost, BlogPostSummary } from "@/lib/blog-data";
 
 const STORAGE_KEY = "nseinsider.followed_topics.v1";
 
@@ -31,7 +31,7 @@ export function saveFollowedTopics(topics: string[]): void {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(cleaned));
 }
 
-export function scorePostForTopics(post: BlogPost, topics: string[]): number {
+export function scorePostForTopics(post: BlogPost | BlogPostSummary, topics: string[]): number {
   if (topics.length === 0) return 0;
   const bag = new Set<string>([
     post.category,
@@ -45,7 +45,7 @@ export function scorePostForTopics(post: BlogPost, topics: string[]): number {
   return score;
 }
 
-export function getPersonalizedPosts(posts: BlogPost[], topics: string[], limit = 4): BlogPost[] {
+export function getPersonalizedPosts<T extends BlogPost | BlogPostSummary>(posts: T[], topics: string[], limit = 4): T[] {
   return posts
     .map((post) => ({ post, score: scorePostForTopics(post, topics) }))
     .filter((item) => item.score > 0)

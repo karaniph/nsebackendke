@@ -23,7 +23,8 @@ const { allPostsRaw, archiveMonths } = Astro.props as { allPostsRaw: any; archiv
 const yearNum = parseInt(year || "0", 10);
 const monthNum = parseInt(month || "0", 10);
 
-const posts = yearNum && monthNum ? getPostsByYearMonthFrom(allPostsRaw, yearNum, monthNum) : [];
+const postsFull = yearNum && monthNum ? getPostsByYearMonthFrom(allPostsRaw, yearNum, monthNum) : [];
+const posts = postsFull.map(({ content, blocks, ...rest }) => rest);
 
 const MONTH_NAMES = [
   "", "January", "February", "March", "April", "May", "June",

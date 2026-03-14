@@ -2,13 +2,13 @@
 import { useState } from "react";
 import PostCard from "@/components/PostCard";
 import Pagination from "@/components/Pagination";
-import { paginatePosts, type BlogPost, type PostCategory } from "@/lib/blog-data";
+import { paginatePosts, type BlogPostSummary, type PostCategory } from "@/lib/blog-data";
 
 interface CategoryContentProps {
   cat: PostCategory;
   label: string;
   desc: string;
-  allPosts: BlogPost[];
+  allPosts: BlogPostSummary[];
 }
 
 const CategoryContent = ({ cat, label, desc, allPosts }: CategoryContentProps) => {
@@ -50,7 +50,7 @@ const CategoryContent = ({ cat, label, desc, allPosts }: CategoryContentProps) =
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
             {posts.map((post, i) => (
-              <PostCard key={post.slug} post={post} index={i} asAstroLink />
+              <PostCard key={post.slug} post={post as any} index={i} />
             ))}
           </div>
           

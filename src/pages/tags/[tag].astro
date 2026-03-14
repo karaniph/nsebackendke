@@ -23,7 +23,8 @@ const actualTag = tag || "";
 const encodedTag = encodeURIComponent(actualTag);
 
 const { allPostsRaw } = Astro.props as { allPostsRaw: any };
-const tagPosts = getPostsByTagFrom(allPostsRaw || [], actualTag);
+const tagPostsFull = getPostsByTagFrom(allPostsRaw || [], actualTag);
+const tagPosts = tagPostsFull.map(({ content, blocks, ...rest }) => rest);
 ---
 
 <BaseLayout 

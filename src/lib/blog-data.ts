@@ -21,6 +21,8 @@ export interface BlogPost {
   };
 }
 
+export type BlogPostSummary = Omit<BlogPost, 'content' | 'blocks'>;
+
 export const CATEGORY_LABELS: Record<PostCategory, string> = {
   "market-briefs": "Market Brief",
   "deep-dives": "Deep Dive",
@@ -295,6 +297,10 @@ export function getPublishedPosts(): BlogPost[] {
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
+export function getPublishedPostSummaries(): BlogPostSummary[] {
+  return getPublishedPosts().map(({ content, blocks, ...rest }) => rest);
+}
+
 export function sortPublishedPosts(posts: BlogPost[]): BlogPost[] {
   return posts
     .filter((p) => !p.draft)
@@ -313,6 +319,15 @@ export function getPostsByCategory(category: PostCategory): BlogPost[] {
   return getPublishedPosts().filter((p) => p.category === category);
 }
 
+export function getPostSummariesByCategory(category: PostCategory): BlogPostSummary[] {
+  return getPublishedPostSummaries().filter((p) => p.category === category);
+}
+
+export function getPostSummariesByCategoryFrom(posts: BlogPost[] | BlogPostSummary[], category: PostCategory): BlogPostSummary[] {
+  const summaries = 'content' in posts[0] ? (posts as BlogPost[]).map(({ content, blocks, ...rest }) => rest) : (posts as BlogPostSummary[]);
+  return summaries.filter(p => p.category === category);
+}
+
 export function getPostsByCategoryFrom(posts: BlogPost[], category: PostCategory): BlogPost[] {
   return sortPublishedPosts(posts).filter((p) => p.category === category);
 }
@@ -324,7 +339,7 @@ export function getAllTags(): string[] {
 }
 
 export function getPostsByTag(tag: string): BlogPost[] {
-  return getPublishedPosts().filter((p) => p.tags.includes(tag));
+  return getPublishedPosts().filter((p) => (p.tags || []).includes(tag));
 }
 
 export function getAllTagsFrom(posts: BlogPost[]): string[] {
@@ -370,8 +385,8 @@ export function getAdjacentPosts(slug: string): {
   const idx = posts.findIndex((p) => p.slug === slug);
   if (idx === -1) return { prev: null, next: null };
   return {
-    next: idx > 0 ? posts[idx - 1] : null,          // newer post
-    prev: idx < posts.length - 1 ? posts[idx + 1] : null, // older post
+    next: idx > 0 ? (posts[idx - 1] ?? null) : null,          // newer post
+    prev: idx < posts.length - 1 ? (posts[idx + 1] ?? null) : null, // older post
   };
 }
 
@@ -380,8 +395,8 @@ export function getAdjacentPostsFrom(posts: BlogPost[], slug: string): { prev: B
   const idx = sorted.findIndex((p) => p.slug === slug);
   if (idx === -1) return { prev: null, next: null };
   return {
-    next: idx > 0 ? sorted[idx - 1] : null,
-    prev: idx < sorted.length - 1 ? sorted[idx + 1] : null,
+    next: idx > 0 ? (sorted[idx - 1] ?? null) : null,
+    prev: idx < sorted.length - 1 ? (sorted[idx + 1] ?? null) : null,
   };
 }
 

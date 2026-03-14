@@ -1,0 +1,92 @@
+---
+// src/components/PostCard.astro
+import { Image } from 'astro:assets';
+import { formatDate, CATEGORY_LABELS, type BlogPostSummary } from '../lib/blog-data';
+import { estimateReadingMinutes, extractSourceUrls } from '../lib/post-intelligence';
+
+interface Props {
+  post: BlogPostSummary & { content?: string };
+  index?: number;
+  variant?: "default" | "compact";
+}
+
+const { post, index = 0, variant = "default" } = Astro.props;
+
+// For summaries, we might need to fallback or if we have content, calculate
+const contentString = post.content || "";
+const readMinutes = estimateReadingMinutes(contentString) || 3;
+const sourceCount = extractSourceUrls(contentString).length || 2;
+
+const staggerClass = `stagger-${Math.min(index + 1, 5)}`;
+---
+
+{variant === "compact" ? (
+  <a
+    href={`/blog/${post.slug}`}
+    className={`block group animate-in-up ${staggerClass}`}
+  >
+    <article class="flex items-start gap-4 py-4 border-b border-border/60 last:border-b-0 group-hover:bg-secondary/30 -mx-3 px-3 rounded-lg transition-colors">
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="category-badge" data-category={post.category}>
+            {CATEGORY_LABELS[post.category]}
+          </span>
+          <time class="text-xs text-muted-foreground">{formatDate(post.date)}</time>
+        </div>
+        <h3 class="text-sm font-semibold text-foreground group-hover:text-accent transition-colors leading-snug line-clamp-2">
+          {post.title}
+        </h3>
+        <div class="mt-2 flex items-center gap-2 text-[11px] text-muted-foreground">
+          <span>{readMinutes} min read</span>
+          <span>·</span>
+          <span>{Math.max(1, sourceCount)} sources</span>
+        </div>
+      </div>
+    </article>
+  </a>
+) : (
+  <article class={`content-card overflow-hidden animate-in-up ${staggerClass}`}>
+    <a href={`/blog/${post.slug}`} class="block group">
+      {post.coverImage && (
+        <div class="aspect-video overflow-hidden">
+          <Image 
+            src={post.coverImage} 
+            alt={post.title}
+            width={600}
+            height={340}
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+      )}
+      <div class="p-5 md:p-6">
+        <div class="flex items-center gap-2.5 mb-3">
+          <span class="category-badge" data-category={post.category}>
+            {CATEGORY_LABELS[post.category]}
+          </span>
+          <time class="text-xs text-muted-foreground">{formatDate(post.date)}</time>
+        </div>
+        <h2 class="font-heading font-bold text-lg text-foreground group-hover:text-accent transition-colors duration-150 leading-snug mb-2">
+          {post.title}
+        </h2>
+        <p class="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-4">
+          {post.description}
+        </p>
+        <div class="flex items-center justify-between">
+          <div class="flex flex-wrap gap-1.5">
+            {post.tags.slice(0, 3).map((tag) => (
+              <span class="text-xs text-muted-foreground bg-secondary px-2 py-0.5 rounded-full">
+                {tag}
+              </span>
+            ))}
+          </div>
+          <span class="text-xs text-muted-foreground">{post.author}</span>
+        </div>
+        <div class="mt-3 flex items-center gap-2 text-[11px] text-muted-foreground">
+          <span>{readMinutes} min read</span>
+          <span>·</span>
+          <span>Verified from {Math.max(1, sourceCount)} source{Math.max(1, sourceCount) > 1 ? "s" : ""}</span>
+        </div>
+      </div>
+    </a>
+  </article>
+)}

@@ -1,9 +1,9 @@
 // src/components/ArchiveContent.tsx
 import PostCard from "@/components/PostCard";
-import type { BlogPost, ArchiveMonth } from "@/lib/blog-data";
+import { type BlogPostSummary, type ArchiveMonth } from "@/lib/blog-data";
 
 interface ArchiveContentProps {
-  posts: BlogPost[];
+  posts: BlogPostSummary[];
   archiveMonths: ArchiveMonth[];
   yearNum: number;
   monthNum: number;
@@ -60,7 +60,7 @@ const ArchiveContent = ({ posts, archiveMonths, yearNum, monthNum, pageTitle }: 
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
               {posts.map((post, i) => (
-                <PostCard key={post.slug} post={post} index={i} asAstroLink />
+                <PostCard key={post.slug} post={post as any} index={i} />
               ))}
             </div>
           )}
