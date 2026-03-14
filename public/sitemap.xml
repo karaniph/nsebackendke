@@ -2,63 +2,93 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://nseinsider.co.ke/</loc>
-    <lastmod>2026-03-11T12:50:38.616Z</lastmod>
+    <lastmod>2026-03-14T04:30:37.965Z</lastmod>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/about</loc>
-    <lastmod>2026-03-11T12:50:38.619Z</lastmod>
+    <lastmod>2026-03-14T04:30:37.968Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/contact</loc>
-    <lastmod>2026-03-11T12:50:38.619Z</lastmod>
+    <lastmod>2026-03-14T04:30:37.968Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/privacy-policy</loc>
-    <lastmod>2026-03-11T12:50:38.619Z</lastmod>
+    <lastmod>2026-03-14T04:30:37.968Z</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/terms-and-conditions</loc>
-    <lastmod>2026-03-11T12:50:38.619Z</lastmod>
+    <lastmod>2026-03-14T04:30:37.968Z</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/tags</loc>
-    <lastmod>2026-03-11T12:50:38.619Z</lastmod>
+    <lastmod>2026-03-14T04:30:37.968Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/category/market-briefs</loc>
-    <lastmod>2026-03-11T12:50:38.619Z</lastmod>
+    <lastmod>2026-03-14T04:30:37.968Z</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/category/deep-dives</loc>
-    <lastmod>2026-03-11T12:50:38.619Z</lastmod>
+    <lastmod>2026-03-14T04:30:37.968Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/category/education</loc>
-    <lastmod>2026-03-11T12:50:38.619Z</lastmod>
+    <lastmod>2026-03-14T04:30:37.968Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/rss</loc>
-    <lastmod>2026-03-11T12:50:38.619Z</lastmod>
+    <lastmod>2026-03-14T04:30:37.968Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://nseinsider.co.ke/blog/2026-03-14-equity-group-holdings-eqty-2026-03-14</loc>
+    <lastmod>2026-03-14T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://nseinsider.co.ke/blog/2026-03-14-nse-market-brief-2026-03-14</loc>
+    <lastmod>2026-03-14T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://nseinsider.co.ke/blog/2026-03-13-kenyan-market-closes-strong-with-select-stocks-leading-gains</loc>
+    <lastmod>2026-03-13T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://nseinsider.co.ke/blog/2026-03-12-dividend-payout-ratio-and-sustainability-2026-03-12</loc>
+    <lastmod>2026-03-12T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://nseinsider.co.ke/blog/2026-03-12-kenyan-market-closes-strong-on-select-stocks-liquidity-holds</loc>
+    <lastmod>2026-03-12T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/blog/2026-03-11-kcb-group-kcb-2026-03-11</loc>
@@ -67,7 +97,7 @@
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-11-dividend-yield-without-traps-2026-03-11</loc>
+    <loc>https://nseinsider.co.ke/blog/2026-03-11-portfolio-risk-management-2026-03-11</loc>
     <lastmod>2026-03-11T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>

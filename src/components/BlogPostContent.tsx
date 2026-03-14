@@ -10,83 +10,40 @@ import { estimateReadingMinutes, extractHeadings, extractKeyTakeaways, extractSo
 import { loadFollowedTopics, saveFollowedTopics } from "@/lib/personalization";
 import { buildVisualBlocks } from "@/lib/visual-blocks";
 import type { BlogPost } from "@/lib/blog-data";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
-// Keep custom markdown text rendering locally for now, 
-// to be replaced by react-markdown in Issue #2.
-function renderContent(content: string) {
-  const lines = content.split("\n");
-  const elements: React.ReactNode[] = [];
-  let inCodeBlock = false;
-  let codeLines: string[] = [];
-  const headingSeen = new Map<string, number>();
-  let key = 0;
-
-  const processInline = (text: string): React.ReactNode[] => {
-    const parts: React.ReactNode[] = [];
-    const regex = /(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\([^)]+\))/g;
-    let lastIndex = 0;
-    let match;
-    while ((match = regex.exec(text)) !== null) {
-      if (match.index > lastIndex) parts.push(text.slice(lastIndex, match.index));
-      const m = match[0];
-      if (m.startsWith("`")) {
-        parts.push(<code key={`i${key++}`}>{m.slice(1, -1)}</code>);
-      } else if (m.startsWith("**")) {
-        parts.push(<strong key={`i${key++}`}>{m.slice(2, -2)}</strong>);
-      } else if (m.startsWith("*")) {
-        parts.push(<em key={`i${key++}`}>{m.slice(1, -1)}</em>);
-      } else if (m.startsWith("[")) {
-        const linkMatch = m.match(/\[([^\]]+)\]\(([^)]+)\)/);
-        if (linkMatch) parts.push(<a key={`i${key++}`} href={linkMatch[2]} target="_blank" rel="noopener noreferrer">{linkMatch[1]}</a>);
-      }
-      lastIndex = match.index + m.length;
-    }
-    if (lastIndex < text.length) parts.push(text.slice(lastIndex));
-    return parts.length > 0 ? parts : [text];
-  };
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    if (line.startsWith("```")) {
-      if (inCodeBlock) {
-        elements.push(<pre key={key++}><code>{codeLines.join("\n")}</code></pre>);
-        codeLines = [];
-        inCodeBlock = false;
-      } else { inCodeBlock = true; }
-      continue;
-    }
-    if (inCodeBlock) { codeLines.push(line); continue; }
-    if (line.trim() === "") continue;
-    if (line.startsWith("## ")) {
-      const text = line.slice(3);
-      const base = slugifyHeading(text);
-      const count = (headingSeen.get(base) || 0) + 1;
-      headingSeen.set(base, count);
-      const id = count === 1 ? base : `${base}-${count}`;
-      elements.push(<h2 key={key++} id={id}>{text}</h2>);
-    } else if (line.startsWith("### ")) {
-      const text = line.slice(4);
-      const base = slugifyHeading(text);
-      const count = (headingSeen.get(base) || 0) + 1;
-      headingSeen.set(base, count);
-      const id = count === 1 ? base : `${base}-${count}`;
-      elements.push(<h3 key={key++} id={id}>{text}</h3>);
-    } else if (line.startsWith("> ")) {
-      elements.push(<blockquote key={key++}>{processInline(line.slice(2))}</blockquote>);
-    } else if (line.startsWith("- ")) {
-      const items: string[] = [line.slice(2)];
-      while (i + 1 < lines.length && lines[i + 1].startsWith("- ")) { i++; items.push(lines[i].slice(2)); }
-      elements.push(<ul key={key++}>{items.map((item, j) => <li key={j}>{processInline(item)}</li>)}</ul>);
-    } else if (/^\d+\. /.test(line)) {
-      const items: string[] = [line.replace(/^\d+\. /, "")];
-      while (i + 1 < lines.length && /^\d+\. /.test(lines[i + 1])) { i++; items.push(lines[i].replace(/^\d+\. /, "")); }
-      elements.push(<ol key={key++}>{items.map((item, j) => <li key={j}>{processInline(item)}</li>)}</ol>);
-    } else {
-      elements.push(<p key={key++}>{processInline(line)}</p>);
-    }
-  }
-  return elements;
-}
+// Custom mapping of markdown elements to Radix/Shadcn/Themed components
+const MarkdownComponents: any = {
+  h2: ({ node, ...props }: any) => {
+    const id = slugifyHeading(props.children?.toString() || "");
+    return <h2 id={id} {...props} />;
+  },
+  h3: ({ node, ...props }: any) => {
+    const id = slugifyHeading(props.children?.toString() || "");
+    return <h3 id={id} {...props} />;
+  },
+  code({ node, inline, className, children, ...props }: any) {
+    const match = /language-(\w+)/.exec(className || "");
+    return !inline && match ? (
+      <SyntaxHighlighter
+        style={oneDark}
+        language={match[1]}
+        PreTag="div"
+        className="rounded-lg my-6"
+        {...props}
+      >
+        {String(children).replace(/\n$/, "")}
+      </SyntaxHighlighter>
+    ) : (
+      <code className={className} {...props}>
+        {children}
+      </code>
+    );
+  },
+};
 
 interface BlogPostContentProps {
   post: BlogPost;
@@ -226,7 +183,14 @@ const BlogPostContent = ({ post, allPosts }: BlogPostContentProps) => {
             </section>
           )}
 
-          <div className="prose-blog">{renderContent(post.content)}</div>
+          <div className="prose-blog">
+            <ReactMarkdown 
+              rehypePlugins={[rehypeRaw]} 
+              components={MarkdownComponents}
+            >
+              {post.content}
+            </ReactMarkdown>
+          </div>
 
           {mounted && (
             <div className="mt-14 content-card p-6 md:p-7">
