@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { getPublishedPosts, type BlogPost, type PostCategory } from "./src/lib/blog-data";
+import { sanitizeRemoteBlogContent } from "./src/lib/blog-content";
 
 const PUBLIC_FEED_URL =
   process.env.BLOG_FEED_API || "https://nse-bot-backend.karanidevops.workers.dev/public/blog/posts?limit=200&include_failed=1";
@@ -81,7 +82,7 @@ function toBlogPost(item: PublicFeedItem | AdminDraftItem): BlogPost {
     category,
     coverImage: "",
     draft: false,
-    content: item.content_markdown
+    content: sanitizeRemoteBlogContent(item.content_markdown)
   };
 }
 

@@ -1,4 +1,5 @@
 import { blogPosts, type BlogPost, type PostCategory } from "@/lib/blog-data";
+import { sanitizeRemoteBlogContent } from "@/lib/blog-content";
 
 interface PublicFeedItem {
   id: number;
@@ -57,7 +58,7 @@ function toBlogPost(item: PublicFeedItem): BlogPost {
     category,
     coverImage: "",
     draft: false,
-    content: item.content_markdown
+    content: sanitizeRemoteBlogContent(item.content_markdown)
   };
 }
 
