@@ -97,24 +97,24 @@ const BlogPostContent = ({ post, allPosts }: BlogPostContentProps) => {
     post.category === "education"
       ? {
           title: "Turn this lesson into a habit",
-          message: "Get practical investor lessons in Telegram and build your process week by week.",
-          primaryLabel: "Get the next lesson",
-          primaryHref: "https://t.me/NSEInsider_bot",
+          message: "Follow investor lessons on our Telegram channel and build your process week by week.",
+          primaryLabel: "Join Telegram channel",
+          primaryHref: "https://t.me/nseinsiderske",
           secondaryLabel: topicFollowed ? "Following topic" : "Follow this topic"
         }
       : post.category === "deep-dives"
         ? {
             title: "Track this stock in real time",
-            message: "Set alerts and follow fresh filings in Telegram before the next deep dive lands.",
-            primaryLabel: "Track on Telegram",
-            primaryHref: "https://t.me/NSEInsider_bot",
+            message: "Follow fresh filings and deep-dive highlights on our Telegram channel.",
+            primaryLabel: "Open Telegram channel",
+            primaryHref: "https://t.me/nseinsiderske",
             secondaryLabel: topicFollowed ? "Following topic" : "Follow this topic"
           }
         : {
             title: "Get tomorrow's brief before open",
-            message: "Receive pre-market context, key movers, and risk signals directly on Telegram.",
-            primaryLabel: "Get morning alert",
-            primaryHref: "https://t.me/NSEInsider_bot",
+            message: "Follow pre-market context, key movers, and risk signals on our Telegram channel.",
+            primaryLabel: "Read on Telegram",
+            primaryHref: "https://t.me/nseinsiderske",
             secondaryLabel: topicFollowed ? "Following topic" : "Follow this topic"
           };
 
