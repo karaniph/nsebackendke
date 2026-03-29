@@ -16,4 +16,18 @@ describe("sanitizeRemoteBlogContent", () => {
       "Kingdom Securities published its Daily Market Wrap. However, the report was not summarized in the feed, leaving traders cautious.",
     );
   });
+
+  it("removes quoted filing dumps and empty takeaway sections", () => {
+    const input = `# NSE Market Brief — 2026-03-29\n\n## Key Takeaways\n- AIB | Announcement | Filing captured.\n- Detailed summary is pending further processing.\n\n## Market Pulse\nA session overview based on the latest available market data and institutional filings.\n\n> NSEinsider Historical Market Source - 2026-03-29\n> Filing Highlights\n> - Source: https://example.com/report.pdf\n\n## What Moved\n- Gainers reflected selective institutional accumulation.`;
+
+    expect(sanitizeRemoteBlogContent(input)).toBe(
+      `# NSE Market Brief — 2026-03-29\n\n## Market Pulse\nA session overview based on the latest available market data and institutional filings.\n\n## What Moved\n- Gainers reflected selective institutional accumulation.`,
+    );
+  });
+
+  it("keeps parent sections when content continues in subheadings", () => {
+    const input = `## What Moved\n\n### Top Gainers\n- Selective institutional accumulation.\n\n### Top Losers\n- Profit-taking in laggards.`;
+
+    expect(sanitizeRemoteBlogContent(input)).toBe(input);
+  });
 });
