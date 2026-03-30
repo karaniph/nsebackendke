@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useLivePosts } from "@/hooks/use-live-posts";
 import { formatDate, CATEGORY_LABELS, sortPublishedPosts } from "@/lib/blog-data";
+import { fetchLivePosts } from "@/lib/live-blog";
 
 interface SearchOverlayProps {
   isOpen: boolean;
@@ -9,9 +9,8 @@ interface SearchOverlayProps {
 
 const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
   const [query, setQuery] = useState("");
+  const [posts, setPosts] = useState(() => [] as Awaited<ReturnType<typeof fetchLivePosts>>);
   const inputRef = useRef<HTMLInputElement>(null);
-  const { data } = useLivePosts();
-  const posts = sortPublishedPosts(data || []);
 
   const filtered = query.trim()
     ? posts.filter(
@@ -32,6 +31,28 @@ const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
       document.body.style.overflow = "";
     }
     return () => { document.body.style.overflow = ""; };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    let cancelled = false;
+
+    void fetchLivePosts()
+      .then((data) => {
+        if (!cancelled) {
+          setPosts(sortPublishedPosts(data || []));
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setPosts([]);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [isOpen]);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
