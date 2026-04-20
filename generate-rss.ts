@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { getPublishedPosts, type BlogPost } from "./src/lib/blog-data";
+import { getLocalContentPosts } from "./src/lib/local-content-posts";
 
 const SITE_URL = "https://nseinsider.co.ke";
 const REMOTE_FEED =
@@ -110,7 +111,7 @@ ${items}
 }
 
 async function main() {
-  const local = getPublishedPosts();
+  const local = mergePosts(getLocalContentPosts(), getPublishedPosts());
   const generated = loadGeneratedPosts();
   const remote = generated.length > 0 ? generated : await fetchRemotePosts();
   const merged = mergePosts(remote, local).slice(0, 200);
