@@ -8,7 +8,6 @@ import ChecklistCard from "@/components/ChecklistCard";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import SearchOverlay from "@/components/SearchOverlay";
-import GiscusComments from "@/components/GiscusComments";
 import { getRelatedPostsFrom, getAdjacentPostsFrom, formatDate, CATEGORY_LABELS } from "@/lib/blog-data";
 import { estimateReadingMinutes, extractHeadings, extractKeyTakeaways, extractSourceUrls, slugifyHeading } from "@/lib/post-intelligence";
 import { loadFollowedTopics, saveFollowedTopics } from "@/lib/personalization";
@@ -353,8 +352,6 @@ const BlogPostContent = ({ post, allPosts }: BlogPostContentProps) => {
               </div>
             </div>
           )}
-
-          <GiscusComments pathname={`/blog/${post.slug}`} />
 
           {/* ─── Prev / Next navigation ─── */}
           {(prev || next) && (
