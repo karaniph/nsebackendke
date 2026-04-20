@@ -8,6 +8,7 @@ import ChecklistCard from "@/components/ChecklistCard";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import SearchOverlay from "@/components/SearchOverlay";
+import GiscusComments from "@/components/GiscusComments";
 import { getRelatedPostsFrom, getAdjacentPostsFrom, formatDate, CATEGORY_LABELS } from "@/lib/blog-data";
 import { estimateReadingMinutes, extractHeadings, extractKeyTakeaways, extractSourceUrls, slugifyHeading } from "@/lib/post-intelligence";
 import { loadFollowedTopics, saveFollowedTopics } from "@/lib/personalization";
@@ -17,6 +18,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { Copy, Linkedin, Send, Share2, Twitter, MessageCircle } from "lucide-react";
 
 // Custom mapping of markdown elements to Radix/Shadcn/Themed components
 const MarkdownComponents: any = {
@@ -57,6 +59,7 @@ const BlogPostContent = ({ post, allPosts }: BlogPostContentProps) => {
   const [followedTopics, setFollowedTopics] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [copyFeedback, setCopyFeedback] = useState<"idle" | "copied" | "error">("idle");
 
   useEffect(() => {
     setFollowedTopics(loadFollowedTopics());
@@ -83,6 +86,8 @@ const BlogPostContent = ({ post, allPosts }: BlogPostContentProps) => {
   );
   const clusterPosts = useMemo(() => related.slice(0, 4), [related]);
   const hubTags = useMemo(() => post.tags.slice(0, 3), [post.tags]);
+  const shareUrl = `https://nseinsider.co.ke/blog/${post.slug}`;
+  const shareText = `${post.title} — ${post.description}`;
   
   const primaryTopic = (post.tags[0] || post.category).toLowerCase();
   const topicFollowed = followedTopics.includes(primaryTopic);
@@ -91,6 +96,54 @@ const BlogPostContent = ({ post, allPosts }: BlogPostContentProps) => {
     const next = topicFollowed ? followedTopics.filter((t) => t !== primaryTopic) : [...followedTopics, primaryTopic];
     setFollowedTopics(next);
     saveFollowedTopics(next);
+  };
+
+  const shareLinks = [
+    {
+      label: "Share on X",
+      href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(post.title)}`,
+      icon: Twitter,
+    },
+    {
+      label: "Share on LinkedIn",
+      href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
+      icon: Linkedin,
+    },
+    {
+      label: "Share on WhatsApp",
+      href: `https://wa.me/?text=${encodeURIComponent(`${post.title} ${shareUrl}`)}`,
+      icon: MessageCircle,
+    },
+    {
+      label: "Share on Telegram",
+      href: `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(post.title)}`,
+      icon: Send,
+    },
+  ];
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopyFeedback("copied");
+      window.setTimeout(() => setCopyFeedback("idle"), 2000);
+    } catch (_error) {
+      setCopyFeedback("error");
+      window.setTimeout(() => setCopyFeedback("idle"), 2500);
+    }
+  };
+
+  const handleNativeShare = async () => {
+    if (!navigator.share) return;
+
+    try {
+      await navigator.share({
+        title: post.title,
+        text: shareText,
+        url: shareUrl,
+      });
+    } catch (_error) {
+      // Ignore cancelled share sheets.
+    }
   };
 
   const ctaConfig =
@@ -159,6 +212,55 @@ const BlogPostContent = ({ post, allPosts }: BlogPostContentProps) => {
                 <a key={tag} href={`/tags/${tag}`} className="tag-chip">{tag}</a>
               ))}
             </div>
+            <section className="content-card mt-6 p-4 md:p-5">
+              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Share this article</p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Send this post to your team, channel, or investing circle.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {typeof navigator !== "undefined" && typeof navigator.share === "function" && (
+                    <button
+                      type="button"
+                      onClick={handleNativeShare}
+                      className="btn-outline inline-flex items-center gap-2 text-sm"
+                    >
+                      <Share2 className="h-4 w-4" />
+                      Share
+                    </button>
+                  )}
+                  {shareLinks.map(({ label, href, icon: Icon }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-outline inline-flex items-center gap-2 text-sm"
+                      aria-label={label}
+                    >
+                      <Icon className="h-4 w-4" />
+                      <span>{label.replace("Share on ", "")}</span>
+                    </a>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={handleCopyLink}
+                    className="btn-outline inline-flex items-center gap-2 text-sm"
+                  >
+                    <Copy className="h-4 w-4" />
+                    <span>
+                      {copyFeedback === "copied"
+                        ? "Link copied"
+                        : copyFeedback === "error"
+                          ? "Copy failed"
+                          : "Copy link"}
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </section>
             <section className="content-card mt-8 p-5 md:p-6">
               <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Build this topic cluster</p>
               <div className="mt-4 grid gap-4 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
@@ -251,6 +353,8 @@ const BlogPostContent = ({ post, allPosts }: BlogPostContentProps) => {
               </div>
             </div>
           )}
+
+          <GiscusComments pathname={`/blog/${post.slug}`} />
 
           {/* ─── Prev / Next navigation ─── */}
           {(prev || next) && (
