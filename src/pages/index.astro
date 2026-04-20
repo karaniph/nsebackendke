@@ -2,7 +2,6 @@
 // src/pages/index.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
 import IndexContent from '../components/IndexContent';
-import SEOHead from '../components/SEOHead'; // Optional: if you still want some dynamically injected things, but BaseLayout covers it.
 
 import { fetchLivePosts } from '../lib/live-blog';
 import { getPublishedPostSummaries, getPostSummariesByCategoryFrom, sortPublishedPosts } from '../lib/blog-data';

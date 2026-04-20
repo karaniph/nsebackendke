@@ -75,6 +75,15 @@ function mergePosts(remote: BlogPost[], local: BlogPost[]): BlogPost[] {
 
 async function fetchGeneratedPosts(): Promise<BlogPost[] | null> {
   try {
+    if (import.meta.env.SSR) {
+      const fs = await import("node:fs/promises");
+      const path = await import("node:path");
+      const source = path.resolve(process.cwd(), "public", "live-posts.json");
+      const raw = await fs.readFile(source, "utf8");
+      const payload = JSON.parse(raw) as BlogPost[];
+      return Array.isArray(payload) ? payload : null;
+    }
+
     const response = await fetch("/live-posts.json", {
       headers: { Accept: "application/json" },
       cache: "no-store"

@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { getPublishedPosts, type BlogPost, type PostCategory } from "./src/lib/blog-data";
 import { sanitizeRemoteBlogContent } from "./src/lib/blog-content";
+import { getLocalContentPosts } from "./src/lib/local-content-posts";
 
 const PUBLIC_FEED_URL =
   process.env.BLOG_FEED_API || "https://nse-bot-backend.karanidevops.workers.dev/public/blog/posts?limit=200&include_failed=1";
@@ -124,11 +125,12 @@ async function fetchDraftPosts(): Promise<BlogPost[]> {
 
 async function main() {
   const [publicPosts, draftPosts] = await Promise.all([fetchPublicPosts(), fetchDraftPosts()]);
-  const merged = mergePosts([...publicPosts, ...draftPosts], getPublishedPosts()).slice(0, 250);
+  const localPosts = mergePosts(getLocalContentPosts(), getPublishedPosts());
+  const merged = mergePosts([...publicPosts, ...draftPosts], localPosts).slice(0, 250);
   const dest = path.resolve(process.cwd(), "public", "live-posts.json");
   fs.writeFileSync(dest, `${JSON.stringify(merged, null, 2)}\n`);
   console.log(
-    `Generated live post feed at ${dest} (${merged.length} posts, drafts ${draftPosts.length}, public ${publicPosts.length})`
+    `Generated live post feed at ${dest} (${merged.length} posts, drafts ${draftPosts.length}, public ${publicPosts.length}, local ${localPosts.length})`
   );
 }
 

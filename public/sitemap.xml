@@ -2,307 +2,157 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://nseinsider.co.ke/</loc>
-    <lastmod>2026-03-29T08:43:15.851Z</lastmod>
+    <lastmod>2026-04-20T09:01:13.886Z</lastmod>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/about</loc>
-    <lastmod>2026-03-29T08:43:15.854Z</lastmod>
+    <lastmod>2026-04-20T09:01:13.890Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/contact</loc>
-    <lastmod>2026-03-29T08:43:15.854Z</lastmod>
+    <lastmod>2026-04-20T09:01:13.890Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/privacy-policy</loc>
-    <lastmod>2026-03-29T08:43:15.854Z</lastmod>
+    <lastmod>2026-04-20T09:01:13.890Z</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/terms-and-conditions</loc>
-    <lastmod>2026-03-29T08:43:15.854Z</lastmod>
+    <lastmod>2026-04-20T09:01:13.890Z</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/tags</loc>
-    <lastmod>2026-03-29T08:43:15.855Z</lastmod>
+    <lastmod>2026-04-20T09:01:13.890Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/category/market-briefs</loc>
-    <lastmod>2026-03-29T08:43:15.855Z</lastmod>
+    <lastmod>2026-04-20T09:01:13.890Z</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/category/deep-dives</loc>
-    <lastmod>2026-03-29T08:43:15.855Z</lastmod>
+    <lastmod>2026-04-20T09:01:13.890Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/category/education</loc>
-    <lastmod>2026-03-29T08:43:15.855Z</lastmod>
+    <lastmod>2026-04-20T09:01:13.890Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/rss</loc>
-    <lastmod>2026-03-29T08:43:15.858Z</lastmod>
+    <lastmod>2026-04-20T09:01:13.890Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-29-nse-market-brief-2026-03-29</loc>
-    <lastmod>2026-03-29T00:00:00.000Z</lastmod>
+    <loc>https://nseinsider.co.ke/blog/2026-04-17-kenyan-market-snapshot-april-17-2026-nasi-slips-08-to-17645</loc>
+    <lastmod>2026-04-17T04:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-28-co-operative-bank-coop-asset-quality-erosion-tests-valuation-case</loc>
-    <lastmod>2026-03-28T00:00:00.000Z</lastmod>
+    <loc>https://nseinsider.co.ke/blog/2026-04-16-kenyan-market-snapshot-april-16-2026-nasi-dips-04-to-18923-as-safaricom-leads-de</loc>
+    <lastmod>2026-04-16T04:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-27-nse-market-brief-2026-03-27</loc>
-    <lastmod>2026-03-27T00:00:00.000Z</lastmod>
+    <loc>https://nseinsider.co.ke/blog/2026-04-16-kenyan-market-snapshot-april-16-2026-nasi-dips-08-to-18243</loc>
+    <lastmod>2026-04-16T04:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-26-t-bills-101-91-182-364-day-how-kenyan-retail-investors-earn-risk-free-yields</loc>
-    <lastmod>2026-03-26T00:00:00.000Z</lastmod>
+    <loc>https://nseinsider.co.ke/blog/2026-04-16-reinvestment-risk-and-income-planning-managing-dividend-cash-flows-on-the-nse</loc>
+    <lastmod>2026-04-16T04:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-26-kenyan-market-snapshot-march-26-2026-nasi-dips-045-on-cautious-trading</loc>
-    <lastmod>2026-03-26T00:00:00.000Z</lastmod>
+    <loc>https://nseinsider.co.ke/blog/2026-04-15-kenyan-market-snapshot-april-15-2026-nasi-dips-04-as-safaricom-leads-losers</loc>
+    <lastmod>2026-04-15T04:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-25-kenyan-market-snapshot-march-25-2026-nasi-edges-higher-on-safaricom-banks-lag</loc>
-    <lastmod>2026-03-25T00:00:00.000Z</lastmod>
+    <loc>https://nseinsider.co.ke/blog/2026-04-14-duration-risk-made-practical-why-10-year-bonds-swing-20-on-a-1-rate-move</loc>
+    <lastmod>2026-04-14T04:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-24-understanding-the-yield-curve-in-kenya-2026-03-24</loc>
-    <lastmod>2026-03-24T00:00:00.000Z</lastmod>
+    <loc>https://nseinsider.co.ke/blog/2026-04-14-kenyan-market-snapshot-april-14-2026-nasi-dips-04-to-1789-amid-mixed-sentiment</loc>
+    <lastmod>2026-04-14T04:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-24-kenyan-market-snapshot-march-24-2026-eqty-leads-gainers-on-regional-growth-optim</loc>
-    <lastmod>2026-03-24T00:00:00.000Z</lastmod>
+    <loc>https://nseinsider.co.ke/blog/2026-04-13-kenyan-market-snapshot-april-13-2026-nasi-dips-08-as-profit-taking-hits-blue-chi</loc>
+    <lastmod>2026-04-13T04:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-23-nse-market-brief-2026-03-23</loc>
-    <lastmod>2026-03-23T00:00:00.000Z</lastmod>
+    <loc>https://nseinsider.co.ke/blog/2026-04-11-equity-group-holdings-eqty-fy25-earnings-quality-and-regional-expansion-case</loc>
+    <lastmod>2026-04-11T04:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-22-kenyan-market-snapshot-mar-22-2026-nasi-flat-liquidity-key</loc>
-    <lastmod>2026-03-22T00:00:00.000Z</lastmod>
+    <loc>https://nseinsider.co.ke/blog/2026-04-11-kenyan-market-snapshot-april-11-2026-nasi-dips-08-to-1523</loc>
+    <lastmod>2026-04-11T04:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-21-kenyan-market-snapshot-march-21-2026-nasi-at-28456</loc>
-    <lastmod>2026-03-21T00:00:00.000Z</lastmod>
+    <loc>https://nseinsider.co.ke/blog/2026-04-11-nse-market-brief-2026-04-11</loc>
+    <lastmod>2026-04-11T04:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-21-kcb-group-kcb-2026-03-21</loc>
-    <lastmod>2026-03-21T00:00:00.000Z</lastmod>
+    <loc>https://nseinsider.co.ke/blog/2026-04-09-inflation-and-real-returns-how-kenyan-investors-lose-ground</loc>
+    <lastmod>2026-04-09T04:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-20-safaricom-scom-2026-03-20</loc>
-    <lastmod>2026-03-20T00:00:00.000Z</lastmod>
+    <loc>https://nseinsider.co.ke/blog/2026-04-07-bonds-vs-equities-allocation-for-local-portfolios-kenyas-2026-risk-reward-balanc</loc>
+    <lastmod>2026-04-07T04:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-20-nse-market-brief-2026-03-20</loc>
-    <lastmod>2026-03-20T00:00:00.000Z</lastmod>
+    <loc>https://nseinsider.co.ke/blog/2026-04-04-kcb-group-kcb-fy2025-earnings-quality-and-regional-expansion</loc>
+    <lastmod>2026-04-04T04:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-19-nse-market-brief-2026-03-19</loc>
-    <lastmod>2026-03-19T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-19-price-to-book-pb-in-banking-and-value-stocks-2026-03-19</loc>
-    <lastmod>2026-03-19T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-18-nairobi-securities-exchange-sees-selective-rally-as-ftgh-surges-593-amid-kes-381</loc>
-    <lastmod>2026-03-18T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-17-nse-shows-resilience-as-consumer-stocks-rally-amid-banking-sector-headwinds</loc>
-    <lastmod>2026-03-17T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-17-eps-and-earnings-quality-2026-03-17</loc>
-    <lastmod>2026-03-17T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-16-nse-market-brief-2026-03-16</loc>
-    <lastmod>2026-03-16T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-15-nse-market-brief-2026-03-15</loc>
-    <lastmod>2026-03-15T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-14-equity-group-holdings-eqty-2026-03-14</loc>
-    <lastmod>2026-03-14T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-14-kenyan-equities-close-mixed-as-consumer-staples-rally-turnover-hits-kes-11b</loc>
-    <lastmod>2026-03-14T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-13-nse-market-brief-2026-03-13</loc>
-    <lastmod>2026-03-13T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-12-dividend-payout-ratio-and-sustainability-2026-03-12</loc>
-    <lastmod>2026-03-12T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-12-kenyan-market-snapshot-march-12-2026-nasi-at-21608</loc>
-    <lastmod>2026-03-12T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-11-kcb-group-kcb-2026-03-11</loc>
-    <lastmod>2026-03-11T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-11-portfolio-risk-management-2026-03-11</loc>
-    <lastmod>2026-03-11T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-11-kenyan-market-report-strong-gainers-lead-active-session</loc>
-    <lastmod>2026-03-11T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-10-equity-group-holdings-eqty-2026-03-10</loc>
-    <lastmod>2026-03-10T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-10-how-to-read-pe-on-the-nse-2026-03-10</loc>
-    <lastmod>2026-03-10T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-10-nse-wrap-market-cap-rises-319-amid-foreign-outflows</loc>
-    <lastmod>2026-03-10T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-09-co-operative-bank-coop-2026-03-09</loc>
-    <lastmod>2026-03-09T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-09-basic-valuation-framework-for-kenyan-stocks</loc>
-    <lastmod>2026-03-09T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-09-nse-wrap-a-quiet-session-with-limited-catalysts</loc>
-    <lastmod>2026-03-09T00:00:00.000Z</lastmod>
+    <loc>https://nseinsider.co.ke/blog/2026-04-04-kenyan-market-snapshot-april-4-2026-nse-20-at-189545</loc>
+    <lastmod>2026-04-04T04:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://nseinsider.co.ke/blog/nse-weekly-wrap-march-2026</loc>
     <lastmod>2026-03-07T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-06-east-african-breweries-eabl-2026-03-06</loc>
-    <lastmod>2026-03-06T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-06-rights-issues-and-dilution-2026-03-06</loc>
-    <lastmod>2026-03-06T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-06-nse-market-brief-2026-03-06</loc>
-    <lastmod>2026-03-06T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-03-nse-market-brief-2026-03-03</loc>
-    <lastmod>2026-03-03T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nseinsider.co.ke/blog/2026-03-02-nse-market-brief-2026-03-02</loc>
-    <lastmod>2026-03-02T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
