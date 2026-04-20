@@ -62,7 +62,17 @@ const SiteFooter = () => {
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
           <p>© {new Date().getFullYear()} NSEinsider. Not investment advice. Do your own research.</p>
-          <p className="font-mono">Nairobi, Kenya 🇰🇪</p>
+          <div className="flex flex-col items-center gap-2 sm:items-end">
+            <a
+              href="https://urimtrader.me/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-colors hover:text-foreground"
+            >
+              Visit Urim Trader
+            </a>
+            <p className="font-mono">Nairobi, Kenya 🇰🇪</p>
+          </div>
         </div>
       </div>
     </footer>
