@@ -59,6 +59,29 @@ const BlogPostContent = ({ post, allPosts }: BlogPostContentProps) => {
   const [mounted, setMounted] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [copyFeedback, setCopyFeedback] = useState<"idle" | "copied" | "error">("idle");
+  const [ttsState, setTtsState] = useState<"idle" | "playing" | "paused">("idle");
+
+  const handleListen = () => {
+    if (!window.speechSynthesis) return;
+    if (ttsState === "playing") {
+      window.speechSynthesis.pause();
+      setTtsState("paused");
+      return;
+    }
+    if (ttsState === "paused") {
+      window.speechSynthesis.resume();
+      setTtsState("playing");
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const text = `${post.title}. ${post.description}. ${post.content.replace(/[#*_`]/g, "")}`;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.95;
+    utterance.onend = () => setTtsState("idle");
+    utterance.onerror = () => setTtsState("idle");
+    window.speechSynthesis.speak(utterance);
+    setTtsState("playing");
+  };
 
   useEffect(() => {
     setFollowedTopics(loadFollowedTopics());
@@ -205,6 +228,15 @@ const BlogPostContent = ({ post, allPosts }: BlogPostContentProps) => {
               <span className="rounded-full bg-secondary px-2.5 py-1">{readMinutes} min read</span>
               <span className="rounded-full bg-secondary px-2.5 py-1">{Math.max(1, sources.length)} verified source{Math.max(1, sources.length) > 1 ? "s" : ""}</span>
               <span className="rounded-full bg-secondary px-2.5 py-1">Last updated {formatDate(post.updatedAt || post.date)}</span>
+              {typeof window !== "undefined" && window.speechSynthesis && (
+                <button
+                  type="button"
+                  onClick={handleListen}
+                  className="rounded-full bg-secondary px-2.5 py-1 flex items-center gap-1 hover:bg-accent hover:text-white transition-colors"
+                >
+                  {ttsState === "playing" ? "⏸ Pause" : ttsState === "paused" ? "▶ Resume" : "🔊 Listen"}
+                </button>
+              )}
             </div>
             <div className="flex flex-wrap gap-2 mt-6">
               {post.tags.map((tag) => (
