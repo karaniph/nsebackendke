@@ -228,7 +228,7 @@ const BlogPostContent = ({ post, allPosts }: BlogPostContentProps) => {
               <span className="rounded-full bg-secondary px-2.5 py-1">{readMinutes} min read</span>
               <span className="rounded-full bg-secondary px-2.5 py-1">{Math.max(1, sources.length)} verified source{Math.max(1, sources.length) > 1 ? "s" : ""}</span>
               <span className="rounded-full bg-secondary px-2.5 py-1">Last updated {formatDate(post.updatedAt || post.date)}</span>
-              {typeof window !== "undefined" && window.speechSynthesis && (
+              {mounted && (
                 <button
                   type="button"
                   onClick={handleListen}
