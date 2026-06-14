@@ -5,9 +5,6 @@ import ValuationSnapshotCard from "@/components/ValuationSnapshotCard";
 import RiskMatrix from "@/components/RiskMatrix";
 import GlossaryChips from "@/components/GlossaryChips";
 import ChecklistCard from "@/components/ChecklistCard";
-import SiteHeader from "@/components/SiteHeader";
-import SiteFooter from "@/components/SiteFooter";
-import SearchOverlay from "@/components/SearchOverlay";
 import { getRelatedPostsFrom, getAdjacentPostsFrom, formatDate, CATEGORY_LABELS } from "@/lib/blog-data";
 import { estimateReadingMinutes, extractHeadings, extractKeyTakeaways, extractSourceUrls, slugifyHeading } from "@/lib/post-intelligence";
 import { loadFollowedTopics, saveFollowedTopics } from "@/lib/personalization";
@@ -57,7 +54,6 @@ interface BlogPostContentProps {
 const BlogPostContent = ({ post, allPosts }: BlogPostContentProps) => {
   const [followedTopics, setFollowedTopics] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const [copyFeedback, setCopyFeedback] = useState<"idle" | "copied" | "error">("idle");
   const [ttsState, setTtsState] = useState<"idle" | "playing" | "paused">("idle");
 
@@ -194,10 +190,7 @@ const BlogPostContent = ({ post, allPosts }: BlogPostContentProps) => {
           };
 
   return (
-    <>
-      <div className="min-h-screen flex flex-col">
-        <SiteHeader onSearchOpen={() => setSearchOpen(true)} currentPath={`/blog/${post.slug}`} />
-        <article className="container py-12 md:py-16 animate-in-up">
+    <article className="container py-12 md:py-16 animate-in-up">
           <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_280px] gap-10">
             <div className="max-w-3xl">
           <header className="mb-10">
@@ -503,11 +496,7 @@ const BlogPostContent = ({ post, allPosts }: BlogPostContentProps) => {
               </aside>
             )}
           </div>
-        </article>
-        <SiteFooter />
-        {mounted && <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />}
-      </div>
-    </>
+    </article>
   );
 };
 

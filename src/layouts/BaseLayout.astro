@@ -33,6 +33,7 @@ const {
 } = Astro.props;
 
 import TickerBar from '../components/TickerBar';
+import AppShell from '../components/AppShell';
 
 const fullTitle = title.includes(SITE_NAME) ? title : `${title} — ${SITE_NAME}`;
 const resolvedImage = image.startsWith('http') ? image : `${SITE_URL}${image.startsWith('/') ? image : `/${image}`}`;
@@ -110,7 +111,9 @@ const resolvedImage = image.startsWith('http') ? image : `${SITE_URL}${image.sta
     
     <div class="relative flex min-h-screen flex-col">
       <TickerBar client:load />
-      <slot />
+      <AppShell client:load currentPath={Astro.url.pathname}>
+        <slot />
+      </AppShell>
     </div>
   </body>
 </html>

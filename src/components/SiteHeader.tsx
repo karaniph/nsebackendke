@@ -7,6 +7,7 @@ interface SiteHeaderProps {
 }
 
 const navLinks = [
+  { label: "Blog", path: "/blog" },
   { label: "Market Briefs", path: "/category/market-briefs" },
   { label: "Deep Dives", path: "/category/deep-dives" },
   { label: "Education", path: "/category/education" },
