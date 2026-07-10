@@ -1,0 +1,28 @@
+---
+title: "Kenya equities drift as foreign flows stay murky before CBK auction"
+description: "Markets were subdued with NASI edging higher as foreign flows remained unclear, ahead of a pivotal CBK bond switch auction and dividend dynamics."
+date: "2026-07-10T07:00:00+03:00"
+author: "NSEinsider"
+category: "market-briefs"
+tags: ["market-brief", "nse", "kenya-markets"]
+slug: "2026-07-10-nse-market-brief"
+draft: false
+---
+
+The Kenyan market traded in a thin session with modest gains in the broad NASI and a parallel rise in the NSE 20, while turnover and price action were restrained by a lack of clarity on foreign participation. The NASI was at 227.74 points, up 0.82 percent, and the NSE 20 stood at 3,813.32, up about 0.95 percent. Trading liquidity was sparse, with 229.62 million shares changing hands, but official turnover data for the session was not disclosed. Foreign flows remained weak and somewhat opaque, with no confirmed domestic data on net inflows or outflows, though a last confirmed foreign net outflow was recorded at 1.18 billion shillings in early September 2025. The Central Bank of Kenya held the policy rate at 8.75 percent, a backdrop that helps anchor fixed income expectations amid mixed equity signals.
+
+Market-moving dynamics were dominated by the absence of a clear foreign bias and a flurry of activity in debt markets rather than equities. Foreign outflows are confirmed in sentiment but the magnitude is unclear given the lack of NSE data, and last week’s bond issuances by AIB and SCOM suggested capital-raising in the fixed income space rather than fresh equity inflows. The immediate commentary from traders centered on a cautious tone that could weigh on more speculative names until foreign participation becomes clearer. With the market's limited appetite for risk on display, investors awaited concrete signals from data releases and upcoming auctions to guide positioning.
+
+Sector performance showed a mixed picture. Banks largely traded flat, with KCB at 38.50 and Equity Bank at 42.20, both effectively unchanged for the session. The telecommunications space remained idle for catalysts, as SCOM traded at 12.80 shillings, down 0.39 percent, reflecting a post-dividend lull rather than any earnings surprise. Manufacturing activity was thin, with little movement across names and volumes subdued, underscoring the overall cautious mood in equities ahead of macro and policy news.
+
+From a fixed income and money-market perspective, the market was watching the CBK bond switch auction due today at 14:00 EAT for potential volatility in rates. In the debt space, the T-bill 91-day rate held at 8.825 percent, with expectations of a narrow 8.80-8.90 percent range at today’s auction. The week featured notable bond issuance activity: AIB issued a 5-year bond with a 12.5 percent coupon that was oversubscribed by about 1.8 times, signaling robust demand; SCOM’s 3-year bond carrying an 11.75 percent coupon also drew strong foreign interest. The combined backdrop suggests a market that is comfortable with high-yielding fixed-income assets, even as equity risk remains comparatively muted.
+
+Domestically, macro conditions painted a steady but watchful picture. The currency traded around 130.16 Kenyan shillings to the dollar, with forex reserves estimated at about 4.1 months of import cover. Parliament’s passage of a CBK emergency lending law added a backstop narrative to the banking sector, potentially reducing systemic risk but also complicating near-term policy signaling. The 8.75 percent policy rate continues to anchor expectations, while the calendar includes the next MPC meeting slated for August 5, with markets unlikely to push for a surprise shift ahead of that decision.
+
+On the technical front, traders cited NASI resistance around 230.00 and a 225.00 support, suggesting that a sustained close above 230.00 could lift the index with a firmer conviction. For NSE 20, the key resistance sits near 3,813.32 with a 3,750 support level observed in the near term, and the 50-day moving average positioned around 3,800. In the mid-cap and small-cap space, SCOM showed a 12.80 shilling level as support and 13.20 as resistance, with volume having tapered off after the dividend event. The broader chart context reinforces a preference for clarity on flow data before expecting meaningful directional moves. 
+
+Globally, markets remained in a risk-off posture as U.S. Treasuries hovered near the 4.25 percent yield level and EM assets remained under pressure amid muted rate-cut expectations. Brent crude traded around $82.50 a barrel, with tensions in the Middle East still a potential source of price spikes. China’s manufacturing PMI flashed a contraction, underscoring a softer growth impulse that could weigh on global demand for Kenyan exports such as tea and flowers. The domestic export outlook remains tied to these external headwinds, even as global demand and currency stability provide some cushion for earningstranslation.
+
+Looking ahead, traders will be watching the CBK bond switch auction for rate signals and the pathway to any policy shifts. Dividend payments loom for BOC and JUB, with ex-dividend dates on the horizon, providing potential near-term catalysts for those names. The absence of confirmed foreign flows adds a layer of caution, suggesting that risk takers should await more definitive liquidity data before initiating sizable exposures. As the market navigates this quiet phase, the focus remains on what the daily NSE report reveals about participation and the direction of cash flows.
+
+Informational only, not investment advice.
