@@ -23,6 +23,16 @@ export interface BlogPost {
 
 export type BlogPostSummary = Omit<BlogPost, 'content' | 'blocks'>;
 
+/**
+ * A summary plus the few derived values a card displays. Precomputing these at
+ * build time lets us drop `content` from island props without cards falling back
+ * to placeholder numbers.
+ */
+export interface BlogPostCard extends BlogPostSummary {
+  readMinutes?: number;
+  sourceCount?: number;
+}
+
 export const CATEGORY_LABELS: Record<PostCategory, string> = {
   "market-briefs": "Market Brief",
   "deep-dives": "Deep Dive",

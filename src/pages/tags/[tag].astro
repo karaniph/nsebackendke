@@ -1,10 +1,12 @@
 ---
 // src/pages/tags/[tag].astro
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import TagContent from '../../components/TagContent';
 
 import { fetchLivePosts } from '../../lib/live-blog';
 import { getAllTagsFrom, sortPublishedPosts, getPostsByTagFrom } from '../../lib/blog-data';
+import { breadcrumbSchema } from '../../lib/seo-schema';
 
 export async function getStaticPaths() {
   const rawPosts = await fetchLivePosts();
@@ -25,14 +27,29 @@ const encodedTag = encodeURIComponent(actualTag);
 const { allPostsRaw } = Astro.props as { allPostsRaw: any };
 const tagPostsFull = getPostsByTagFrom(allPostsRaw || [], actualTag);
 const tagPosts = tagPostsFull.map(({ content, blocks, ...rest }) => rest);
+
+const pageUrl = new URL(`/tags/${encodedTag}/`, Astro.site ?? 'https://nseinsider.co.ke').href;
+const breadcrumbItems = [
+  { name: 'Home', url: '/' },
+  { name: 'Tags', url: '/tags' },
+  { name: `#${actualTag}` },
+];
+
+// Tag pages were sharing one boilerplate description. Include the coverage count
+// and a sample of the topics so each page describes itself.
+const seoDescription = tagPosts.length > 0
+  ? `${tagPosts.length} NSEinsider ${tagPosts.length === 1 ? 'article' : 'articles'} tagged "${actualTag}" — NSE market briefs, deep dives, and investor education covering ${actualTag}.`
+  : `NSEinsider coverage tagged "${actualTag}".`;
 ---
 
 <BaseLayout 
   title={`#${actualTag}`}
-  description={`Posts tagged "${actualTag}" on NSEinsider.`}
+  description={seoDescription}
   type="website"
   keywords={[`tag ${actualTag}`, "NSEinsider", "NSE"]}
+  schemas={[breadcrumbSchema(breadcrumbItems, pageUrl)]}
 >
+  <Breadcrumbs items={breadcrumbItems} />
   <TagContent 
     client:load 
     tag={actualTag} 

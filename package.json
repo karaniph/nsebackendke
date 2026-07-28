@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "prebuild": "node --import tsx generate-live-posts.ts && node --import tsx generate-rss.ts && node --import tsx generate-sitemap.ts",
+    "prebuild": "node --import tsx generate-live-posts.ts",
     "build": "astro build",
     "build:dev": "astro build",
     "lint": "eslint .",

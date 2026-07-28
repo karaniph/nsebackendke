@@ -8,16 +8,20 @@ interface Props {
   image?: string;
   type?: "website" | "article";
   publishedDate?: string;
+  modifiedDate?: string;
   author?: string;
   keywords?: string[];
   canonicalUrl?: string;
   noindex?: boolean;
+  /** Page-specific JSON-LD nodes. Organization + WebSite are always added. */
+  schemas?: any[];
+  /** @deprecated single-node form, kept so existing callers keep working. */
   schema?: any;
 }
 
 const SITE_NAME = "NSEinsider";
 const SITE_URL = "https://nseinsider.co.ke";
-const DEFAULT_OG_IMAGE = `${SITE_URL}/og-market-briefs.svg`;
+const DEFAULT_OG_IMAGE = "/og/site/default.png";
 
 const {
   title,
@@ -25,18 +29,30 @@ const {
   image = DEFAULT_OG_IMAGE,
   type = "website",
   publishedDate,
+  modifiedDate,
   author,
   keywords,
   canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? SITE_URL).href,
   noindex = false,
+  schemas = [],
   schema
 } = Astro.props;
 
 import TickerBar from '../components/TickerBar';
 import AppShell from '../components/AppShell';
+import { buildGraph, organizationSchema, websiteSchema } from '../lib/seo-schema';
 
 const fullTitle = title.includes(SITE_NAME) ? title : `${title} — ${SITE_NAME}`;
 const resolvedImage = image.startsWith('http') ? image : `${SITE_URL}${image.startsWith('/') ? image : `/${image}`}`;
+
+// Organization and WebSite ship on every page so Article / BreadcrumbList /
+// FAQPage nodes can reference them by @id.
+const jsonLdGraph = buildGraph([
+  organizationSchema(),
+  websiteSchema(),
+  ...schemas,
+  ...(schema ? [schema] : []),
+]);
 ---
 
 <!doctype html>
@@ -46,6 +62,12 @@ const resolvedImage = image.startsWith('http') ? image : `${SITE_URL}${image.sta
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google-site-verification" content="rW8_nC_eNRhTLdp_Qp_pZg9Mu8MZScYmVUWzPZx5srY" />
     <link rel="icon" type="image/png" href="/favicon.png" />
+
+    <!-- Third-party origins used below; warm the connections early. -->
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin />
+    <link rel="preconnect" href="https://www.clarity.ms" crossorigin />
+    <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+    <link rel="dns-prefetch" href="https://www.clarity.ms" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta name="robots" content={noindex ? "noindex,follow" : "index,follow"} />
@@ -59,8 +81,13 @@ const resolvedImage = image.startsWith('http') ? image : `${SITE_URL}${image.sta
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={resolvedImage} />
+    <meta property="og:image:secure_url" content={resolvedImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={fullTitle} />
     <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content="en_KE" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -73,15 +100,18 @@ const resolvedImage = image.startsWith('http') ? image : `${SITE_URL}${image.sta
     <link rel="alternate" type="application/rss+xml" title={`${SITE_NAME} RSS Feed`} href={`${SITE_URL}/rss.xml`} />
 
     {publishedDate && <meta property="article:published_time" content={publishedDate} />}
+    {modifiedDate && <meta property="article:modified_time" content={modifiedDate} />}
     {author && <meta property="article:author" content={author} />}
+    {author && <meta name="author" content={author} />}
 
     <link rel="canonical" href={canonicalUrl} />
 
-    {schema && (
-      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    {jsonLdGraph && (
+      <script type="application/ld+json" set:html={JSON.stringify(jsonLdGraph)} />
     )}
 
     <!-- Google AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-8863850669996838">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8863850669996838" crossorigin="anonymous"></script>
 
     <!-- Microsoft Clarity -->

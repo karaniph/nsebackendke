@@ -1,0 +1,30 @@
+---
+// src/components/Breadcrumbs.astro
+// Server-rendered breadcrumb trail (zero client JS). Kept in sync with the
+// BreadcrumbList JSON-LD emitted by the page so the markup and the schema agree.
+export interface BreadcrumbLink {
+  name: string;
+  /** Omit on the current page. */
+  url?: string;
+}
+
+const { items, class: className = "" } = Astro.props as {
+  items: BreadcrumbLink[];
+  class?: string;
+};
+---
+
+<nav aria-label="Breadcrumb" class={`container pt-8 ${className}`.trim()}>
+  <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
+    {items.map((item, index) => (
+      <li class="flex items-center gap-x-2">
+        {item.url ? (
+          <a href={item.url} class="hover:text-accent transition-colors">{item.name}</a>
+        ) : (
+          <span class="text-foreground font-medium" aria-current="page">{item.name}</span>
+        )}
+        {index < items.length - 1 && <span aria-hidden="true" class="text-muted-foreground/50">/</span>}
+      </li>
+    ))}
+  </ol>
+</nav>
