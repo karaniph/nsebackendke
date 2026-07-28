@@ -21,6 +21,7 @@ const SiteFooter = () => {
               <li><a href="/category/deep-dives" className="hover:text-foreground transition-colors">Deep Dives</a></li>
               <li><a href="/category/education" className="hover:text-foreground transition-colors">Education</a></li>
               <li><a href="/category/bot-updates" className="hover:text-foreground transition-colors">Bot Updates</a></li>
+              <li><a href="/stocks" className="hover:text-foreground transition-colors">Stocks</a></li>
             </ul>
           </div>
 

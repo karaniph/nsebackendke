@@ -1,0 +1,89 @@
+---
+// src/pages/category/[category]/[...page].astro
+// Static, paginated category listings: /category/<cat>/, /category/<cat>/2/ ...
+import type { GetStaticPaths, Page } from 'astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import PaginationNav from '../../../components/PaginationNav.astro';
+import PostCard from '../../../components/PostCard';
+
+import { fetchLivePosts } from '../../../lib/live-blog';
+import {
+  sortPublishedPosts,
+  getPostsByCategoryFrom,
+  CATEGORY_LABELS,
+  type PostCategory,
+  type BlogPostCard,
+} from '../../../lib/blog-data';
+import { toPostCard, getCategoryOgImage } from '../../../lib/post-intelligence';
+import { breadcrumbSchema } from '../../../lib/seo-schema';
+
+const CATEGORY_DESCRIPTIONS: Record<PostCategory, string> = {
+  'market-briefs': 'Daily NSE market briefs with top movers, foreign flow, risk signals, and what to watch next.',
+  'deep-dives': 'Deep analysis of NSE-listed companies covering valuation, strategy, financial trend, and key risks.',
+  'education': 'Practical investing lessons for Kenyan retail investors: valuation, risk, portfolio sizing, and discipline.',
+  'bot-updates': 'NSEinsider Telegram bot updates, new alert features, and workflow tips for investors.',
+};
+
+export const getStaticPaths = (async ({ paginate }) => {
+  // Inlined: getStaticPaths is hoisted above frontmatter consts.
+  const categories: PostCategory[] = ['market-briefs', 'deep-dives', 'education', 'bot-updates'];
+  const all = sortPublishedPosts((await fetchLivePosts()) || []);
+  return categories.flatMap((category) => {
+    const posts = getPostsByCategoryFrom(all, category).map(toPostCard);
+    return paginate(posts, { params: { category }, pageSize: 12 });
+  });
+}) satisfies GetStaticPaths;
+
+const { category } = Astro.params as { category: PostCategory };
+const { page } = Astro.props as { page: Page<BlogPostCard> };
+
+const label = CATEGORY_LABELS[category] || 'Category';
+const desc = CATEGORY_DESCRIPTIONS[category] || '';
+const seoDescription = desc ? `${desc} Read the latest ${label.toLowerCase()} on NSEinsider.` : '';
+const ogImage = getCategoryOgImage(category);
+
+const pageTitle = page.currentPage > 1 ? `${label} — Page ${page.currentPage}` : label;
+const pageUrl = new URL(page.url.current, Astro.site ?? 'https://nseinsider.co.ke').href;
+const breadcrumbItems = [
+  { name: 'Home', url: '/' },
+  { name: label, ...(page.currentPage > 1 ? { url: `/category/${category}` } : {}) },
+  ...(page.currentPage > 1 ? [{ name: `Page ${page.currentPage}` }] : []),
+];
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={seoDescription}
+  image={ogImage}
+  type="website"
+  keywords={[label, 'NSEinsider', 'NSE', 'Kenya stocks', 'Nairobi Securities Exchange', category]}
+  schemas={[breadcrumbSchema(breadcrumbItems, pageUrl)]}
+>
+  <Breadcrumbs items={breadcrumbItems} />
+  <div class="container py-12 md:py-16 animate-in-up flex-1">
+    <div class="mb-10">
+      <span class="category-badge mb-3" data-category={category}>{label}</span>
+      <h1 class="text-3xl md:text-4xl font-heading font-bold text-foreground mt-3">{label}</h1>
+      <p class="text-muted-foreground mt-2 max-w-lg">{desc}</p>
+      <p class="text-sm text-muted-foreground mt-1">
+        {page.total} post{page.total !== 1 ? 's' : ''} · page {page.currentPage} of {page.lastPage}
+      </p>
+    </div>
+
+    {page.data.length === 0 ? (
+      <div class="empty-state">
+        <p class="text-sm font-medium text-foreground">No posts yet</p>
+        <p class="text-xs text-muted-foreground mt-1">Check back soon — new content is published regularly.</p>
+      </div>
+    ) : (
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+        {page.data.map((post, i) => (
+          <PostCard post={post} index={i} />
+        ))}
+      </div>
+    )}
+
+    <PaginationNav currentPage={page.currentPage} totalPages={page.lastPage} base={`/category/${category}/`} />
+  </div>
+</BaseLayout>

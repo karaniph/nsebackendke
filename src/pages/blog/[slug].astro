@@ -17,9 +17,14 @@ import {
   getPostMetaDescription,
   getPostOgImage,
   extractKeyTakeaways,
+  extractHeadings,
+  extractSourceUrls,
+  estimateReadingMinutes,
   normalizePostMarkdown,
   toPostCard,
 } from '../../lib/post-intelligence';
+import { renderPostHtml } from '../../lib/markdown';
+import { buildVisualBlocks } from '../../lib/visual-blocks';
 import { articleSchema, breadcrumbSchema, faqSchema } from '../../lib/seo-schema';
 
 export async function getStaticPaths() {
@@ -61,8 +66,17 @@ const categoryLabel = CATEGORY_LABELS[post.category] ?? 'Blog';
 const publishedIso = new Date(post.date).toISOString();
 const modifiedIso = new Date(post.updatedAt || post.date).toISOString();
 
+// Everything derived from the body is computed here, at build time, so the
+// client island ships neither the markdown libraries nor the raw markdown.
 const normalizedContent = normalizePostMarkdown(post.content, post.title);
 const wordCount = normalizedContent.split(/\s+/).filter(Boolean).length;
+const headings = extractHeadings(normalizedContent);
+const contentHtml = renderPostHtml(normalizedContent, headings);
+const readMinutes = estimateReadingMinutes(normalizedContent);
+const sourceCount = extractSourceUrls(normalizedContent).length;
+const keyTakeaways = extractKeyTakeaways(normalizedContent, 3);
+const visualBlocks = buildVisualBlocks({ ...post, content: normalizedContent });
+const postCard = toPostCard(post);
 
 const breadcrumbItems = [
   { name: 'Home', url: '/' },
@@ -126,7 +140,13 @@ const schemas = [
   <Breadcrumbs items={breadcrumbItems} />
   <BlogPostContent
     client:load
-    post={post}
+    post={postCard}
+    contentHtml={contentHtml}
+    headings={headings}
+    keyTakeaways={keyTakeaways}
+    readMinutes={readMinutes}
+    sourceCount={sourceCount}
+    visualBlocks={visualBlocks}
     related={related}
     prev={prev}
     next={next}

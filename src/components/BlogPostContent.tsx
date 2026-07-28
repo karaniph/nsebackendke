@@ -6,60 +6,45 @@ import RiskMatrix from "@/components/RiskMatrix";
 import GlossaryChips from "@/components/GlossaryChips";
 import ChecklistCard from "@/components/ChecklistCard";
 import { formatDate, CATEGORY_LABELS } from "@/lib/blog-data";
-import {
-  estimateReadingMinutes,
-  extractHeadings,
-  extractKeyTakeaways,
-  extractSourceUrls,
-  normalizePostMarkdown,
-  slugifyHeading,
-} from "@/lib/post-intelligence";
+import type { PostHeading } from "@/lib/post-intelligence";
+import { htmlToPlainText } from "@/lib/markdown";
 import { loadFollowedTopics, saveFollowedTopics } from "@/lib/personalization";
-import { buildVisualBlocks } from "@/lib/visual-blocks";
-import type { BlogPost, BlogPostCard } from "@/lib/blog-data";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import type { VisualBlocks } from "@/lib/visual-blocks";
+import type { BlogPostCard } from "@/lib/blog-data";
 import { Copy, Linkedin, Send, Share2, Twitter, MessageCircle } from "lucide-react";
 
-const CodeBlock = ({ node, inline, className, children, ...props }: any) => {
-  const match = /language-(\w+)/.exec(className || "");
-  return !inline && match ? (
-    <SyntaxHighlighter
-      style={oneDark}
-      language={match[1]}
-      PreTag="div"
-      className="rounded-lg my-6"
-      {...props}
-    >
-      {String(children).replace(/\n$/, "")}
-    </SyntaxHighlighter>
-  ) : (
-    <code className={className} {...props}>
-      {children}
-    </code>
-  );
-};
-
 interface BlogPostContentProps {
-  post: BlogPost;
+  /** Summary only — the body arrives pre-rendered as `contentHtml`. */
+  post: BlogPostCard;
+  /** Post body rendered to HTML at build time (no markdown lib on the client). */
+  contentHtml: string;
+  headings: PostHeading[];
+  keyTakeaways: string[];
+  readMinutes: number;
+  sourceCount: number;
+  visualBlocks: VisualBlocks;
   /** Related posts, already scored and trimmed at build time. */
   related: BlogPostCard[];
   prev: BlogPostCard | null;
   next: BlogPostCard | null;
 }
 
-const BlogPostContent = ({ post, related, prev, next }: BlogPostContentProps) => {
+const BlogPostContent = ({
+  post,
+  contentHtml,
+  headings,
+  keyTakeaways,
+  readMinutes,
+  sourceCount,
+  visualBlocks,
+  related,
+  prev,
+  next,
+}: BlogPostContentProps) => {
   const [followedTopics, setFollowedTopics] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
   const [copyFeedback, setCopyFeedback] = useState<"idle" | "copied" | "error">("idle");
   const [ttsState, setTtsState] = useState<"idle" | "playing" | "paused">("idle");
-
-  // Strips the level-1 heading that repeats the title and demotes any remaining
-  // `#` to `##`, so the page has exactly one <h1> and every section is eligible
-  // for the table of contents.
-  const content = useMemo(() => normalizePostMarkdown(post.content, post.title), [post.content, post.title]);
 
   const handleListen = () => {
     if (!window.speechSynthesis) return;
@@ -74,7 +59,7 @@ const BlogPostContent = ({ post, related, prev, next }: BlogPostContentProps) =>
       return;
     }
     window.speechSynthesis.cancel();
-    const text = `${post.title}. ${post.description}. ${content.replace(/[#*_`]/g, "")}`;
+    const text = `${post.title}. ${post.description}. ${htmlToPlainText(contentHtml)}`;
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = 0.95;
     utterance.onend = () => setTtsState("idle");
@@ -87,34 +72,6 @@ const BlogPostContent = ({ post, related, prev, next }: BlogPostContentProps) =>
     setFollowedTopics(loadFollowedTopics());
     setMounted(true);
   }, []);
-
-  const headings = useMemo(() => extractHeadings(content), [content]);
-  const readMinutes = estimateReadingMinutes(content);
-  const sources = extractSourceUrls(content);
-  const keyTakeaways = extractKeyTakeaways(content, 3);
-  const visualBlocks = useMemo(() => buildVisualBlocks({ ...post, content }), [post, content]);
-
-  // Heading anchors are handed out in document order from the same list that
-  // builds the table of contents, so every TOC link resolves — previously the
-  // renderer slugified independently and duplicate headings pointed nowhere.
-  const headingIds = headings.map((heading) => heading.id);
-  let headingCursor = 0;
-  const nextHeadingId = (fallback: string) => headingIds[headingCursor++] ?? fallback;
-
-  const MarkdownComponents: any = {
-    // Safety net: any level-1 heading surviving normalization (e.g. raw HTML via
-    // rehype-raw) renders as an h2 so the page keeps a single h1.
-    h1: ({ node, ...props }: any) => (
-      <h2 id={slugifyHeading(props.children?.toString() || "")} {...props} />
-    ),
-    h2: ({ node, ...props }: any) => (
-      <h2 id={nextHeadingId(slugifyHeading(props.children?.toString() || ""))} {...props} />
-    ),
-    h3: ({ node, ...props }: any) => (
-      <h3 id={nextHeadingId(slugifyHeading(props.children?.toString() || ""))} {...props} />
-    ),
-    code: CodeBlock,
-  };
 
   const recommended = useMemo(
     () =>
@@ -244,7 +201,7 @@ const BlogPostContent = ({ post, related, prev, next }: BlogPostContentProps) =>
             </div>
             <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
               <span className="rounded-full bg-secondary px-2.5 py-1">{readMinutes} min read</span>
-              <span className="rounded-full bg-secondary px-2.5 py-1">{Math.max(1, sources.length)} verified source{Math.max(1, sources.length) > 1 ? "s" : ""}</span>
+              <span className="rounded-full bg-secondary px-2.5 py-1">{Math.max(1, sourceCount)} verified source{Math.max(1, sourceCount) > 1 ? "s" : ""}</span>
               <span className="rounded-full bg-secondary px-2.5 py-1">Last updated {formatDate(post.updatedAt || post.date)}</span>
               {mounted && (
                 <button
@@ -379,14 +336,7 @@ const BlogPostContent = ({ post, related, prev, next }: BlogPostContentProps) =>
             </section>
           )}
 
-          <div className="prose-blog">
-            <ReactMarkdown 
-              rehypePlugins={[rehypeRaw]} 
-              components={MarkdownComponents}
-            >
-              {content}
-            </ReactMarkdown>
-          </div>
+          <div className="prose-blog" dangerouslySetInnerHTML={{ __html: contentHtml }} />
 
           {mounted && (
             <div className="mt-14 content-card p-6 md:p-7">

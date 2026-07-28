@@ -1,0 +1,103 @@
+---
+// src/pages/stocks/[ticker].astro
+// Per-company hub aggregating existing NSE coverage of a counter.
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PostCard from '../../components/PostCard';
+
+import { fetchLivePosts } from '../../lib/live-blog';
+import { sortPublishedPosts, type BlogPostCard } from '../../lib/blog-data';
+import { toPostCard } from '../../lib/post-intelligence';
+import { STOCK_REGISTRY, getStockPosts, MIN_HUB_POSTS, type StockDefinition } from '../../lib/stocks';
+import { breadcrumbSchema, SITE_URL } from '../../lib/seo-schema';
+
+export const getStaticPaths = (async () => {
+  const all = sortPublishedPosts((await fetchLivePosts()) || []);
+  return STOCK_REGISTRY
+    .map((stock) => ({ stock, matches: getStockPosts(all, stock) }))
+    .filter(({ matches }) => matches.length >= MIN_HUB_POSTS)
+    .map(({ stock, matches }) => ({
+      params: { ticker: stock.ticker.toLowerCase() },
+      props: { stock, posts: matches.map((m) => toPostCard(m.post as any)) },
+    }));
+}) satisfies GetStaticPaths;
+
+const { stock, posts } = Astro.props as { stock: StockDefinition; posts: BlogPostCard[] };
+
+const pageUrl = new URL(`/stocks/${stock.ticker.toLowerCase()}/`, Astro.site ?? SITE_URL).href;
+const title = `${stock.name} (${stock.ticker}) — NSE Analysis & Coverage`;
+const seoDescription =
+  `${stock.name} (${stock.ticker}) on the Nairobi Securities Exchange: ${posts.length} NSEinsider articles covering results, dividends, valuation, and market-brief mentions. ${stock.blurb}`.slice(0, 300);
+
+const breadcrumbItems = [
+  { name: 'Home', url: '/' },
+  { name: 'Stocks', url: '/stocks' },
+  { name: `${stock.name} (${stock.ticker})` },
+];
+
+const collectionSchema = {
+  '@type': 'CollectionPage',
+  '@id': `${pageUrl}#collection`,
+  url: pageUrl,
+  name: title,
+  description: seoDescription,
+  about: {
+    '@type': 'Corporation',
+    name: stock.name,
+    tickerSymbol: `NSE:${stock.ticker}`,
+  },
+  isPartOf: { '@id': `${SITE_URL}/#website` },
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: posts.slice(0, 25).map((post, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      url: `${SITE_URL}/blog/${post.slug}/`,
+      name: post.title,
+    })),
+  },
+};
+
+const schemas = [breadcrumbSchema(breadcrumbItems, pageUrl), collectionSchema];
+const latest = posts[0];
+---
+
+<BaseLayout
+  title={title}
+  description={seoDescription}
+  image="/og/site/deep-dives.png"
+  type="website"
+  keywords={[stock.name, stock.ticker, `${stock.name} NSE`, `${stock.name} share price`, `${stock.name} dividend`, 'Nairobi Securities Exchange', 'Kenya stocks']}
+  schemas={schemas}
+>
+  <Breadcrumbs items={breadcrumbItems} />
+  <div class="container py-12 md:py-16 animate-in-up flex-1">
+    <header class="mb-10 max-w-2xl">
+      <p class="text-xs uppercase tracking-[0.14em] text-muted-foreground">NSE:{stock.ticker}</p>
+      <h1 class="text-3xl md:text-4xl font-heading font-bold text-foreground mt-2">
+        {stock.name} ({stock.ticker})
+      </h1>
+      <p class="text-muted-foreground mt-3">{stock.blurb}</p>
+      <p class="text-sm text-muted-foreground mt-4">
+        {posts.length} article{posts.length !== 1 ? 's' : ''} on NSEinsider.
+        {latest && <> Most recent coverage: {latest.title}.</>}
+      </p>
+      <p class="text-xs text-muted-foreground mt-3">
+        NSEinsider publishes analysis and market-brief coverage, not live price quotes. Nothing here is investment advice.
+      </p>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+      {posts.map((post, i) => (
+        <PostCard post={post} index={i} />
+      ))}
+    </div>
+
+    <div class="mt-10 flex flex-wrap gap-2">
+      <a href="/stocks" class="btn-outline text-sm">All companies</a>
+      <a href="/category/deep-dives" class="btn-outline text-sm">Company deep dives</a>
+      <a href="/category/market-briefs" class="btn-outline text-sm">Daily market briefs</a>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,55 @@
+---
+// src/pages/stocks/index.astro
+// Directory of the per-company hubs.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+import { fetchLivePosts } from '../../lib/live-blog';
+import { sortPublishedPosts } from '../../lib/blog-data';
+import { STOCK_REGISTRY, getStockPosts, MIN_HUB_POSTS } from '../../lib/stocks';
+import { breadcrumbSchema, SITE_URL } from '../../lib/seo-schema';
+
+const all = sortPublishedPosts((await fetchLivePosts()) || []);
+const hubs = STOCK_REGISTRY
+  .map((stock) => ({ stock, count: getStockPosts(all, stock).length }))
+  .filter((h) => h.count >= MIN_HUB_POSTS)
+  .sort((a, b) => b.count - a.count);
+
+const pageUrl = new URL('/stocks/', Astro.site ?? SITE_URL).href;
+const breadcrumbItems = [
+  { name: 'Home', url: '/' },
+  { name: 'Stocks' },
+];
+---
+
+<BaseLayout
+  title="NSE Stocks — Company Coverage"
+  description="Company-by-company NSEinsider coverage of Nairobi Securities Exchange counters: Safaricom, KCB, Equity, Co-operative Bank, EABL and more — analysis, results, and dividends."
+  type="website"
+  keywords={['NSE stocks', 'Nairobi Securities Exchange companies', 'Kenya shares', 'Safaricom', 'KCB', 'Equity Group']}
+  schemas={[breadcrumbSchema(breadcrumbItems, pageUrl)]}
+>
+  <Breadcrumbs items={breadcrumbItems} />
+  <div class="container py-12 md:py-16 max-w-3xl animate-in-up flex-1">
+    <h1 class="text-3xl md:text-4xl font-heading font-bold text-foreground mb-2">NSE Stocks</h1>
+    <p class="text-muted-foreground mb-10">
+      Company-level coverage of the counters we track most closely on the Nairobi Securities Exchange.
+    </p>
+
+    <ul class="divide-y divide-border/60">
+      {hubs.map(({ stock, count }) => (
+        <li>
+          <a href={`/stocks/${stock.ticker.toLowerCase()}`} class="flex items-baseline justify-between gap-4 py-4 group">
+            <span>
+              <span class="text-base font-medium text-foreground group-hover:text-accent transition-colors">
+                {stock.name}
+              </span>
+              <span class="text-xs text-muted-foreground ml-2">NSE:{stock.ticker}</span>
+            </span>
+            <span class="text-xs text-muted-foreground">{count} article{count !== 1 ? 's' : ''}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</BaseLayout>
