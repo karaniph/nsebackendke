@@ -1,4 +1,4 @@
-import type { BlogPost } from "@/lib/blog-data";
+import type { BlogPost, BlogPostCard } from "@/lib/blog-data";
 
 export interface PostHeading {
   id: string;
@@ -14,6 +14,57 @@ export function slugifyHeading(text: string): string {
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")
     .slice(0, 60) || "section";
+}
+
+/**
+ * Normalises post markdown before rendering.
+ *
+ * Two problems in the corpus this fixes:
+ *  1. 57 posts open with a level-1 heading that repeats the post title, and the
+ *     template already renders the title as the page's <h1>. That produced up to
+ *     six <h1> elements per page.
+ *  2. Any other level-1 heading is demoted to level 2 so the document outline is
+ *     title -> sections, and so those sections become eligible for the on-page
+ *     table of contents (which only ever looked at ## and ###).
+ *
+ * Fenced code blocks are left untouched so `# comment` lines survive.
+ */
+export function normalizePostMarkdown(markdown: string, title?: string): string {
+  if (!markdown) return "";
+
+  const normalizedTitle = (title || "").replace(/\s+/g, " ").trim().toLowerCase();
+  const out: string[] = [];
+  let insideFence = false;
+  let titleRemoved = false;
+
+  for (const line of markdown.split("\n")) {
+    const trimmed = line.trim();
+
+    if (/^(```|~~~)/.test(trimmed)) {
+      insideFence = !insideFence;
+      out.push(line);
+      continue;
+    }
+    if (insideFence) {
+      out.push(line);
+      continue;
+    }
+
+    const heading = /^#\s+(.*\S)\s*$/.exec(trimmed);
+    if (!heading) {
+      out.push(line);
+      continue;
+    }
+
+    const text = heading[1].replace(/\s+/g, " ").trim();
+    if (!titleRemoved && normalizedTitle && text.toLowerCase() === normalizedTitle) {
+      titleRemoved = true;
+      continue;
+    }
+    out.push(`## ${text}`);
+  }
+
+  return out.join("\n").replace(/^\n+/, "");
 }
 
 export function extractHeadings(markdown: string): PostHeading[] {
@@ -115,9 +166,38 @@ export function getPostMetaDescription(post: BlogPost): string {
   return `${categoryPrefix} (${date}): ${post.description}`.slice(0, 160);
 }
 
+const SITE_OG_KEYS = new Set(["market-briefs", "deep-dives", "education", "bot-updates"]);
+
+/**
+ * Category-level Open Graph image. These are real PNGs prerendered by
+ * `src/pages/og/site/[key].png.ts` — the previous SVG references were never
+ * rendered by social crawlers, and `bot-updates` pointed at an og-image.jpg
+ * that did not exist.
+ */
 export function getCategoryOgImage(category: string): string {
-  if (category === "education") return "/og-education.svg";
-  if (category === "deep-dives") return "/og-deep-dives.svg";
-  if (category === "market-briefs") return "/og-market-briefs.svg";
-  return "/og-image.jpg";
+  return SITE_OG_KEYS.has(category) ? `/og/site/${category}.png` : "/og/site/default.png";
+}
+
+/** Per-post Open Graph image, prerendered by `src/pages/og/[slug].png.ts`. */
+export function getPostOgImage(slug: string): string {
+  return `/og/${slug}.png`;
+}
+
+/**
+ * Converts a post to the shape a card needs, dropping `content` and `blocks`.
+ *
+ * Post pages used to hand the entire post corpus to the React island, which
+ * serialised ~673 KB of duplicate markdown into every page's HTML. Reading time
+ * and source count are derived here so cards stay accurate without the body.
+ *
+ * Lives in a module rather than page frontmatter because Astro hoists
+ * `getStaticPaths` into a scope where only imports are in scope.
+ */
+export function toPostCard(post: BlogPost): BlogPostCard {
+  const { content, blocks, ...summary } = post;
+  return {
+    ...summary,
+    readMinutes: estimateReadingMinutes(content || ""),
+    sourceCount: extractSourceUrls(content || "").length,
+  };
 }

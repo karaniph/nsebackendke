@@ -1,0 +1,53 @@
+---
+// src/pages/archive/index.astro
+// The site footer and the archive month pages both linked to /archive, which had
+// no route and returned 404 — leaving the archive tier (the only pages that link
+// deeply into the post corpus) unreachable by internal links.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+import { fetchLivePosts } from '../../lib/live-blog';
+import { getArchiveMonthsFrom, sortPublishedPosts } from '../../lib/blog-data';
+import { breadcrumbSchema } from '../../lib/seo-schema';
+
+const published = sortPublishedPosts((await fetchLivePosts()) || []);
+const archiveMonths = getArchiveMonthsFrom(published);
+const totalPosts = published.length;
+
+const pageUrl = new URL('/archive/', Astro.site ?? 'https://nseinsider.co.ke').href;
+const breadcrumbItems = [
+  { name: 'Home', url: '/' },
+  { name: 'Archive' },
+];
+---
+
+<BaseLayout
+  title="Archive"
+  description={`Browse all ${totalPosts} NSEinsider posts by month — NSE market briefs, company deep dives, and investor education for the Nairobi Securities Exchange.`}
+  type="website"
+  keywords={["NSEinsider archive", "NSE market reports", "Kenya market history"]}
+  schemas={[breadcrumbSchema(breadcrumbItems, pageUrl)]}
+>
+  <Breadcrumbs items={breadcrumbItems} />
+  <div class="container py-12 md:py-16 max-w-3xl animate-in-up flex-1">
+    <h1 class="text-3xl md:text-4xl font-heading font-bold text-foreground mb-2">Archive</h1>
+    <p class="text-muted-foreground mb-10">
+      {totalPosts} posts across {archiveMonths.length} {archiveMonths.length === 1 ? 'month' : 'months'} of NSE coverage.
+    </p>
+
+    <ul class="divide-y divide-border/60">
+      {archiveMonths.map((month) => (
+        <li>
+          <a href={month.href} class="flex items-baseline justify-between gap-4 py-4 group">
+            <span class="text-base font-medium text-foreground group-hover:text-accent transition-colors">
+              {month.label}
+            </span>
+            <span class="text-xs text-muted-foreground">
+              {month.count} {month.count === 1 ? 'post' : 'posts'}
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</BaseLayout>

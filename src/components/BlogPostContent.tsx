@@ -5,57 +5,61 @@ import ValuationSnapshotCard from "@/components/ValuationSnapshotCard";
 import RiskMatrix from "@/components/RiskMatrix";
 import GlossaryChips from "@/components/GlossaryChips";
 import ChecklistCard from "@/components/ChecklistCard";
-import { getRelatedPostsFrom, getAdjacentPostsFrom, formatDate, CATEGORY_LABELS } from "@/lib/blog-data";
-import { estimateReadingMinutes, extractHeadings, extractKeyTakeaways, extractSourceUrls, slugifyHeading } from "@/lib/post-intelligence";
+import { formatDate, CATEGORY_LABELS } from "@/lib/blog-data";
+import {
+  estimateReadingMinutes,
+  extractHeadings,
+  extractKeyTakeaways,
+  extractSourceUrls,
+  normalizePostMarkdown,
+  slugifyHeading,
+} from "@/lib/post-intelligence";
 import { loadFollowedTopics, saveFollowedTopics } from "@/lib/personalization";
 import { buildVisualBlocks } from "@/lib/visual-blocks";
-import type { BlogPost } from "@/lib/blog-data";
+import type { BlogPost, BlogPostCard } from "@/lib/blog-data";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { Copy, Linkedin, Send, Share2, Twitter, MessageCircle } from "lucide-react";
 
-// Custom mapping of markdown elements to Radix/Shadcn/Themed components
-const MarkdownComponents: any = {
-  h2: ({ node, ...props }: any) => {
-    const id = slugifyHeading(props.children?.toString() || "");
-    return <h2 id={id} {...props} />;
-  },
-  h3: ({ node, ...props }: any) => {
-    const id = slugifyHeading(props.children?.toString() || "");
-    return <h3 id={id} {...props} />;
-  },
-  code({ node, inline, className, children, ...props }: any) {
-    const match = /language-(\w+)/.exec(className || "");
-    return !inline && match ? (
-      <SyntaxHighlighter
-        style={oneDark}
-        language={match[1]}
-        PreTag="div"
-        className="rounded-lg my-6"
-        {...props}
-      >
-        {String(children).replace(/\n$/, "")}
-      </SyntaxHighlighter>
-    ) : (
-      <code className={className} {...props}>
-        {children}
-      </code>
-    );
-  },
+const CodeBlock = ({ node, inline, className, children, ...props }: any) => {
+  const match = /language-(\w+)/.exec(className || "");
+  return !inline && match ? (
+    <SyntaxHighlighter
+      style={oneDark}
+      language={match[1]}
+      PreTag="div"
+      className="rounded-lg my-6"
+      {...props}
+    >
+      {String(children).replace(/\n$/, "")}
+    </SyntaxHighlighter>
+  ) : (
+    <code className={className} {...props}>
+      {children}
+    </code>
+  );
 };
 
 interface BlogPostContentProps {
   post: BlogPost;
-  allPosts: BlogPost[];
+  /** Related posts, already scored and trimmed at build time. */
+  related: BlogPostCard[];
+  prev: BlogPostCard | null;
+  next: BlogPostCard | null;
 }
 
-const BlogPostContent = ({ post, allPosts }: BlogPostContentProps) => {
+const BlogPostContent = ({ post, related, prev, next }: BlogPostContentProps) => {
   const [followedTopics, setFollowedTopics] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
   const [copyFeedback, setCopyFeedback] = useState<"idle" | "copied" | "error">("idle");
   const [ttsState, setTtsState] = useState<"idle" | "playing" | "paused">("idle");
+
+  // Strips the level-1 heading that repeats the title and demotes any remaining
+  // `#` to `##`, so the page has exactly one <h1> and every section is eligible
+  // for the table of contents.
+  const content = useMemo(() => normalizePostMarkdown(post.content, post.title), [post.content, post.title]);
 
   const handleListen = () => {
     if (!window.speechSynthesis) return;
@@ -70,7 +74,7 @@ const BlogPostContent = ({ post, allPosts }: BlogPostContentProps) => {
       return;
     }
     window.speechSynthesis.cancel();
-    const text = `${post.title}. ${post.description}. ${post.content.replace(/[#*_`]/g, "")}`;
+    const text = `${post.title}. ${post.description}. ${content.replace(/[#*_`]/g, "")}`;
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = 0.95;
     utterance.onend = () => setTtsState("idle");
@@ -84,13 +88,34 @@ const BlogPostContent = ({ post, allPosts }: BlogPostContentProps) => {
     setMounted(true);
   }, []);
 
-  const related = getRelatedPostsFrom(allPosts, post, 6);
-  const { prev, next } = getAdjacentPostsFrom(allPosts, post.slug);
-  const headings = extractHeadings(post.content);
-  const readMinutes = estimateReadingMinutes(post.content);
-  const sources = extractSourceUrls(post.content);
-  const keyTakeaways = extractKeyTakeaways(post.content, 3);
-  const visualBlocks = buildVisualBlocks(post);
+  const headings = useMemo(() => extractHeadings(content), [content]);
+  const readMinutes = estimateReadingMinutes(content);
+  const sources = extractSourceUrls(content);
+  const keyTakeaways = extractKeyTakeaways(content, 3);
+  const visualBlocks = useMemo(() => buildVisualBlocks({ ...post, content }), [post, content]);
+
+  // Heading anchors are handed out in document order from the same list that
+  // builds the table of contents, so every TOC link resolves — previously the
+  // renderer slugified independently and duplicate headings pointed nowhere.
+  const headingIds = headings.map((heading) => heading.id);
+  let headingCursor = 0;
+  const nextHeadingId = (fallback: string) => headingIds[headingCursor++] ?? fallback;
+
+  const MarkdownComponents: any = {
+    // Safety net: any level-1 heading surviving normalization (e.g. raw HTML via
+    // rehype-raw) renders as an h2 so the page keeps a single h1.
+    h1: ({ node, ...props }: any) => (
+      <h2 id={slugifyHeading(props.children?.toString() || "")} {...props} />
+    ),
+    h2: ({ node, ...props }: any) => (
+      <h2 id={nextHeadingId(slugifyHeading(props.children?.toString() || ""))} {...props} />
+    ),
+    h3: ({ node, ...props }: any) => (
+      <h3 id={nextHeadingId(slugifyHeading(props.children?.toString() || ""))} {...props} />
+    ),
+    code: CodeBlock,
+  };
+
   const recommended = useMemo(
     () =>
       related
@@ -359,7 +384,7 @@ const BlogPostContent = ({ post, allPosts }: BlogPostContentProps) => {
               rehypePlugins={[rehypeRaw]} 
               components={MarkdownComponents}
             >
-              {post.content}
+              {content}
             </ReactMarkdown>
           </div>
 

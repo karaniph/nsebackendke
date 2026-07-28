@@ -1,81 +1,134 @@
 ---
 // src/pages/blog/[slug].astro
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import BlogPostContent from '../../components/BlogPostContent';
 
 import { fetchLivePosts } from '../../lib/live-blog';
-import { getPublishedPosts, getPostBySlugFrom, sortPublishedPosts } from '../../lib/blog-data';
-import { getPostMetaDescription, getCategoryOgImage } from '../../lib/post-intelligence';
-import { CATEGORY_LABELS, type BlogPost } from '../../lib/blog-data';
+import {
+  sortPublishedPosts,
+  getRelatedPostsFrom,
+  getAdjacentPostsFrom,
+  CATEGORY_LABELS,
+  type BlogPost,
+  type BlogPostCard,
+} from '../../lib/blog-data';
+import {
+  getPostMetaDescription,
+  getPostOgImage,
+  extractKeyTakeaways,
+  normalizePostMarkdown,
+  toPostCard,
+} from '../../lib/post-intelligence';
+import { articleSchema, breadcrumbSchema, faqSchema } from '../../lib/seo-schema';
 
 export async function getStaticPaths() {
-  // To allow SSG, we need to know all the slugs at build time.
-  // We fetch all posts and map them.
+  // Astro hoists getStaticPaths, so anything it uses must be an import or a
+  // hoisted function declaration — not a frontmatter const.
+  const RELATED_LIMIT = 6;
   const allPosts = await fetchLivePosts();
   const published = sortPublishedPosts(allPosts || []);
-  
-  return published.map((post) => ({
-    params: { slug: post.slug },
-    props: { post, allPosts: published },
-  }));
+
+  return published.map((post) => {
+    const { prev, next } = getAdjacentPostsFrom(published, post.slug);
+    return {
+      params: { slug: post.slug },
+      props: {
+        post,
+        related: getRelatedPostsFrom(published, post, RELATED_LIMIT).map(toPostCard),
+        prev: prev ? toPostCard(prev) : null,
+        next: next ? toPostCard(next) : null,
+      },
+    };
+  });
 }
 
-const { slug } = Astro.params;
-const { post, allPosts } = Astro.props as { post: BlogPost; allPosts: BlogPost[] };
+const { post, related, prev, next } = Astro.props as {
+  post: BlogPost;
+  related: BlogPostCard[];
+  prev: BlogPostCard | null;
+  next: BlogPostCard | null;
+};
 
 if (!post) {
-  // Fallback (though getStaticPaths should catch this)
   return Astro.redirect('/404');
 }
 
 const metaDescription = getPostMetaDescription(post);
-const ogImage = getCategoryOgImage(post.category);
+const ogImage = getPostOgImage(post.slug);
+const pageUrl = new URL(`/blog/${post.slug}/`, Astro.site ?? 'https://nseinsider.co.ke').href;
+const categoryLabel = CATEGORY_LABELS[post.category] ?? 'Blog';
+const publishedIso = new Date(post.date).toISOString();
+const modifiedIso = new Date(post.updatedAt || post.date).toISOString();
 
-const faq = post.category === "education"
+const normalizedContent = normalizePostMarkdown(post.content, post.title);
+const wordCount = normalizedContent.split(/\s+/).filter(Boolean).length;
+
+const breadcrumbItems = [
+  { name: 'Home', url: '/' },
+  { name: categoryLabel, url: `/category/${post.category}` },
+  { name: post.title },
+];
+
+// FAQPage for education posts. Answers are drawn from the post itself rather
+// than fixed boilerplate. Note Google restricted FAQ rich results to health and
+// government sites in 2023, so treat this as machine-readable Q&A rather than a
+// SERP feature.
+const takeaways = extractKeyTakeaways(normalizedContent, 2);
+const faq = post.category === 'education'
   ? [
       {
-        question: `What is the main lesson in "${post.title}"?`,
-        answer: post.description
+        question: `What does "${post.title}" cover?`,
+        answer: post.description,
       },
+      ...(takeaways[0]
+        ? [{ question: 'What is the key takeaway?', answer: takeaways[0] }]
+        : []),
       {
-        question: "How can I apply this on the NSE today?",
-        answer: "Use the checklist in the article before entering any position."
+        question: 'Is this investment advice?',
+        answer:
+          'No. NSEinsider publishes educational and research material for decision support only. Nothing here is investment advice, and you should consult a licensed financial advisor before investing on the NSE.',
       },
-      {
-        question: "Is this investment advice?",
-        answer: "No. This is educational content for decision support and research discipline."
-      }
     ]
-  : undefined;
+  : null;
 
-const schema = {
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "headline": post.title,
-  "description": metaDescription,
-  "image": ogImage,
-  "datePublished": post.date,
-  "dateModified": post.updatedAt || post.date,
-  "author": {
-    "@type": "Person",
-    "name": post.author
-  }
-};
+const schemas = [
+  articleSchema({
+    pageUrl,
+    headline: post.title,
+    description: metaDescription,
+    image: ogImage,
+    datePublished: publishedIso,
+    dateModified: modifiedIso,
+    authorName: post.author,
+    authorRole: post.authorRole,
+    section: categoryLabel,
+    keywords: post.tags,
+    wordCount,
+    hasBreadcrumb: true,
+  }),
+  breadcrumbSchema(breadcrumbItems, pageUrl),
+  ...(faq ? [faqSchema(faq, pageUrl)] : []),
+];
 ---
 
-<BaseLayout 
+<BaseLayout
   title={post.title}
   description={metaDescription}
   image={ogImage}
   type="article"
-  publishedDate={post.date}
+  publishedDate={publishedIso}
+  modifiedDate={modifiedIso}
   author={post.author}
   keywords={post.tags}
-  schema={schema}
+  schemas={schemas}
 >
-  <BlogPostContent 
-    client:load 
+  <Breadcrumbs items={breadcrumbItems} />
+  <BlogPostContent
+    client:load
     post={post}
-    allPosts={allPosts}
+    related={related}
+    prev={prev}
+    next={next}
   />
 </BaseLayout>

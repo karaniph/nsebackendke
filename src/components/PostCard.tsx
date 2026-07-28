@@ -3,8 +3,10 @@ import { estimateReadingMinutes, extractSourceUrls } from "@/lib/post-intelligen
 
 const PostCard = ({ post, index = 0, variant = "default" }: { post: BlogPostSummary | any; index?: number; variant?: "default" | "compact" }) => {
   const content = post.content || "";
-  const readMinutes = estimateReadingMinutes(content) || 3;
-  const sourceCount = extractSourceUrls(content).length || 2;
+  // Prefer values precomputed at build time; fall back to deriving them when the
+  // full markdown happens to be available.
+  const readMinutes = post.readMinutes ?? (estimateReadingMinutes(content) || 3);
+  const sourceCount = post.sourceCount ?? (extractSourceUrls(content).length || 2);
 
   if (variant === "compact") {
     return (

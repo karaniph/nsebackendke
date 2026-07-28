@@ -1,10 +1,12 @@
 ---
 // src/pages/archive/[year]/[month].astro
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import ArchiveContent from '../../../components/ArchiveContent';
 
 import { fetchLivePosts } from '../../../lib/live-blog';
 import { getPostsByYearMonthFrom, getArchiveMonthsFrom, sortPublishedPosts } from '../../../lib/blog-data';
+import { breadcrumbSchema } from '../../../lib/seo-schema';
 
 export async function getStaticPaths() {
   const rawPosts = await fetchLivePosts();
@@ -33,14 +35,23 @@ const MONTH_NAMES = [
 
 const monthLabel = MONTH_NAMES[monthNum] || "";
 const pageTitle = `${monthLabel} ${yearNum}`;
+
+const pageUrl = new URL(`/archive/${year}/${month}/`, Astro.site ?? 'https://nseinsider.co.ke').href;
+const breadcrumbItems = [
+  { name: 'Home', url: '/' },
+  { name: 'Archive', url: '/archive' },
+  { name: pageTitle },
+];
 ---
 
 <BaseLayout 
   title={`Archive: ${pageTitle} — NSEinsider`}
-  description={`Browse all NSEinsider posts published in ${pageTitle}.`}
+  description={`All ${posts.length} NSEinsider posts published in ${pageTitle} — NSE market briefs, company deep dives, and investor education.`}
   type="website"
   keywords={["NSEinsider archive", "NSE market reports", pageTitle]}
+  schemas={[breadcrumbSchema(breadcrumbItems, pageUrl)]}
 >
+  <Breadcrumbs items={breadcrumbItems} />
   <ArchiveContent
     client:load
     posts={posts}
