@@ -79,6 +79,14 @@ const keyTakeaways = extractKeyTakeaways(normalizedContent, 3);
 const visualBlocks = buildVisualBlocks({ ...post, content: normalizedContent });
 const postCard = toPostCard(post);
 
+// Deep-link TradingView only when the post is clearly about a covered NSE
+// counter (ticker/name in title or matching tag), so links stay contextual.
+const tvMatch = STOCK_REGISTRY
+  .map((stock) => ({ stock, strength: stockMatchStrength(post, stock) }))
+  .filter((m) => m.strength >= 2)
+  .sort((a, b) => b.strength - a.strength)[0];
+const tvTicker = tvMatch ? tvMatch.stock.ticker : null;
+
 const breadcrumbItems = [
   { name: 'Home', url: '/' },
   { name: categoryLabel, url: `/category/${post.category}` },
@@ -151,5 +159,6 @@ const schemas = [
     related={related}
     prev={prev}
     next={next}
+    tvTicker={tvTicker}
   />
 </BaseLayout>
