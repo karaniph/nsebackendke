@@ -71,7 +71,7 @@ const IndexContent = ({ allPosts, marketBriefs, deepDives, education, botUpdates
                 Read Latest Brief →
               </a>
               <a
-                href="https://www.tradingview.com/?aff_id=170183"
+                href="https://www.tradingview.com/markets/stocks-kenya/?aff_id=170183"
                 target="_blank"
                 rel="sponsored noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-500 px-5 py-2.5 font-semibold text-white shadow-sm transition-colors hover:bg-emerald-600"
