@@ -70,6 +70,18 @@ const IndexContent = ({ allPosts, marketBriefs, deepDives, education, botUpdates
               <a href="/category/market-briefs" className="btn-outline">
                 Read Latest Brief →
               </a>
+              <a
+                href="https://www.tradingview.com/?aff_id=170183"
+                target="_blank"
+                rel="sponsored noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-500 px-5 py-2.5 font-semibold text-white shadow-sm transition-colors hover:bg-emerald-600"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 3v18h18" />
+                  <path d="m19 9-5 5-4-4-3 3" />
+                </svg>
+                Chart NSE on TradingView
+              </a>
             </div>
           </div>
         </section>
