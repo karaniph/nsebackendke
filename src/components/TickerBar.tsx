@@ -1,4 +1,9 @@
 // src/components/TickerBar.tsx
+import { TRADINGVIEW_AFF_ID, AFFILIATE_REL } from "@/lib/affiliate";
+
+// Kenya stocks market page (verified to exist on TradingView) + affiliate id.
+// Site-wide, always-valid link that sets the affiliate cookie on every page.
+const TV_KENYA_URL = `https://www.tradingview.com/markets/stocks-kenya/?aff_id=${TRADINGVIEW_AFF_ID}`;
 
 const TickerBar = () => {
   const indices = [
@@ -17,13 +22,20 @@ const TickerBar = () => {
       <div className="ticker-scroll flex items-center gap-8 whitespace-nowrap">
         {/* Render twice for seamless infinite scroll */}
         {[...indices, ...indices].map((item, i) => (
-          <span key={i}>
+          <a
+            key={i}
+            href={TV_KENYA_URL}
+            target="_blank"
+            rel={AFFILIATE_REL}
+            className="hover:text-accent transition-colors"
+            title="View live NSE charts on TradingView"
+          >
             {item.label}{" "}
             <span className={`stat-pill ${item.direction}`}>
               {item.direction === "up" ? "▲" : "▼"} {item.value}
             </span>{" "}
             {item.price}
-          </span>
+          </a>
         ))}
       </div>
     </div>
