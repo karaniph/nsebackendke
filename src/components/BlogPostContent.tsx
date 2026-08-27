@@ -11,7 +11,9 @@ import { htmlToPlainText } from "@/lib/markdown";
 import { loadFollowedTopics, saveFollowedTopics } from "@/lib/personalization";
 import type { VisualBlocks } from "@/lib/visual-blocks";
 import type { BlogPostCard } from "@/lib/blog-data";
-import { Copy, Linkedin, Send, Share2, Twitter, MessageCircle } from "lucide-react";
+import { Copy, Linkedin, Send, Share2, Twitter, MessageCircle, LineChart } from "lucide-react";
+import TradingViewCTA from "@/components/TradingViewCTA";
+import { tradingViewSymbolUrl, TRADINGVIEW_INCENTIVE, AFFILIATE_REL } from "@/lib/affiliate";
 
 interface BlogPostContentProps {
   /** Summary only — the body arrives pre-rendered as `contentHtml`. */
@@ -27,6 +29,8 @@ interface BlogPostContentProps {
   related: BlogPostCard[];
   prev: BlogPostCard | null;
   next: BlogPostCard | null;
+  /** NSE ticker this post is clearly about (deep-dives / briefs) — enables TradingView deep-links. */
+  tvTicker?: string | null;
 }
 
 const BlogPostContent = ({
@@ -40,6 +44,7 @@ const BlogPostContent = ({
   related,
   prev,
   next,
+  tvTicker = null,
 }: BlogPostContentProps) => {
   const [followedTopics, setFollowedTopics] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
@@ -336,7 +341,25 @@ const BlogPostContent = ({
             </section>
           )}
 
+          {tvTicker && (
+            <a
+              href={tradingViewSymbolUrl(tvTicker)}
+              target="_blank"
+              rel={AFFILIATE_REL}
+              className="mb-6 inline-flex items-center gap-2 rounded-lg border border-border/60 bg-secondary/50 px-4 py-2 text-sm font-medium text-foreground hover:text-accent transition-colors"
+            >
+              <LineChart className="h-4 w-4 text-accent" />
+              Analyze {tvTicker} technicals on TradingView →
+            </a>
+          )}
+
           <div className="prose-blog" dangerouslySetInnerHTML={{ __html: contentHtml }} />
+
+          {tvTicker && (
+            <div className="mt-10">
+              <TradingViewCTA variant="inline" ticker={tvTicker} />
+            </div>
+          )}
 
           {mounted && (
             <div className="mt-14 content-card p-6 md:p-7">
@@ -467,6 +490,24 @@ const BlogPostContent = ({
                       </div>
                     )}
                   </div>
+                  {tvTicker && (
+                    <div className="content-card p-5">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground mb-2">Chart it</p>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Open {tvTicker} on TradingView for live charts and indicators. {TRADINGVIEW_INCENTIVE}.
+                      </p>
+                      <a
+                        href={tradingViewSymbolUrl(tvTicker)}
+                        target="_blank"
+                        rel={AFFILIATE_REL}
+                        className="btn-brand w-full justify-center text-sm"
+                      >
+                        <LineChart className="h-4 w-4" />
+                        Chart {tvTicker}
+                      </a>
+                      <p className="mt-2 text-[11px] text-muted-foreground">Affiliate link</p>
+                    </div>
+                  )}
                 </div>
               </aside>
             )}

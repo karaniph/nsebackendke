@@ -26,6 +26,7 @@ import {
 import { renderPostHtml } from '../../lib/markdown';
 import { buildVisualBlocks } from '../../lib/visual-blocks';
 import { articleSchema, breadcrumbSchema, faqSchema } from '../../lib/seo-schema';
+import { STOCK_REGISTRY, stockMatchStrength } from '../../lib/stocks';
 
 export async function getStaticPaths() {
   // Astro hoists getStaticPaths, so anything it uses must be an import or a

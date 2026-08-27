@@ -5,6 +5,8 @@ import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import PostCard from '../../components/PostCard';
+import TradingViewChart from '../../components/TradingViewChart';
+import TradingViewCTA from '../../components/TradingViewCTA';
 
 import { fetchLivePosts } from '../../lib/live-blog';
 import { sortPublishedPosts, type BlogPostCard } from '../../lib/blog-data';
@@ -88,13 +90,25 @@ const latest = posts[0];
       </p>
     </header>
 
+    <section class="mb-10">
+      <div class="mb-3 flex items-baseline justify-between gap-3">
+        <h2 class="text-lg font-heading font-bold text-foreground">{stock.ticker} interactive chart</h2>
+        <span class="text-xs text-muted-foreground">Powered by TradingView</span>
+      </div>
+      <TradingViewChart client:visible ticker={stock.ticker} name={stock.name} />
+    </section>
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
       {posts.map((post, i) => (
         <PostCard post={post} index={i} />
       ))}
     </div>
 
-    <div class="mt-10 flex flex-wrap gap-2">
+    <div class="mt-10">
+      <TradingViewCTA ticker={stock.ticker} />
+    </div>
+
+    <div class="mt-8 flex flex-wrap gap-2">
       <a href="/stocks" class="btn-outline text-sm">All companies</a>
       <a href="/category/deep-dives" class="btn-outline text-sm">Company deep dives</a>
       <a href="/category/market-briefs" class="btn-outline text-sm">Daily market briefs</a>
