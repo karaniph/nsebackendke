@@ -67,7 +67,7 @@ export function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
     if (!chatToken) return;
 
     try {
-      const res = await fetch(`${API_BASE}/payments/paystack/status?chat_token=${encodeURIComponent(chatToken)}`);
+      const res = await fetch(`${API_BASE}/payments/intasend/status?chat_token=${encodeURIComponent(chatToken)}`);
       const data = await res.json();
       setSubscription(data);
       setShowPaywall(!data.active);
@@ -128,26 +128,26 @@ export function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
     setPaymentLoading(true);
     setPaymentError(null);
     try {
-      const res = await fetch(`${API_BASE}/payments/paystack/initialize`, {
+      const res = await fetch(`${API_BASE}/payments/intasend/initialize`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim() }),
       });
       const data = (await res.json().catch(() => ({}))) as {
         ok?: boolean;
-        authorization_url?: string;
+        checkout_url?: string;
         chat_token?: string;
         error?: string;
       };
 
-      if (res.ok && data.ok && data.authorization_url) {
+      if (res.ok && data.ok && data.checkout_url) {
         // Store token for later use
         if (data.chat_token) {
           localStorage.setItem("nse_chat_token", data.chat_token);
           setChatToken(data.chat_token);
         }
-        // Redirect to Paystack
-        window.location.href = data.authorization_url;
+        // Redirect to IntaSend checkout
+        window.location.href = data.checkout_url;
       } else {
         const message = data.error || `Payment service returned ${res.status}. Please try again.`;
         console.error("Payment init failed", { status: res.status, data });
@@ -303,7 +303,7 @@ export function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
               onClick={handlePayment}
               disabled={!email.trim() || paymentLoading}
             >
-              {paymentLoading ? "Initializing..." : "Subscribe with Paystack"}
+              {paymentLoading ? "Initializing..." : "Subscribe with IntaSend"}
             </Button>
 
             {paymentError && (
@@ -313,7 +313,7 @@ export function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
             )}
 
             <p className="text-xs text-muted-foreground text-center">
-              You'll be redirected to Paystack to complete payment securely.
+              You'll be redirected to IntaSend to complete payment securely via M-Pesa or card.
             </p>
 
             <Separator />
