@@ -49,6 +49,7 @@ export function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
   const [chatToken, setChatToken] = useState<string | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -125,15 +126,21 @@ export function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
     }
 
     setPaymentLoading(true);
+    setPaymentError(null);
     try {
       const res = await fetch(`${API_BASE}/payments/paystack/initialize`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim() }),
       });
-      const data = await res.json();
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        authorization_url?: string;
+        chat_token?: string;
+        error?: string;
+      };
 
-      if (data.ok && data.authorization_url) {
+      if (res.ok && data.ok && data.authorization_url) {
         // Store token for later use
         if (data.chat_token) {
           localStorage.setItem("nse_chat_token", data.chat_token);
@@ -142,12 +149,13 @@ export function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
         // Redirect to Paystack
         window.location.href = data.authorization_url;
       } else {
-        console.error("Payment init failed", data);
-        alert(data.error || "Failed to initialize payment. Please try again.");
+        const message = data.error || `Payment service returned ${res.status}. Please try again.`;
+        console.error("Payment init failed", { status: res.status, data });
+        setPaymentError(message);
       }
     } catch (error) {
       console.error("Payment error", error);
-      alert("Failed to initialize payment. Please try again.");
+      setPaymentError("Could not connect to the payment service. Please try again.");
     } finally {
       setPaymentLoading(false);
     }
@@ -298,6 +306,12 @@ export function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
               {paymentLoading ? "Initializing..." : "Subscribe with Paystack"}
             </Button>
 
+            {paymentError && (
+              <div role="alert" className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                {paymentError}
+              </div>
+            )}
+
             <p className="text-xs text-muted-foreground text-center">
               You'll be redirected to Paystack to complete payment securely.
             </p>
@@ -420,6 +434,12 @@ export function ChatButton() {
 
   // Check for payment return on mount
   useEffect(() => {
+    const openAdvisor = () => setIsOpen(true);
+    window.addEventListener("nseinsider:open-advisor", openAdvisor);
+    return () => window.removeEventListener("nseinsider:open-advisor", openAdvisor);
+  }, []);
+
+  useEffect(() => {
     const url = new URL(window.location.href);
     if (url.searchParams.get("payment") === "success") {
       // Clean up URL
@@ -433,15 +453,21 @@ export function ChatButton() {
 
   return (
     <>
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 bg-primary text-primary-foreground rounded-full p-4 shadow-lg hover:shadow-xl transition-all hover:scale-105"
-        aria-label="Open chat"
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-        </svg>
-      </button>
+      <div className="fixed bottom-5 right-4 z-40 flex flex-col items-end gap-2 sm:bottom-6 sm:right-6">
+        <button
+          onClick={() => setIsOpen(true)}
+          className="group inline-flex items-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-lg ring-1 ring-primary/20 transition-all hover:scale-[1.02] hover:shadow-xl"
+          aria-label="Open NSEinsider AI Investment Advisor"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span>Ask the NSE Advisor</span>
+        </button>
+        <span className="rounded-full bg-background/95 px-3 py-1 text-[11px] font-medium text-muted-foreground shadow-sm ring-1 ring-border">
+          AI guidance for Kenya's market · KES 500/month
+        </span>
+      </div>
 
       <ChatWidget isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </>

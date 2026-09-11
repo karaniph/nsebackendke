@@ -59,8 +59,30 @@ export function websiteSchema() {
     name: SITE_NAME,
     alternateName: "NSE insider",
     description:
-      "Daily NSE market briefs, company deep dives, and practical investor education for Kenya.",
+      "Daily NSE market briefs, company deep dives, practical investor education, and AI-powered investment guidance for Kenya.",
     publisher: { "@id": ORGANIZATION_ID },
+    inLanguage: "en-KE",
+  };
+}
+
+export function investmentAdvisorSchema() {
+  return {
+    "@type": "SoftwareApplication",
+    "@id": `${SITE_URL}/investment-advisor/#software`,
+    name: "NSEinsider AI Investment Advisor",
+    url: `${SITE_URL}/investment-advisor/`,
+    applicationCategory: "FinanceApplication",
+    operatingSystem: "Web",
+    description:
+      "A Kenya-focused AI investment advisor that helps users explore NSE portfolio strategies using risk appetite, time horizon, filings, and market context.",
+    provider: { "@id": ORGANIZATION_ID },
+    offers: {
+      "@type": "Offer",
+      price: "500",
+      priceCurrency: "KES",
+      url: `${SITE_URL}/investment-advisor/`,
+      availability: "https://schema.org/InStock",
+    },
     inLanguage: "en-KE",
   };
 }

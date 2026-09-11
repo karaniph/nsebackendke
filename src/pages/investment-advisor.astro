@@ -1,0 +1,113 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { absoluteUrl, faqSchema, investmentAdvisorSchema } from "../lib/seo-schema";
+
+const pageUrl = absoluteUrl("/investment-advisor");
+const description =
+  "Explore NSE investment strategies with an AI investment advisor for Kenya. Share your budget, risk appetite, and time horizon for research-backed guidance using NSE market context.";
+const faqs = [
+  {
+    question: "What does the NSEinsider AI investment advisor do?",
+    answer:
+      "It asks about your budget, risk appetite, and time horizon, then helps you explore NSE investment strategies using available filings, market events, and current Kenya market context.",
+  },
+  {
+    question: "Can I ask about a KES 10,000 investment portfolio?",
+    answer:
+      "Yes. You can describe a budget such as KES 10,000 and the advisor will ask follow-up questions before discussing possible allocation approaches and risks.",
+  },
+  {
+    question: "How much does NSEinsider Chat Pro cost?",
+    answer:
+      "NSEinsider Chat Pro costs KES 500 per month and includes up to 100 advisor messages during the billing period.",
+  },
+  {
+    question: "Is this licensed financial advice?",
+    answer:
+      "No. The advisor provides educational, research-assisted information and is not a replacement for a licensed financial adviser, broker, or your own investment decisions.",
+  },
+];
+---
+
+<BaseLayout
+  title="AI Investment Advisor for Kenya's NSE"
+  description={description}
+  canonicalUrl={pageUrl}
+  keywords={["AI investment advisor Kenya", "NSE investment advisor", "Kenya stock portfolio", "Nairobi Securities Exchange investing", "NSE portfolio strategy"]}
+  schemas={[investmentAdvisorSchema(), faqSchema(faqs, pageUrl)]}
+>
+  <main>
+    <section class="container py-16 md:py-24">
+      <div class="mx-auto max-w-3xl text-center">
+        <p class="text-xs font-semibold uppercase tracking-[0.16em] text-primary">NSEinsider Chat Pro</p>
+        <h1 class="mt-4 text-4xl font-heading font-bold leading-tight text-foreground md:text-6xl">
+          Your AI investment advisor for Kenya's NSE
+        </h1>
+        <p class="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
+          Move from a broad investing question to a structured plan. Share your KES budget, risk appetite, and time horizon, then explore practical NSE strategies informed by market filings and current context.
+        </p>
+        <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+          <button type="button" data-open-advisor class="btn-brand">Start a private advisor chat</button>
+          <a href="/#investment-advisor" class="btn-outline">See the KES 500/month plan</a>
+        </div>
+        <p class="mt-4 text-xs text-muted-foreground">Up to 100 messages per month · Secure Paystack checkout · Educational information only</p>
+      </div>
+    </section>
+
+    <section class="container pb-12 md:pb-16" aria-labelledby="how-it-works">
+      <div class="grid gap-5 md:grid-cols-3">
+        <article class="content-card p-6">
+          <span class="text-sm font-semibold text-primary">01</span>
+          <h2 class="mt-3 text-xl font-heading font-bold">Share your situation</h2>
+          <p class="mt-2 text-sm leading-relaxed text-muted-foreground">Tell the advisor how much you want to invest, what you are trying to achieve, and when you may need the money.</p>
+        </article>
+        <article class="content-card p-6">
+          <span class="text-sm font-semibold text-primary">02</span>
+          <h2 id="how-it-works" class="mt-3 text-xl font-heading font-bold">Answer follow-up questions</h2>
+          <p class="mt-2 text-sm leading-relaxed text-muted-foreground">The conversation captures risk appetite, time horizon, liquidity needs, and relevant NSE counters or themes.</p>
+        </article>
+        <article class="content-card p-6">
+          <span class="text-sm font-semibold text-primary">03</span>
+          <h2 class="mt-3 text-xl font-heading font-bold">Review a strategy</h2>
+          <p class="mt-2 text-sm leading-relaxed text-muted-foreground">Use the response as a research starting point with evidence, uncertainty, portfolio trade-offs, and risks clearly explained.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="container pb-12 md:pb-16" aria-labelledby="advisor-data-heading">
+      <div class="content-card p-6 md:p-8">
+        <h2 id="advisor-data-heading" class="text-2xl font-heading font-bold">Built for investors following the Nairobi Securities Exchange</h2>
+        <div class="mt-5 grid gap-5 text-sm leading-relaxed text-muted-foreground md:grid-cols-2">
+          <p>The advisor can use structured NSE filing summaries, company events, market reports, educational material, and recent research context to keep answers grounded in the Kenyan market.</p>
+          <p>It can help you compare equities with cash, T-bills, bonds, and other alternatives, while highlighting liquidity, concentration, valuation, and data-quality risks.</p>
+        </div>
+        <div class="mt-6 rounded-lg bg-amber-50 p-4 text-sm text-amber-900 dark:bg-amber-950/30 dark:text-amber-200">
+          <strong>Important:</strong> This is an AI research and education tool, not licensed investment advice. Prices, filings, and market conditions can change; verify information with authoritative sources before acting.
+        </div>
+      </div>
+    </section>
+
+    <section class="container pb-16 md:pb-24" aria-labelledby="advisor-faq-heading">
+      <div class="mx-auto max-w-3xl">
+        <h2 id="advisor-faq-heading" class="text-2xl font-heading font-bold">NSE AI advisor questions</h2>
+        <div class="mt-5 divide-y divide-border rounded-xl border border-border">
+          {faqs.map((faq) => (
+            <details class="p-5">
+              <summary class="cursor-pointer font-semibold text-foreground">{faq.question}</summary>
+              <p class="mt-3 text-sm leading-relaxed text-muted-foreground">{faq.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<script is:inline>
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (target instanceof Element && target.closest("[data-open-advisor]")) {
+      window.dispatchEvent(new CustomEvent("nseinsider:open-advisor"));
+    }
+  });
+</script>
