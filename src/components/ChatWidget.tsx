@@ -237,26 +237,36 @@ export function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
   if (showPaywall || !subscription?.active) {
     return (
       <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
-        <SheetContent className="w-full sm:max-w-md">
-          <SheetHeader>
-            <SheetTitle className="flex items-center gap-2">
+        <SheetContent className="w-full overflow-y-auto p-0 sm:max-w-md">
+          <div className="border-b bg-gradient-to-br from-primary/15 via-primary/5 to-background px-6 pb-6 pt-8">
+            <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+            </div>
+          <SheetHeader className="space-y-2 text-left">
+            <SheetTitle className="flex items-center gap-2 text-xl">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
               </svg>
               NSEinsider Chat Pro
             </SheetTitle>
             <SheetDescription>
-              Get personalized investment guidance powered by AI, with access to real NSE filing data and market analysis.
+              Research Kenyan shares, filings, risk and portfolio decisions with a focused AI advisor.
             </SheetDescription>
           </SheetHeader>
+          </div>
 
-          <div className="mt-6 space-y-6">
-            <div className="bg-muted/50 rounded-lg p-4 space-y-3">
+          <div className="space-y-5 px-6 py-6">
+            <div className="rounded-2xl border bg-card p-4 shadow-sm">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Monthly Plan</span>
-                <Badge variant="secondary">KES 500/month</Badge>
+                <div>
+                  <p className="text-sm font-semibold">Advisor access</p>
+                  <p className="mt-1 text-xs text-muted-foreground">One payment unlocks 30 days.</p>
+                </div>
+                <Badge className="rounded-full px-3 py-1">KES 500</Badge>
               </div>
-              <ul className="text-sm text-muted-foreground space-y-2">
+              <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
                 <li className="flex items-center gap-2">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-green-600">
                     <polyline points="20 6 9 17 4 12"/>
@@ -284,41 +294,49 @@ export function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
               </ul>
             </div>
 
-            <div className="space-y-3">
-              <label htmlFor="email" className="text-sm font-medium">
-                Enter your email to subscribe
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-sm font-semibold">
+                Email for your advisor access
               </label>
+              <p className="text-xs leading-5 text-muted-foreground">We use this to link your payment and chat access.</p>
               <Input
                 id="email"
                 type="email"
+                autoComplete="email"
                 placeholder="you@example.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (paymentError) setPaymentError(null);
+                }}
                 onKeyDown={(e) => e.key === "Enter" && handlePayment()}
               />
             </div>
 
             <Button
-              className="w-full"
+              className="h-12 w-full rounded-xl text-sm font-semibold shadow-sm"
               onClick={handlePayment}
               disabled={!email.trim() || paymentLoading}
             >
-              {paymentLoading ? "Initializing..." : "Subscribe with IntaSend"}
+              {paymentLoading ? "Preparing secure checkout…" : "Continue to secure payment →"}
             </Button>
 
             {paymentError && (
-              <div role="alert" className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-                {paymentError}
+              <div role="alert" className="rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
+                <p className="font-semibold">We couldn’t start checkout</p>
+                <p className="mt-1 text-xs leading-5">{paymentError}</p>
               </div>
             )}
 
-            <p className="text-xs text-muted-foreground text-center">
-              You'll be redirected to IntaSend to complete payment securely via M-Pesa or card.
-            </p>
+            <div className="flex items-center justify-center gap-3 rounded-xl bg-muted/60 px-3 py-3 text-xs text-muted-foreground">
+              <span className="font-medium text-foreground">Secure payment</span>
+              <span className="rounded bg-background px-2 py-1 font-semibold shadow-sm">M-Pesa</span>
+              <span className="rounded bg-background px-2 py-1 font-semibold shadow-sm">Card</span>
+            </div>
 
             <Separator />
 
-            <div className="bg-amber-50 dark:bg-amber-950/30 rounded-lg p-3">
+            <div className="rounded-xl bg-amber-50 p-3 dark:bg-amber-950/30">
               <p className="text-xs text-amber-800 dark:text-amber-200">
                 <strong>Disclaimer:</strong> This tool provides educational information only, not licensed financial advice. 
                 Always consult a qualified financial advisor before making investment decisions.
@@ -333,7 +351,7 @@ export function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
   // Chat UI
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent className="w-full sm:max-w-lg flex flex-col p-0">
+      <SheetContent className="flex w-full flex-col p-0 sm:max-w-lg">
         <SheetHeader className="px-4 pt-4 pb-2 border-b">
           <div className="flex items-center justify-between">
             <SheetTitle className="flex items-center gap-2 text-base">
@@ -359,13 +377,13 @@ export function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
         <ScrollArea className="flex-1 px-4" ref={scrollRef}>
           <div className="py-4 space-y-4">
             {messages.length === 0 && (
-              <div className="text-center py-8 space-y-3">
-                <div className="text-muted-foreground">
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mx-auto mb-3 opacity-50">
+              <div className="py-8 text-center">
+                <div className="rounded-2xl border bg-muted/40 px-5 py-6 text-muted-foreground">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mx-auto mb-3 opacity-60">
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                   </svg>
-                  <p className="text-sm font-medium">Ask me about NSE investments</p>
-                  <p className="text-xs mt-1">e.g., "I have KES 10,000 to invest, what should I buy?"</p>
+                  <p className="text-sm font-semibold text-foreground">What would you like to research?</p>
+                  <p className="mt-1 text-xs leading-5">Try: “Compare Equity and KCB for a three-year investment horizon.”</p>
                 </div>
               </div>
             )}
