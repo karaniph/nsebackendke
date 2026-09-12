@@ -67,7 +67,8 @@ export function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
     if (!chatToken) return;
 
     try {
-      const res = await fetch(`${API_BASE}/payments/intasend/status?chat_token=${encodeURIComponent(chatToken)}`);
+      // Use Pesapal status endpoint (same DB, same subscription check)
+      const res = await fetch(`${API_BASE}/payments/pesapal/status?chat_token=${encodeURIComponent(chatToken)}`);
       const data = await res.json();
       setSubscription(data);
       setShowPaywall(!data.active);
@@ -128,7 +129,7 @@ export function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
     setPaymentLoading(true);
     setPaymentError(null);
     try {
-      const res = await fetch(`${API_BASE}/payments/intasend/initialize`, {
+      const res = await fetch(`${API_BASE}/payments/pesapal/initialize`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim() }),
@@ -146,7 +147,7 @@ export function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
           localStorage.setItem("nse_chat_token", data.chat_token);
           setChatToken(data.chat_token);
         }
-        // Redirect to IntaSend checkout
+        // Redirect to Pesapal checkout
         window.location.href = data.checkout_url;
       } else {
         const message = data.error || `Payment service returned ${res.status}. Please try again.`;
@@ -465,7 +466,7 @@ export function ChatButton() {
     //   ChatWidget) will find it active and open the chat.
     // pending: M-Pesa/card confirmation was still in flight when the
     //   customer was redirected back. Opening the widget lets it re-check
-    //   status; IntaSend's webhook, if delivered, activates it shortly after.
+    //   status; Pesapal's webhook, if delivered, activates it shortly after.
     // failed: opening the widget re-shows the paywall so the customer can
     //   retry immediately instead of wondering what happened.
     if (paymentOutcome === "success" || paymentOutcome === "pending" || paymentOutcome === "failed") {
