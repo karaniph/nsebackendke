@@ -459,12 +459,21 @@ export function ChatButton() {
 
   useEffect(() => {
     const url = new URL(window.location.href);
-    if (url.searchParams.get("payment") === "success") {
+    const paymentOutcome = url.searchParams.get("payment");
+    // success: the Worker already confirmed and activated the subscription
+    //   before redirecting here, so the paywall's own status check (in
+    //   ChatWidget) will find it active and open the chat.
+    // pending: M-Pesa/card confirmation was still in flight when the
+    //   customer was redirected back. Opening the widget lets it re-check
+    //   status; IntaSend's webhook, if delivered, activates it shortly after.
+    // failed: opening the widget re-shows the paywall so the customer can
+    //   retry immediately instead of wondering what happened.
+    if (paymentOutcome === "success" || paymentOutcome === "pending" || paymentOutcome === "failed") {
       // Clean up URL
       url.searchParams.delete("payment");
       url.searchParams.delete("reference");
       window.history.replaceState({}, "", url.toString());
-      // Open chat
+      // Open chat/paywall
       setTimeout(() => setIsOpen(true), 500);
     }
   }, []);
