@@ -22,6 +22,7 @@ interface CheckoutRequestBody {
   phone?: string;
   reference?: string;
   redirectUrl?: string;
+  amount?: number;
 }
 
 function json(res: any, status: number, data: unknown) {
@@ -59,6 +60,10 @@ export default async function handler(req: any, res: any) {
     return json(res, 400, { ok: false, error: "email, reference, and redirectUrl are required" });
   }
 
+  // The Worker is the source of truth for price; fall back to 500 only if it
+  // omits the field so older callers keep working.
+  const amount = Number.isFinite(body.amount) && (body.amount as number) > 0 ? String(body.amount) : "500";
+
   const baseUrl = publicKey.includes("_test_")
     ? "https://sandbox.intasend.com"
     : "https://api.intasend.com";
@@ -74,7 +79,7 @@ export default async function handler(req: any, res: any) {
         email,
         phone_number: body.phone,
         country: "KE",
-        amount: "500",
+        amount,
         currency: "KES",
         api_ref: reference,
         host: process.env.SITE_BASE_URL || "https://nseinsider.co.ke",
