@@ -272,7 +272,7 @@ export function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-green-600">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
-                  Up to 100 messages per month
+                  Up to 100 messages, use them anytime over 30 days
                 </li>
                 <li className="flex items-center gap-2">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-green-600">
@@ -367,6 +367,16 @@ export function ChatWidget({ isOpen, onClose }: ChatWidgetProps) {
               </Badge>
             )}
           </div>
+          {subscription?.subscription?.currentPeriodEnd && (
+            <p className="text-xs text-muted-foreground mt-1">
+              Messages roll over — use them any time before your access renews on{" "}
+              {new Date(subscription.subscription.currentPeriodEnd).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+              })}
+              .
+            </p>
+          )}
           {profile && (profile.risk_level || profile.horizon_months) && (
             <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
               {profile.risk_level && <span>Risk: {profile.risk_level}</span>}
