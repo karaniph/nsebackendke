@@ -10,6 +10,7 @@ import { getPublishedPostSummaries, getPostSummariesByCategoryFrom, sortPublishe
 const rawPosts = await fetchLivePosts();
 const allPostsFull = sortPublishedPosts(rawPosts || []);
 const allPosts = allPostsFull.map(({ content, blocks, ...rest }) => rest);
+const news = getPostSummariesByCategoryFrom(allPosts, "news");
 const marketBriefs = getPostSummariesByCategoryFrom(allPosts, "market-briefs");
 const deepDives = getPostSummariesByCategoryFrom(allPosts, "deep-dives");
 const education = getPostSummariesByCategoryFrom(allPosts, "education");
@@ -35,6 +36,7 @@ const seoKeywords = ["NSE", "Nairobi Securities Exchange", "Kenya stocks", "mark
   <IndexContent 
     client:load 
     allPosts={allPosts}
+    news={news}
     marketBriefs={marketBriefs}
     deepDives={deepDives}
     education={education}

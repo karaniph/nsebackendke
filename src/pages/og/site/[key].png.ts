@@ -18,6 +18,12 @@ const SITE_OG_IMAGES: SiteOgEntry[] = [
     accent: DEFAULT_ACCENT,
   },
   {
+    key: "news",
+    title: "Latest Kenya, NSE, and East African business news for investors",
+    kicker: "News",
+    accent: CATEGORY_ACCENT["news"],
+  },
+  {
     key: "market-briefs",
     title: "Daily NSE market briefs: index direction, key movers, and what to watch",
     kicker: "Market Briefs",

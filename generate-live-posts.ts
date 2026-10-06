@@ -13,7 +13,7 @@ const INCLUDE_DRAFTS = /^(1|true|yes)$/i.test((process.env.BLOG_FEED_INCLUDE_DRA
 
 interface PublicFeedItem {
   report_date: string;
-  category: "market-briefs" | "deep-dives" | "education";
+  category: "news" | "market-briefs" | "deep-dives" | "education";
   title: string;
   slug: string;
   excerpt: string | null;
@@ -28,7 +28,7 @@ interface PublicFeedResponse {
 
 interface AdminDraftItem {
   report_date: string;
-  category: "market-briefs" | "deep-dives" | "education";
+  category: "news" | "market-briefs" | "deep-dives" | "education";
   title: string;
   slug: string;
   excerpt: string | null;
@@ -43,6 +43,7 @@ interface AdminDraftResponse {
 }
 
 function normalizeCategory(category: string): PostCategory {
+  if (category === "news") return "news";
   if (category === "deep-dives") return "deep-dives";
   if (category === "education") return "education";
   return "market-briefs";
@@ -50,7 +51,15 @@ function normalizeCategory(category: string): PostCategory {
 
 function guessTags(title: string, excerpt: string | null, category: string): string[] {
   const tags = new Set<string>(["nse", "kenya"]);
-  tags.add(category === "market-briefs" ? "market-brief" : category === "deep-dives" ? "deep-dive" : "education");
+  tags.add(
+    category === "news"
+      ? "news"
+      : category === "market-briefs"
+        ? "market-brief"
+        : category === "deep-dives"
+          ? "deep-dive"
+          : "education"
+  );
 
   const hay = `${title} ${excerpt || ""}`.toLowerCase();
   const checks: Array<[string, string]> = [
@@ -78,7 +87,7 @@ function toBlogPost(item: PublicFeedItem | AdminDraftItem): BlogPost {
     date: item.report_date,
     updatedAt: item.updated_at || item.report_date,
     author: "NSEinsider Desk",
-    authorRole: category === "education" ? "Education Desk" : "Market Intelligence Desk",
+    authorRole: category === "news" ? "Newsroom" : category === "education" ? "Education Desk" : "Market Intelligence Desk",
     tags: guessTags(item.title, item.excerpt, item.category),
     category,
     coverImage: "",

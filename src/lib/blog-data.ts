@@ -1,4 +1,4 @@
-export type PostCategory = "market-briefs" | "deep-dives" | "education" | "bot-updates";
+export type PostCategory = "news" | "market-briefs" | "deep-dives" | "education" | "bot-updates";
 
 export interface BlogPost {
   slug: string;
@@ -34,6 +34,7 @@ export interface BlogPostCard extends BlogPostSummary {
 }
 
 export const CATEGORY_LABELS: Record<PostCategory, string> = {
+  "news": "News",
   "market-briefs": "Market Brief",
   "deep-dives": "Deep Dive",
   "education": "Education",

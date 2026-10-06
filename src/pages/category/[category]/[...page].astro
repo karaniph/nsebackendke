@@ -19,6 +19,7 @@ import { toPostCard, getCategoryOgImage } from '../../../lib/post-intelligence';
 import { breadcrumbSchema } from '../../../lib/seo-schema';
 
 const CATEGORY_DESCRIPTIONS: Record<PostCategory, string> = {
+  'news': 'Latest Kenya, NSE, and East African business news that matters to Nairobi Securities Exchange investors.',
   'market-briefs': 'Daily NSE market briefs with top movers, foreign flow, risk signals, and what to watch next.',
   'deep-dives': 'Deep analysis of NSE-listed companies covering valuation, strategy, financial trend, and key risks.',
   'education': 'Practical investing lessons for Kenyan retail investors: valuation, risk, portfolio sizing, and discipline.',
@@ -27,7 +28,7 @@ const CATEGORY_DESCRIPTIONS: Record<PostCategory, string> = {
 
 export const getStaticPaths = (async ({ paginate }) => {
   // Inlined: getStaticPaths is hoisted above frontmatter consts.
-  const categories: PostCategory[] = ['market-briefs', 'deep-dives', 'education', 'bot-updates'];
+  const categories: PostCategory[] = ['news', 'market-briefs', 'deep-dives', 'education', 'bot-updates'];
   const all = sortPublishedPosts((await fetchLivePosts()) || []);
   return categories.flatMap((category) => {
     const posts = getPostsByCategoryFrom(all, category).map(toPostCard);

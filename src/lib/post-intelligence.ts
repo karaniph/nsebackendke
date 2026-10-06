@@ -151,13 +151,15 @@ export function extractKeyTakeaways(markdown: string, limit = 3): string[] {
 
 export function getPostMetaDescription(post: BlogPost): string {
   const categoryPrefix =
-    post.category === "market-briefs"
-      ? "NSE Market Brief"
-      : post.category === "deep-dives"
-        ? "NSE Company Deep Dive"
-        : post.category === "education"
-          ? "NSE Investor Education"
-          : "NSEinsider Update";
+    post.category === "news"
+      ? "NSE & Kenya Business News"
+      : post.category === "market-briefs"
+        ? "NSE Market Brief"
+        : post.category === "deep-dives"
+          ? "NSE Company Deep Dive"
+          : post.category === "education"
+            ? "NSE Investor Education"
+            : "NSEinsider Update";
   const date = new Date(post.date).toLocaleDateString("en-GB", {
     day: "numeric",
     month: "short",
@@ -166,7 +168,7 @@ export function getPostMetaDescription(post: BlogPost): string {
   return `${categoryPrefix} (${date}): ${post.description}`.slice(0, 160);
 }
 
-const SITE_OG_KEYS = new Set(["market-briefs", "deep-dives", "education", "bot-updates"]);
+const SITE_OG_KEYS = new Set(["news", "market-briefs", "deep-dives", "education", "bot-updates"]);
 
 /**
  * Category-level Open Graph image. These are real PNGs prerendered by

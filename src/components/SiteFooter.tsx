@@ -17,6 +17,7 @@ const SiteFooter = () => {
           <div>
             <h4 className="text-sm font-semibold text-foreground mb-4">Content</h4>
             <ul className="space-y-2.5 text-sm text-muted-foreground">
+              <li><a href="/category/news" className="hover:text-foreground transition-colors">News</a></li>
               <li><a href="/category/market-briefs" className="hover:text-foreground transition-colors">Market Briefs</a></li>
               <li><a href="/category/deep-dives" className="hover:text-foreground transition-colors">Deep Dives</a></li>
               <li><a href="/category/education" className="hover:text-foreground transition-colors">Education</a></li>

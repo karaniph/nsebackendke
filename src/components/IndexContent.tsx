@@ -9,6 +9,7 @@ import type { BlogPost, BlogPostSummary } from "@/lib/blog-data";
 
 interface IndexContentProps {
   allPosts: BlogPostSummary[];
+  news: BlogPostSummary[];
   marketBriefs: BlogPostSummary[];
   deepDives: BlogPostSummary[];
   education: BlogPostSummary[];
@@ -16,7 +17,7 @@ interface IndexContentProps {
   todayBrief?: BlogPost; // Keep todayBrief as full object for takeaways
 }
 
-const IndexContent = ({ allPosts, marketBriefs, deepDives, education, botUpdates, todayBrief }: IndexContentProps) => {
+const IndexContent = ({ allPosts, news, marketBriefs, deepDives, education, botUpdates, todayBrief }: IndexContentProps) => {
   const [followedTopics, setFollowedTopics] = useState<string[]>([]);
   // Avoid hydration mismatch by only rendering user-specific FollowedTopics after mount
   const [mounted, setMounted] = useState(false);
@@ -209,6 +210,24 @@ const IndexContent = ({ allPosts, marketBriefs, deepDives, education, botUpdates
             ))}
           </div>
         </section>
+
+        {/* ─── News ─── */}
+        {news.length > 0 && (
+          <section className="container py-12 md:py-16">
+            <div className="section-header">
+              <div>
+                <h2>News</h2>
+                <p className="text-sm text-muted-foreground mt-1">Latest Kenya, NSE, and East African business news for investors</p>
+              </div>
+              <a href="/category/news">View all →</a>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {news.slice(0, 2).map((post, i) => (
+                <PostCard key={post.slug} post={post} index={i} asAstroLink />
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* ─── Market Briefs ─── */}
         {marketBriefs.length > 0 && (

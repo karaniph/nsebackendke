@@ -28,6 +28,7 @@ const TITLE_MAX_CHARS = 104;
 const TITLE_MAX_HEIGHT = 340;
 
 export const CATEGORY_ACCENT: Record<string, string> = {
+  "news": "#F472B6",
   "market-briefs": "#F59E0B",
   "deep-dives": "#38BDF8",
   "education": "#34D399",

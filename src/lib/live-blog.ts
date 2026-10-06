@@ -4,7 +4,7 @@ import { sanitizeRemoteBlogContent } from "@/lib/blog-content";
 interface PublicFeedItem {
   id: number;
   report_date: string;
-  category: "market-briefs" | "deep-dives" | "education";
+  category: "news" | "market-briefs" | "deep-dives" | "education";
   title: string;
   slug: string;
   excerpt: string | null;
@@ -18,6 +18,7 @@ interface PublicFeedResponse {
 }
 
 function normalizeCategory(category: string): PostCategory {
+  if (category === "news") return "news";
   if (category === "deep-dives") return "deep-dives";
   if (category === "education") return "education";
   return "market-briefs";
@@ -25,7 +26,15 @@ function normalizeCategory(category: string): PostCategory {
 
 function guessTags(item: PublicFeedItem): string[] {
   const tags = new Set<string>(["nse", "kenya"]);
-  tags.add(item.category === "market-briefs" ? "market-brief" : item.category === "deep-dives" ? "deep-dive" : "education");
+  tags.add(
+    item.category === "news"
+      ? "news"
+      : item.category === "market-briefs"
+        ? "market-brief"
+        : item.category === "deep-dives"
+          ? "deep-dive"
+          : "education"
+  );
 
   const hay = `${item.title} ${item.excerpt || ""}`.toLowerCase();
   const checks: Array<[string, string]> = [
@@ -53,7 +62,7 @@ function toBlogPost(item: PublicFeedItem): BlogPost {
     date: item.report_date,
     updatedAt: item.updated_at || item.report_date,
     author: "NSEinsider Desk",
-    authorRole: category === "education" ? "Education Desk" : "Market Intelligence Desk",
+    authorRole: category === "news" ? "Newsroom" : category === "education" ? "Education Desk" : "Market Intelligence Desk",
     tags: guessTags(item),
     category,
     coverImage: "",

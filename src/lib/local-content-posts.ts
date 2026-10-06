@@ -17,6 +17,7 @@ interface Frontmatter {
 }
 
 function normalizeCategory(category: string | undefined): PostCategory {
+  if (category === "news") return "news";
   if (category === "deep-dives") return "deep-dives";
   if (category === "education") return "education";
   if (category === "bot-updates") return "bot-updates";
@@ -24,6 +25,7 @@ function normalizeCategory(category: string | undefined): PostCategory {
 }
 
 function inferAuthorRole(category: PostCategory): string {
+  if (category === "news") return "Newsroom";
   if (category === "education") return "Education Desk";
   if (category === "bot-updates") return "Product Desk";
   return "Market Intelligence Desk";
