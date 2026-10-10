@@ -19,6 +19,7 @@ interface PublicFeedItem {
   excerpt: string | null;
   content_markdown: string;
   updated_at?: string | null;
+  publish_status?: string | null;
 }
 
 interface PublicFeedResponse {
@@ -112,7 +113,11 @@ async function fetchPublicPosts(): Promise<BlogPost[]> {
     const response = await fetch(PUBLIC_FEED_URL, { headers: { Accept: "application/json" } });
     if (!response.ok) return [];
     const payload = (await response.json()) as PublicFeedResponse;
-    return (payload.items || []).map(toBlogPost);
+    // Posts taken down by the owner keep their DB row (so the worker cron does not
+    // regenerate them) but are marked 'unpublished' and must never be rendered.
+    return (payload.items || [])
+      .filter((item) => (item.publish_status || "published") !== "unpublished")
+      .map(toBlogPost);
   } catch (_error) {
     return [];
   }

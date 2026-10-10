@@ -10,6 +10,7 @@ interface PublicFeedItem {
   excerpt: string | null;
   content_markdown: string;
   updated_at?: string | null;
+  publish_status?: string | null;
 }
 
 interface PublicFeedResponse {
@@ -124,7 +125,9 @@ export async function fetchLivePosts(): Promise<BlogPost[]> {
 
     const payload = (await response.json()) as PublicFeedResponse;
     const items = Array.isArray(payload.items) ? payload.items : [];
-    const remote = items.map(toBlogPost);
+    const remote = items
+      .filter((item) => (item.publish_status || "published") !== "unpublished")
+      .map(toBlogPost);
     return mergePosts(remote, blogPosts);
   } catch (_error) {
     return mergePosts([], blogPosts);
