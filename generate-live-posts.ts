@@ -130,7 +130,10 @@ async function fetchDraftPosts(): Promise<BlogPost[]> {
     const response = await fetch(url, { headers: { Accept: "application/json" } });
     if (!response.ok) return [];
     const payload = (await response.json()) as AdminDraftResponse;
-    const drafts = (payload.drafts || []).filter((item) => (item.publish_status || "draft") !== "published");
+    const drafts = (payload.drafts || []).filter((item) => {
+      const status = item.publish_status || "draft";
+      return status !== "published" && status !== "unpublished";
+    });
     return drafts.map(toBlogPost);
   } catch (_error) {
     return [];
