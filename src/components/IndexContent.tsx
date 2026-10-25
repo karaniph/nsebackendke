@@ -71,16 +71,6 @@ const IndexContent = ({ allPosts, news, marketBriefs, deepDives, education, botU
               <a href="/category/market-briefs" className="btn-outline">
                 Read Latest Brief →
               </a>
-              <button
-                type="button"
-                onClick={() => window.dispatchEvent(new CustomEvent("nseinsider:open-advisor"))}
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
-              >
-                Ask the NSE Advisor · KES 500/mo
-              </button>
-              <a href="/investment-advisor" className="btn-outline">
-                See How It Works →
-              </a>
               <a
                 href="https://www.tradingview.com/markets/stocks-kenya/?aff_id=170183"
                 target="_blank"
@@ -94,29 +84,6 @@ const IndexContent = ({ allPosts, news, marketBriefs, deepDives, education, botU
                 Chart NSE on TradingView
               </a>
             </div>
-          </div>
-        </section>
-
-        <section id="investment-advisor" className="container py-8 md:py-10" aria-labelledby="advisor-heading">
-          <div className="content-card border-l-4 border-l-primary p-6 md:p-8">
-            <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-center">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">New · NSEinsider Chat Pro</p>
-                <h2 id="advisor-heading" className="mt-2 text-2xl font-heading font-bold">AI investment advisor for Kenya's NSE</h2>
-                <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                  Tell the advisor your budget, risk appetite, and time horizon. It uses NSE filings, market events, and current market research to help you explore a practical strategy — from KES 10,000 portfolios to company-specific questions.
-                </p>
-                <p className="mt-3 text-sm font-medium text-foreground">KES 500/month · up to 100 advisor messages · cancel through Paystack</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => window.dispatchEvent(new CustomEvent("nseinsider:open-advisor"))}
-                className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
-              >
-                Start a private advisor chat
-              </button>
-            </div>
-            <p className="mt-5 text-xs text-muted-foreground">Educational information only — not licensed financial advice. Review every suggestion independently.</p>
           </div>
         </section>
 

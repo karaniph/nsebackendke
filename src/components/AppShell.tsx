@@ -2,7 +2,6 @@ import { useState, type ReactNode } from "react";
 import SiteHeader from "./SiteHeader";
 import SiteFooter from "./SiteFooter";
 import SearchOverlay from "./SearchOverlay";
-import { ChatButton } from "./ChatWidget";
 
 interface AppShellProps {
   children: ReactNode;
@@ -18,7 +17,6 @@ const AppShell = ({ children, currentPath = "/" }: AppShellProps) => {
       <main className="flex-1">{children}</main>
       <SiteFooter />
       <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
-      <ChatButton />
     </>
   );
 };
