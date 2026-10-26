@@ -76,6 +76,9 @@ const SiteFooter = () => {
             <p className="font-mono">Nairobi, Kenya 🇰🇪</p>
           </div>
         </div>
+        <p className="mt-5 text-center text-[11px] leading-relaxed text-muted-foreground">
+          Affiliate disclosure: Some links to Stock Analysis Pro and TradingView are affiliate links. We may earn a commission at no extra cost to you.
+        </p>
       </div>
     </footer>
   );

@@ -68,9 +68,6 @@ const ResearchToolsCTA = ({ ticker = null, placement = "content" }: ResearchTool
         </a>
       </div>
 
-      <p className="mt-4 text-[11px] leading-relaxed text-muted-foreground">
-        Disclosure: These are affiliate links. We may earn a commission if you sign up or subscribe, at no extra cost to you. This is not investment advice.
-      </p>
     </section>
   );
 };

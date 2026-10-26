@@ -11,9 +11,10 @@ import { htmlToPlainText } from "@/lib/markdown";
 import { loadFollowedTopics, saveFollowedTopics } from "@/lib/personalization";
 import type { VisualBlocks } from "@/lib/visual-blocks";
 import type { BlogPostCard } from "@/lib/blog-data";
-import { Copy, Linkedin, Send, Share2, Twitter, MessageCircle, LineChart } from "lucide-react";
+import { BarChart3, Copy, Linkedin, Send, Share2, Twitter, MessageCircle, LineChart } from "lucide-react";
 import ResearchToolsCTA from "@/components/ResearchToolsCTA";
-import { tradingViewSymbolUrl, TRADINGVIEW_INCENTIVE, AFFILIATE_REL } from "@/lib/affiliate";
+import ResearchToolsLinks from "@/components/ResearchToolsLinks";
+import { tradingViewSymbolUrl, TRADINGVIEW_INCENTIVE, AFFILIATE_REL, STOCK_ANALYSIS_AFF_URL, trackAffiliateClick } from "@/lib/affiliate";
 
 interface BlogPostContentProps {
   /** Summary only — the body arrives pre-rendered as `contentHtml`. */
@@ -272,6 +273,7 @@ const BlogPostContent = ({
                 </div>
               </div>
             </section>
+            <ResearchToolsLinks ticker={tvTicker} placement="article_top" />
             <section className="content-card mt-8 p-5 md:p-6">
               <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Build this topic cluster</p>
               <div className="mt-4 grid gap-4 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
@@ -498,12 +500,22 @@ const BlogPostContent = ({
                         href={tradingViewSymbolUrl(tvTicker)}
                         target="_blank"
                         rel={AFFILIATE_REL}
+                        onClick={() => trackAffiliateClick("tradingview", "article_sidebar")}
                         className="btn-brand w-full justify-center text-sm"
                       >
                         <LineChart className="h-4 w-4" />
                         Chart {tvTicker}
                       </a>
-                      <p className="mt-2 text-[11px] text-muted-foreground">Affiliate link</p>
+                      <a
+                        href={STOCK_ANALYSIS_AFF_URL}
+                        target="_blank"
+                        rel={AFFILIATE_REL}
+                        onClick={() => trackAffiliateClick("stock_analysis", "article_sidebar")}
+                        className="btn-outline mt-2 w-full justify-center text-sm"
+                      >
+                        <BarChart3 className="h-4 w-4" />
+                        Research financials
+                      </a>
                     </div>
                   )}
                 </div>
