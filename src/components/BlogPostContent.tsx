@@ -12,7 +12,7 @@ import { loadFollowedTopics, saveFollowedTopics } from "@/lib/personalization";
 import type { VisualBlocks } from "@/lib/visual-blocks";
 import type { BlogPostCard } from "@/lib/blog-data";
 import { Copy, Linkedin, Send, Share2, Twitter, MessageCircle, LineChart } from "lucide-react";
-import TradingViewCTA from "@/components/TradingViewCTA";
+import ResearchToolsCTA from "@/components/ResearchToolsCTA";
 import { tradingViewSymbolUrl, TRADINGVIEW_INCENTIVE, AFFILIATE_REL } from "@/lib/affiliate";
 
 interface BlogPostContentProps {
@@ -355,11 +355,9 @@ const BlogPostContent = ({
 
           <div className="prose-blog" dangerouslySetInnerHTML={{ __html: contentHtml }} />
 
-          {tvTicker && (
-            <div className="mt-10">
-              <TradingViewCTA variant="inline" ticker={tvTicker} />
-            </div>
-          )}
+          <div className="mt-10">
+            <ResearchToolsCTA ticker={tvTicker} placement="article" />
+          </div>
 
           {mounted && (
             <div className="mt-14 content-card p-6 md:p-7">

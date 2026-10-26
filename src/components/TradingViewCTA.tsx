@@ -2,11 +2,7 @@
 // Reusable TradingView affiliate CTA. Mirrors TelegramCTA's default/inline
 // variants and styling so it feels native to the site.
 import { LineChart } from "lucide-react";
-import {
-  tradingViewLink,
-  TRADINGVIEW_INCENTIVE,
-  AFFILIATE_REL,
-} from "@/lib/affiliate";
+import { tradingViewLink, TRADINGVIEW_INCENTIVE, AFFILIATE_REL, trackAffiliateClick } from "@/lib/affiliate";
 
 interface TradingViewCTAProps {
   variant?: "default" | "inline";
@@ -29,7 +25,7 @@ const TradingViewCTA = ({ variant = "default", ticker = null }: TradingViewCTAPr
             Interactive charts, indicators, and alerts. {TRADINGVIEW_INCENTIVE}.
           </p>
         </div>
-        <a href={href} target="_blank" rel={AFFILIATE_REL} className="btn-brand text-sm whitespace-nowrap">
+        <a href={href} target="_blank" rel={AFFILIATE_REL} onClick={() => trackAffiliateClick("tradingview", "tradingview_cta_inline")} className="btn-brand text-sm whitespace-nowrap">
           {label} →
         </a>
       </div>
@@ -50,7 +46,7 @@ const TradingViewCTA = ({ variant = "default", ticker = null }: TradingViewCTAPr
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3">
-          <a href={href} target="_blank" rel={AFFILIATE_REL} className="btn-brand whitespace-nowrap">
+          <a href={href} target="_blank" rel={AFFILIATE_REL} onClick={() => trackAffiliateClick("tradingview", "tradingview_cta_default")} className="btn-brand whitespace-nowrap">
             <LineChart className="h-4 w-4" />
             {label}
           </a>

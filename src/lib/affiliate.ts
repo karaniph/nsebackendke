@@ -8,6 +8,9 @@
 
 export const TRADINGVIEW_AFF_ID = "170183";
 
+/** Stock Analysis Pro affiliate link supplied by NSEinsider. */
+export const STOCK_ANALYSIS_AFF_URL = "https://stockanalysis.com/pro/?ref=nseinsider";
+
 /** Generic affiliate landing link (homepage). */
 export const TRADINGVIEW_AFF_URL = `https://www.tradingview.com/?aff_id=${TRADINGVIEW_AFF_ID}`;
 
@@ -15,10 +18,17 @@ export const TRADINGVIEW_AFF_URL = `https://www.tradingview.com/?aff_id=${TRADIN
 export const TV_EXCHANGE = "NSEKE";
 
 /** Short incentive line used across CTAs. */
-export const TRADINGVIEW_INCENTIVE = "Get up to $15 off a TradingView plan";
+export const TRADINGVIEW_INCENTIVE = "Free charts, indicators, and alerts";
 
 /** rel value for outbound affiliate links (FTC + SEO best practice). */
 export const AFFILIATE_REL = "sponsored noopener noreferrer";
+
+/** Keep affiliate click reporting consistent without making links dependent on analytics. */
+export function trackAffiliateClick(partner: "stock_analysis" | "tradingview", placement: string): void {
+  if (typeof window === "undefined") return;
+  const gtag = (window as Window & { gtag?: (...args: unknown[]) => void }).gtag;
+  gtag?.("event", "affiliate_click", { affiliate_partner: partner, affiliate_placement: placement });
+}
 
 /** Widget symbol, e.g. "NSEKE:SCOM". */
 export function tradingViewSymbol(ticker: string): string {

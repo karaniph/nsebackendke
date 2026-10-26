@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 // Since we mapped paths in Vite using "@", let's ensure Astro respects it or use relative paths.
 import PostCard from "@/components/PostCard";
 import TelegramCTA from "@/components/TelegramCTA";
+import ResearchToolsCTA from "@/components/ResearchToolsCTA";
 import { extractKeyTakeaways, inferMarketMood } from "@/lib/post-intelligence";
 import { DEFAULT_TOPICS, getPersonalizedPosts, loadFollowedTopics, saveFollowedTopics } from "@/lib/personalization";
 import type { BlogPost, BlogPostSummary } from "@/lib/blog-data";
@@ -118,6 +119,11 @@ const IndexContent = ({ allPosts, news, marketBriefs, deepDives, education, botU
             </div>
           </section>
         )}
+
+        {/* ─── Research tools ─── */}
+        <section className="container py-8 md:py-10">
+          <ResearchToolsCTA placement="homepage" />
+        </section>
 
         {/* ─── Personalization ─── */}
         <section className="container py-8 md:py-10">

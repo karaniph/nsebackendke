@@ -6,7 +6,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import PostCard from '../../components/PostCard';
 import TradingViewChart from '../../components/TradingViewChart';
-import TradingViewCTA from '../../components/TradingViewCTA';
+import ResearchToolsCTA from '../../components/ResearchToolsCTA';
 
 import { fetchLivePosts } from '../../lib/live-blog';
 import { sortPublishedPosts, type BlogPostCard } from '../../lib/blog-data';
@@ -105,7 +105,7 @@ const latest = posts[0];
     </div>
 
     <div class="mt-10">
-      <TradingViewCTA ticker={stock.ticker} />
+      <ResearchToolsCTA client:load ticker={stock.ticker} placement="stock_hub" />
     </div>
 
     <div class="mt-8 flex flex-wrap gap-2">
