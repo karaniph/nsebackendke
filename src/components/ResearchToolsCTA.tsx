@@ -45,7 +45,6 @@ const ResearchToolsCTA = ({ ticker = null, placement = "content" }: ResearchTool
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
             Compare financials, valuation, dividends, analyst estimates, and screeners across global stocks.
           </p>
-          <p className="mt-3 text-[11px] text-muted-foreground">Affiliate link · supports NSEinsider</p>
         </a>
 
         <a
@@ -64,7 +63,6 @@ const ResearchToolsCTA = ({ ticker = null, placement = "content" }: ResearchTool
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
             {ticker ? `Chart ${ticker} with interactive candles, indicators, and alerts.` : "Chart NSE counters with interactive candles, indicators, and alerts."} {TRADINGVIEW_INCENTIVE}.
           </p>
-          <p className="mt-3 text-[11px] text-muted-foreground">Affiliate link · supports NSEinsider</p>
         </a>
       </div>
 
