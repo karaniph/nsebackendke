@@ -1,42 +1,40 @@
 ---
-title: "TPSE Leads Gains as EGAD Dives in Thin NSE Session"
-description: "TPSE rose to 18.00 and led the gains as EGAD fell to 26.60 in a thin NSE session; turnover hit 601.44m with no confirmed foreign flows."
+title: "TPSE leads gains to 18.00 as EGAD pulls back in thin NSE session"
+description: "TPSE climbs to 18.00 while EGAD slides in a thin session, NASI drifts and turnover sits around 601m. No clear leadership across sectors today."
 date: "2026-11-22T07:00:00+03:00"
 author: "NSEinsider"
 category: "market-briefs"
-tags: ["market-brief", "nse", "kenya-markets", "cbk", "foreign-flow"]
+tags: ["market-brief", "nse", "kenya-markets", "kcb", "foreign-flow"]
 slug: "2026-11-22-nse-market-brief"
 draft: false
 ---
 
 ## Key takeaways
-- TPSE led the day, up 8.43% to 18.00 as EGAD fell 6.50% to 26.60 amid a thin session.
-- Turnover 601,436,559.31 with 16,698,343.00 shares traded; no confirmed foreign flows.
-- NASI slipped 0.4%; there is still no clear sector leadership and momentum is fragile.
+- TPSE featured an 8.43% jump to 18.00, the day’s top gainer, while EGAD tumbled to 26.60, the largest loser, and NASI retreated about 0.4%.
+- Turnover came in around 601.4 million with 16.7 million shares traded; there were no confirmed foreign flows in this thin session.
+- Broad leadership remains elusive as SCOM, KCB and EQTY traded quietly while traders waited for clearer cues.
 
 ## Market pulse
-- The NASI moved down 0.4% on the day, with price action showing a cautious tone across the board.
-- Turnover stood at 601,436,559.31 and 16,698,343.00 shares traded, underscoring a thin session with limited participation.
-- Foreign flows remained unconfirmed in a day dominated by selective stock moves rather than broad market breadth.
+TPSE’s 18.00 level is the standout move, rising 8.43% to lead gainers, while EGAD fell to 26.60, down 6.50%. The NASI slipped 0.4% on light turnover of 601,436,559.31 and 16,698,343 shares traded. There is no clear breadth signal today; the market is acting on a handful of names rather than broad strength.
 
 ## What moved
-- TPSE closed at 18.00, up 8.43% and sitting as the day’s top gainer on momentum as it clears the 18.00 level.
-- EGAD closed at 26.60, down 6.50% as the day’s top loser, reflecting profit-taking or a risk-off tone on some names.
+- TPSE 18.00, +8.43%.
+- EGAD 26.60, -6.50%.
+- SCOM, KCB, EQTY quiet.
 
 ## Sector & themes
-- There was no clear leadership across sectors; financials were quiet even as TPSE showed strength and EGAD weakened.
-- The move hints at stock-specific dynamics rather than a macro-driven rally, with the local rate backdrop and macro news still dictating sentiment.
-- The CBK policy rate sits at 8.75%, a factor investors watch for liquidity implications, while global risk appetite remains a swing factor.
-- The NASI index hovered near a modestly negative tone, reinforcing a cautious market posture in the absence of clear catalysts.
+No clear leadership across sectors in this thin session. Financials were quiet as mixed moves defined the day; TPSE strength contrasts with EGAD weakness, suggesting selective interest rather than broad momentum. The macro tilt stays tethered to the policy rate at 8.75% and a cautious liquidity backdrop, with the NASI direction reflecting broader macro moves rather than a sector-led rally.
 
 ## Risks
-- Thin liquidity can amplify choppy moves and give outsized swings on small volumes.
-- Local rate expectations and macro signals can quickly flip sentiment, particularly if funds re-prioritize risk assets.
-- The market has shown sensitivity to debt-supply signals via AIB bondissue filings; any new issuance could shift liquidity balance.
+- Liquidity is thin; expect choppy moves if buyers or sellers fail to re-emerge.
+- Local rate dynamics and NASI signals can drive sudden spillovers into equities.
+- Foreign flows remain uncertain in the current trading regime, limiting reliable upside momentum.
 
 ## What to watch next
-- December 9, 2026: MPC meeting details and any guidance on liquidity or policy trajectory.
-- Watch for further AIB bondissue filings or updates on debt supply that could influence yields and turnover.
-- TPSE trading above 18.00 on continued momentum would be a signal to reassess risk appetite; EGAD stabilization would be needed to confirm breadth.
+- Track TPSE if it sustains above 18.00 for potential follow-through today.
+- Monitor EGAD for signs of stabilization or further weakness amid ongoing liquidity constraints.
+- The market will shift with the next MPC cue on Dec 9, 2026; watch liquidity signals and any AIB bondissue filings for debt-supply effects.
+
+In this daily wrap, we stick to the signals the tape gives us and warn you where the risk sits.
 
 _Informational only, not investment advice._
